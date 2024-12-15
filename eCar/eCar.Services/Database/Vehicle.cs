@@ -17,7 +17,7 @@ public partial class Vehicle
 
     public decimal Price { get; set; }
 
-    public virtual DriverVehicle? DriverVehicle { get; set; }
+    public virtual ICollection<DriverVehicle> DriverVehicles { get; set; } = new List<DriverVehicle>();
 
-    public virtual Rent? Rent { get; set; }
+    public virtual ICollection<Rent> Rents { get; set; } = new List<Rent>();
 }

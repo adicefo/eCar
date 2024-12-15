@@ -13,7 +13,7 @@ public partial class Rent
 
     public int? NumberOfDays { get; set; }
 
-    public decimal FullPrice { get; set; }
+    public decimal? FullPrice { get; set; }
 
     public string? Status { get; set; }
 
@@ -21,7 +21,7 @@ public partial class Rent
 
     public int ClientId { get; set; }
 
-    public virtual Vehicle Id1 { get; set; } = null!;
+    public virtual Client Client { get; set; } = null!;
 
-    public virtual Client IdNavigation { get; set; } = null!;
+    public virtual Vehicle Vehicle { get; set; } = null!;
 }

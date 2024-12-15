@@ -19,5 +19,5 @@ public partial class Statistic
 
     public int DriverId { get; set; }
 
-    public virtual Driver IdNavigation { get; set; } = null!;
+    public virtual Driver Driver { get; set; } = null!;
 }

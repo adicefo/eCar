@@ -9,7 +9,7 @@ public partial class CompanyPrice
 
     public decimal PricePerKilometar { get; set; }
 
-    public virtual CompanyDetail? CompanyDetail { get; set; }
+    public virtual ICollection<CompanyDetail> CompanyDetails { get; set; } = new List<CompanyDetail>();
 
-    public virtual Route? Route { get; set; }
+    public virtual ICollection<Route> Routes { get; set; } = new List<Route>();
 }

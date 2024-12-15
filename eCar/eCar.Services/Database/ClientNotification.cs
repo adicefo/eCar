@@ -11,7 +11,7 @@ public partial class ClientNotification
 
     public int NotificationId { get; set; }
 
-    public virtual Notification Id1 { get; set; } = null!;
+    public virtual Client Client { get; set; } = null!;
 
-    public virtual Client IdNavigation { get; set; } = null!;
+    public virtual Notification Notification { get; set; } = null!;
 }

@@ -11,5 +11,5 @@ public partial class CompanyDetail
 
     public int CompanyPricesId { get; set; }
 
-    public virtual CompanyPrice IdNavigation { get; set; } = null!;
+    public virtual CompanyPrice CompanyPrices { get; set; } = null!;
 }

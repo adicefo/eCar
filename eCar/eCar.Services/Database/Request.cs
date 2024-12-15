@@ -13,7 +13,7 @@ public partial class Request
 
     public int DriverId { get; set; }
 
-    public virtual Route Id1 { get; set; } = null!;
+    public virtual Driver Driver { get; set; } = null!;
 
-    public virtual Driver IdNavigation { get; set; } = null!;
+    public virtual Route Route { get; set; } = null!;
 }

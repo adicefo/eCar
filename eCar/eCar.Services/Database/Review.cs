@@ -17,9 +17,9 @@ public partial class Review
 
     public int RouteId { get; set; }
 
-    public virtual Driver Id1 { get; set; } = null!;
+    public virtual Driver Reviewed { get; set; } = null!;
 
-    public virtual Route Id2 { get; set; } = null!;
+    public virtual Client Reviews { get; set; } = null!;
 
-    public virtual Client IdNavigation { get; set; } = null!;
+    public virtual Route Route { get; set; } = null!;
 }

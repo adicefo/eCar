@@ -9,7 +9,7 @@ public partial class Notification
 
     public string? Heading { get; set; }
 
-    public string? Content { get; set; }
+    public string? Content_ { get; set; }
 
     public byte[]? Image { get; set; }
 
@@ -19,7 +19,7 @@ public partial class Notification
 
     public string? Status { get; set; }
 
-    public virtual ClientNotification? ClientNotification { get; set; }
+    public virtual ICollection<ClientNotification> ClientNotifications { get; set; } = new List<ClientNotification>();
 
-    public virtual DriverNotification? DriverNotification { get; set; }
+    public virtual ICollection<DriverNotification> DriverNotifications { get; set; } = new List<DriverNotification>();
 }

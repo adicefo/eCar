@@ -9,11 +9,11 @@ public partial class DriverVehicle
 
     public int DriverId { get; set; }
 
-    public string VehicleId { get; set; } = null!;
+    public int VehicleId { get; set; }
 
     public DateOnly? DateOfUsing { get; set; }
 
-    public virtual Vehicle Id1 { get; set; } = null!;
+    public virtual Driver Driver { get; set; } = null!;
 
-    public virtual Driver IdNavigation { get; set; } = null!;
+    public virtual Vehicle Vehicle { get; set; } = null!;
 }

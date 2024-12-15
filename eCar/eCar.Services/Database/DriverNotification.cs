@@ -11,7 +11,7 @@ public partial class DriverNotification
 
     public int NotifiactionId { get; set; }
 
-    public virtual Notification Id1 { get; set; } = null!;
+    public virtual Driver Driver { get; set; } = null!;
 
-    public virtual Driver IdNavigation { get; set; } = null!;
+    public virtual Notification Notifiaction { get; set; } = null!;
 }

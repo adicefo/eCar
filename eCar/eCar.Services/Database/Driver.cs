@@ -7,23 +7,23 @@ public partial class Driver
 {
     public int Id { get; set; }
 
-    public int UserId { get; set; }
+    public int UserID { get; set; }
 
     public int? NumberOfHoursAmount { get; set; }
 
     public int? NumberOfClientsAmount { get; set; }
 
-    public virtual DriverNotification? DriverNotification { get; set; }
+    public virtual ICollection<DriverNotification> DriverNotifications { get; set; } = new List<DriverNotification>();
 
-    public virtual DriverVehicle? DriverVehicle { get; set; }
+    public virtual ICollection<DriverVehicle> DriverVehicles { get; set; } = new List<DriverVehicle>();
 
-    public virtual User IdNavigation { get; set; } = null!;
+    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
-    public virtual Request? Request { get; set; }
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
-    public virtual Review? Review { get; set; }
+    public virtual ICollection<Route> Routes { get; set; } = new List<Route>();
 
-    public virtual Route? Route { get; set; }
+    public virtual ICollection<Statistic> Statistics { get; set; } = new List<Statistic>();
 
-    public virtual Statistic? Statistic { get; set; }
+    public virtual User User { get; set; } = null!;
 }

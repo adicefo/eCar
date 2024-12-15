@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Spatial;
+using Nest;
+using NetTopologySuite.Geometries;
 
 namespace eCar.Services.Database;
 
@@ -7,31 +10,35 @@ public partial class Route
 {
     public int Id { get; set; }
 
+    public Point? SourcePoint { get; set; }
+
+    public Point? DestinationPoint { get; set; }
+
     public DateTime? StartDate { get; set; }
 
     public DateTime? EndDate { get; set; }
 
     public int? Duration { get; set; }
 
-    public int? NumberOfKilometars { get; set; }
+    public decimal? NumberOfKilometars { get; set; }
 
-    public decimal FullPrice { get; set; }
+    public decimal? FullPrice { get; set; }
 
     public string? Status { get; set; }
 
     public int ClientId { get; set; }
 
-    public int DriverId { get; set; }
+    public int DriverID { get; set; }
 
-    public int CompanyPricesId { get; set; }
+    public int CompanyPricesID { get; set; }
 
-    public virtual CompanyPrice Id1 { get; set; } = null!;
+    public virtual Client Client { get; set; } = null!;
 
-    public virtual Driver Id2 { get; set; } = null!;
+    public virtual CompanyPrice CompanyPrices { get; set; } = null!;
 
-    public virtual Client IdNavigation { get; set; } = null!;
+    public virtual Driver Driver { get; set; } = null!;
 
-    public virtual Request? Request { get; set; }
+    public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
-    public virtual Review? Review { get; set; }
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 }

@@ -11,13 +11,13 @@ public partial class Client
 
     public byte[]? Image { get; set; }
 
-    public virtual ClientNotification? ClientNotification { get; set; }
+    public virtual ICollection<ClientNotification> ClientNotifications { get; set; } = new List<ClientNotification>();
 
-    public virtual Rent? Rent { get; set; }
+    public virtual ICollection<Rent> Rents { get; set; } = new List<Rent>();
 
-    public virtual Review? Review { get; set; }
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
-    public virtual Route? Route { get; set; }
+    public virtual ICollection<Route> Routes { get; set; } = new List<Route>();
 
     public virtual User User { get; set; } = null!;
 }
