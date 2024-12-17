@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace eCar.Services.Services
 {
-    public class BaseService<TModel,TSearch,TDbEntity>:IService<TModel,TSearch> where TSearch : BaseSearchObject  where TDbEntity:class where TModel : class
+    public abstract class BaseService<TModel,TSearch,TDbEntity>:IService<TModel,TSearch> where TSearch : BaseSearchObject  where TDbEntity:class where TModel : class
     {
         public ECarDbContext Context { get; set; }
         public IMapper Mapper { get; set; }
@@ -20,7 +20,7 @@ namespace eCar.Services.Services
             Mapper = mapper;
         }
 
-        public List<TModel>Get(TSearch search)
+        public  List<TModel>Get(TSearch search)
         {
             List<TModel> result = new List<TModel>();
             var query = Context.Set<TDbEntity>().AsQueryable();
@@ -34,9 +34,11 @@ namespace eCar.Services.Services
 
             var list = query.ToList();
 
-            result = Mapper.Map(list, result);
+            result = Map(list, result);
             return result;
         }
+
+       
 
         public TModel GetById(int id)
         {
@@ -49,6 +51,11 @@ namespace eCar.Services.Services
         public virtual IQueryable<TDbEntity> AddFilter(TSearch search,IQueryable<TDbEntity> query)
         {
             return query;
+        }
+        //Implemented for the purposes of manually mapping in Model.Model.Route 
+        public virtual List<TModel> Map(List<TDbEntity> list, List<TModel> result)
+        {
+            return Mapper.Map(list,result);
         }
     }
 }

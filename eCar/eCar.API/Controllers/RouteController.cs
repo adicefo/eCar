@@ -9,33 +9,17 @@ namespace eCar.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class RouteController : ControllerBase
+    public class RouteController :BaseCRUDController<Model.Model.Route,
+        RouteSearchObject,RouteInsertRequest,RouteUpdateRequest>
     {
-        protected IRouteService _service;
-        public RouteController(IRouteService service)
+        public RouteController(IRouteService service):base(service)
         {
-            _service = service;
+            
         }
-        [HttpGet]
-        public List<Model.Model.Route> GetRoutes([FromQuery]RouteSearchObject searchObject)
-        {
-            return _service.GetRoutes(searchObject);
-        }
-        [HttpPost]
-        public Model.Model.Route Insert(RouteInsertRequest request)
-        {
-            return _service.Insert(request);
-        }
-        [HttpPut("Begin{id}")]
-        public Model.Model.Route UpdateBegin(int id)
-        {
-            return _service.UpdateBegin(id);
-        }
-
-        [HttpPut("Finish{id}")]
-        public Model.Model.Route UpdateFinish(int id)
-        {
-            return _service.UpdateFinsih(id);
-        }
+       [HttpPut("Finish{id}")]
+       public Model.Model.Route UpdateFinish(int id)
+       {
+           return (_service as IRouteService).UpdateFinsih(id);
+       }
     }
 }

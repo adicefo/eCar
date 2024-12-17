@@ -6,6 +6,8 @@ using eCar.Services.Services;
 using Mapster;
 using FluentAssertions.Common;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.SignalR;
+using eCar.Services.StateMachine.RouteStateMachine;
 
 internal class Program
 {
@@ -17,6 +19,11 @@ internal class Program
         builder.Services.AddTransient<IRouteService, RouteService>();
         builder.Services.AddTransient<IUserService, UserService>();
         builder.Services.AddTransient<IVehicleService, VehicleService>();
+        builder.Services.AddTransient<IRentService,RentService>();
+        builder.Services.AddTransient<BaseRouteState>();
+        builder.Services.AddTransient<InitialRouteState>();
+        builder.Services.AddTransient<WaitRouteState>();
+        builder.Services.AddTransient<FinishedRouteState>();
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -32,12 +39,16 @@ internal class Program
         //for Mapster
         builder.Services.AddMapster();
         TypeAdapterConfig.GlobalSettings.Default.MapToConstructor(true);
+        MapsterConfig.Configure();
+
 
         builder.Services.AddControllers().AddNewtonsoftJson();
         builder.Services.AddControllers()
         .AddNewtonsoftJson(options =>
                          options.SerializerSettings.ReferenceLoopHandling =
                          Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+      
 
         var app = builder.Build();
 

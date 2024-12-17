@@ -12,14 +12,20 @@ namespace eCar.API.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class VehicleController : BaseCRUDController<Model.Model.Vehicle,
-        VehicleSearchObject,VehicleInsertRequest,VehicleUpdateRequest>
+    public class RentController : BaseCRUDController<Model.Model.Rent,
+        RentSearchObject,RentInsertRequest,RentUpdateRequest>
     {
         
-        public VehicleController(IVehicleService service):base(service) 
+        public RentController(IRentService service):base(service) 
         { 
 
         }
-                 
+
+        [HttpPut("Finish{id}")]
+        public Model.Model.Rent UpdateFinish(int id)
+        {
+            return (_service as IRentService).UpdateFinsih(id);
+        }
+
     }
 }

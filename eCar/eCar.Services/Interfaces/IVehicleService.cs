@@ -1,4 +1,5 @@
-﻿using eCar.Model.SearchObjects;
+﻿using eCar.Model.Requests;
+using eCar.Model.SearchObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace eCar.Services.Interfaces
 {
-    public interface IVehicleService:IService<Model.Model.Vehicle,VehicleSearchObject>
+    public interface IVehicleService:ICRUDService<Model.Model.Vehicle,
+        VehicleSearchObject,VehicleInsertRequest,VehicleUpdateRequest>
     { 
     }
 }

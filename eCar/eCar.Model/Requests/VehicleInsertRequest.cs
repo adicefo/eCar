@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eCar.Model.Model
+namespace eCar.Model.Requests
 {
-    public class Vehicle
+    public class VehicleInsertRequest
     {
-        public int Id { get; set; }
+       // public int Id { get; set; }
 
         public bool? Available { get; set; }
 
@@ -19,9 +19,5 @@ namespace eCar.Model.Model
         public byte[]? Image { get; set; }
 
         public decimal Price { get; set; }
-
-       // public virtual ICollection<DriverVehicle> DriverVehicles { get; set; } = new List<DriverVehicle>();
-
-        //public virtual ICollection<Rent> Rents { get; set; } = new List<Rent>();
     }
 }

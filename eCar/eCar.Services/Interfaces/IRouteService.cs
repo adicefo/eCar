@@ -9,13 +9,9 @@ using System.Threading.Tasks;
 
 namespace eCar.Services.Interfaces
 {
-    public interface IRouteService
+    public interface IRouteService:ICRUDService<Model.Model.Route,
+        RouteSearchObject,RouteInsertRequest,RouteUpdateRequest>
     {
-        List<Route> GetRoutes(RouteSearchObject searchObject);
-        Model.Model.Route Insert(RouteInsertRequest request);
-
-        Model.Model.Route UpdateBegin(int id);
-
-        Model.Model.Route UpdateFinsih(int id);
+       Model.Model.Route UpdateFinsih(int id);
     }
 }

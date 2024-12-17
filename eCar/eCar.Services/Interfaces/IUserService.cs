@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace eCar.Services.Interfaces
 {
-    public interface IUserService:IService<User,UserSearchObject>
+    public interface IUserService:ICRUDService<Model.Model.User,UserSearchObject,
+        UserInsertRequest,UserUpdateRequest>
     {
-        Model.Model.User Insert(UserInsertRequest request);
-        Model.Model.User Update(int id,UserUpdateRequest request);
+      
     }
 }
