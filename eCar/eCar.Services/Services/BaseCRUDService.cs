@@ -59,7 +59,7 @@ namespace eCar.Services.Services
             return result;
         }
 
-        public  TModel Delete(int id)
+        public virtual  TModel Delete(int id)
         {
             var set = Context.Set<TDbEntity>();
 

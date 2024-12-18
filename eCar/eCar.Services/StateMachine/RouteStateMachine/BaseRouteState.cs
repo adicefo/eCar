@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using eCar.Model.Requests;
 using eCar.Services.Database;
+using eCar.Services.StateMachine.RentStateMachine;
 namespace eCar.Services.StateMachine.RouteStateMachine
 {
     public class BaseRouteState
@@ -46,6 +47,8 @@ namespace eCar.Services.StateMachine.RouteStateMachine
                     return ServiceProvider.GetService<WaitRouteState>();
                 case "active":
                     return ServiceProvider.GetService<FinishedRouteState>();
+                case "finished":
+                    return ServiceProvider.GetService<WaitRouteState>();
                 default:
                     throw new Exception("State not recognized");
             }

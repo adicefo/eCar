@@ -8,6 +8,7 @@ using FluentAssertions.Common;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.SignalR;
 using eCar.Services.StateMachine.RouteStateMachine;
+using eCar.Services.StateMachine.RentStateMachine;
 
 internal class Program
 {
@@ -24,6 +25,10 @@ internal class Program
         builder.Services.AddTransient<InitialRouteState>();
         builder.Services.AddTransient<WaitRouteState>();
         builder.Services.AddTransient<FinishedRouteState>();
+        builder.Services.AddTransient<BaseRentState>();
+        builder.Services.AddTransient<InitialRentState>();
+        builder.Services.AddTransient<WaitRentState>();
+        builder.Services.AddTransient<FinishedRentState>();
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

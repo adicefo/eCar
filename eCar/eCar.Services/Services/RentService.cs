@@ -2,6 +2,8 @@
 using eCar.Model.SearchObjects;
 using eCar.Services.Database;
 using eCar.Services.Interfaces;
+using eCar.Services.StateMachine.RentStateMachine;
+using eCar.Services.StateMachine.RouteStateMachine;
 using MapsterMapper;
 using System;
 using System.Collections.Generic;
@@ -14,30 +16,40 @@ namespace eCar.Services.Services
     public class RentService:BaseCRUDService<Model.Model.Rent,
         RentSearchObject,Database.Rent,RentInsertRequest,RentUpdateRequest>,IRentService
     {
-        public RentService(ECarDbContext context,IMapper mapper):base(context,mapper) 
+        public BaseRentState BaseRentState { get; set; }
+        public RentService(ECarDbContext context,IMapper mapper,BaseRentState baseRentState):base(context,mapper) 
         {
-            
+            BaseRentState = baseRentState;
+        }
+        public override Model.Model.Rent Insert(RentInsertRequest request)
+        {
+            var state = BaseRentState.CreateState("initial");
+            return state.Insert(request);
+        }
+        public override Model.Model.Rent Update(int id,RentUpdateRequest request)
+        {
+            var entity = GetById(id);
+            var state = BaseRentState.CreateState(entity.Status);
+            return state.Update(id,request);
+        }
+        public override Model.Model.Rent Delete(int id)
+        {
+            var entity = GetById(id);
+            var state = BaseRentState.CreateState(entity.Status);
+            return state.Delete(id);
         }
         public Model.Model.Rent UpdateFinsih(int id)
         {
-            var entity = Context.Rents.Find(id);
-            if (entity == null)
-                throw new Exception("Non-existed model");
-            entity.Status = "finished";
-            Context.Rents.Update(entity);
-            Context.SaveChanges();
-
-            var result = Mapper.Map<Model.Model.Rent>(entity);
-
-            return result;
+            var entity= GetById(id);
+            var state=BaseRentState.CreateState(entity.Status);
+            return state.UpdateFinish(id);
         }
         public override IQueryable<Rent> AddFilter(RentSearchObject search, IQueryable<Rent> query)
         {
-            //TODO:Fix condition for VehicleId
             var filteredQuery = base.AddFilter(search, query);
             if (!string.IsNullOrWhiteSpace(search.Status))
                 filteredQuery = filteredQuery.Where(x => x.Status == search.Status);
-            if (Context.Rents.Find(search.VehicleId)!=null)
+            if (search.VehicleId!=null)
                 filteredQuery = filteredQuery.Where(x=>x.VehicleId==search.VehicleId);
             if (search.NumberOfDaysLETE!=null&&search.NumberOfDaysLETE>0)
                 filteredQuery = filteredQuery.Where(x => x.NumberOfDays <= search.NumberOfDaysLETE);
@@ -56,22 +68,24 @@ namespace eCar.Services.Services
         public override void BeforeInsert(RentInsertRequest request, Rent entity)
         {
             
-            entity.Status = "wait";
-            if(request.EndingDate!=null&&request.RentingDate!=null)
-                entity.NumberOfDays = (int)(request.EndingDate.Value - request.RentingDate.Value).TotalDays;
-            else
-                entity.NumberOfDays = 0;
-            var vehicle=Context.Vehicles.Find(request.VehicleId);
-            if(vehicle!=null)
-                entity.FullPrice = entity.NumberOfDays * vehicle.Price;
-            else
-                entity.FullPrice= 0;
+          //  entity.Status = "wait";
+          //  if (request.EndingDate < request.RentingDate)
+          //      throw new Exception("Input valid dates");
+          //  if(request.EndingDate!=null&&request.RentingDate!=null)
+          //      entity.NumberOfDays = (int)(request.EndingDate.Value - request.RentingDate.Value).TotalDays;
+          //  else
+          //      entity.NumberOfDays = 0;
+          //  var vehicle=Context.Vehicles.Find(request.VehicleId);
+          //  if(vehicle!=null)
+          //      entity.FullPrice = entity.NumberOfDays * vehicle.Price;
+          //  else
+          //      entity.FullPrice= 0;
             base.BeforeInsert(request, entity);
         }
 
         public override void BeforeUpdate(RentUpdateRequest request, Rent entity)
         {
-            entity.Status = "active";
+            //entity.Status = "active";
             base.BeforeUpdate(request, entity);
         }
 
