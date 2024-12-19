@@ -44,6 +44,20 @@ namespace eCar.Services.Services
             var state=BaseRentState.CreateState(entity.Status);
             return state.UpdateFinish(id);
         }
+        public List<Enums.Action> AllowedActions(int id)
+        {
+            if (id <= 0)
+            {
+                var state = BaseRentState.CreateState("initial");
+                return state.AllowedActions(null);
+            }
+            else
+            {
+                var entity = Context.Rents.Find(id);
+                var state = BaseRentState.CreateState(entity.Status);
+                return state.AllowedActions(entity);
+            }
+        }
         public override IQueryable<Rent> AddFilter(RentSearchObject search, IQueryable<Rent> query)
         {
             var filteredQuery = base.AddFilter(search, query);
@@ -67,25 +81,12 @@ namespace eCar.Services.Services
         }
         public override void BeforeInsert(RentInsertRequest request, Rent entity)
         {
-            
-          //  entity.Status = "wait";
-          //  if (request.EndingDate < request.RentingDate)
-          //      throw new Exception("Input valid dates");
-          //  if(request.EndingDate!=null&&request.RentingDate!=null)
-          //      entity.NumberOfDays = (int)(request.EndingDate.Value - request.RentingDate.Value).TotalDays;
-          //  else
-          //      entity.NumberOfDays = 0;
-          //  var vehicle=Context.Vehicles.Find(request.VehicleId);
-          //  if(vehicle!=null)
-          //      entity.FullPrice = entity.NumberOfDays * vehicle.Price;
-          //  else
-          //      entity.FullPrice= 0;
             base.BeforeInsert(request, entity);
         }
 
         public override void BeforeUpdate(RentUpdateRequest request, Rent entity)
         {
-            //entity.Status = "active";
+            
             base.BeforeUpdate(request, entity);
         }
 

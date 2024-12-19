@@ -11,17 +11,18 @@ using eCar.Services.Database;
 using eCar.Services.Helpers;
 using eCar.Model.SearchObject;
 using System.Data.Entity;
+using Microsoft.Extensions.Logging;
 namespace eCar.Services.Services
 {
     public class UserService : BaseCRUDService<Model.Model.User,UserSearchObject ,Database.User,UserInsertRequest,UserUpdateRequest> ,IUserService
     {
 
-     
-       public UserService(ECarDbContext context,IMapper mapper):
+        public ILogger<UserService> _logger { get; set; }
+        public UserService(ECarDbContext context,IMapper mapper,ILogger<UserService> logger):
             base(context,mapper)
-       {
-          
-       }
+        {
+            _logger = logger;
+        }
        
         public override IQueryable<Database.User> AddFilter(UserSearchObject search, IQueryable<Database.User> query)
         {
@@ -39,6 +40,8 @@ namespace eCar.Services.Services
 
         public override void BeforeInsert(UserInsertRequest request, User entity)
         {
+            _logger.LogInformation($"Adding user: {entity.UserName}");
+
            if (request.Password != request.PasswordConfirm)
            {
                throw new Exception("Password and Confirmed password are not the same");

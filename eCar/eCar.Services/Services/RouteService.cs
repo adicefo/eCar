@@ -17,6 +17,7 @@ using eCar.Model.DTO;
 using eCar.Model.SearchObjects;
 using System.Data.Entity;
 using eCar.Services.StateMachine.RouteStateMachine;
+using Microsoft.Extensions.Logging;
 
 namespace eCar.Services.Services
 
@@ -25,10 +26,12 @@ namespace eCar.Services.Services
         RouteSearchObject,Database.Route,RouteInsertRequest,RouteUpdateRequest>
         ,IRouteService
     {
+        public ILogger<RouteService> _logger { get; set; }
         public BaseRouteState BaseRouteState { get; set; }
-        public RouteService(ECarDbContext context, IMapper mapper,BaseRouteState baseRouteState) :base(context,mapper)
+        public RouteService(ECarDbContext context, IMapper mapper,BaseRouteState baseRouteState,ILogger<RouteService> logger) :base(context,mapper)
         {
             BaseRouteState = baseRouteState;
+            _logger = logger;
         }
 
         public override Model.Model.Route Insert(RouteInsertRequest request)
@@ -49,6 +52,22 @@ namespace eCar.Services.Services
             var entity = GetById(id);
             var state=BaseRouteState.CreateState(entity.Status);
             return state.UpdateFinish(id);
+        }
+        public List<Enums.Action> AllowedActions(int id)
+        {
+            _logger.LogInformation($"Allowed actions called for: {id} ");
+                
+            if(id<=0)
+            {
+                var state = BaseRouteState.CreateState("initial");
+                return state.AllowedActions(null);
+            }
+            else
+            {
+                var entity= Context.Routes.Find(id);
+                var state = BaseRouteState.CreateState(entity.Status);
+                return state.AllowedActions(entity);
+            }
         }
         public override IQueryable<Database.Route> AddFilter(RouteSearchObject search, IQueryable<Database.Route> query)
         {
@@ -79,43 +98,15 @@ namespace eCar.Services.Services
             
         }
         public override void BeforeInsert(RouteInsertRequest request, Database.Route entity)
-        {
-          //  var client = Context.Clients.Find(request.ClientId);
-          //  var driver = Context.Drivers.Find(request.DriverID);
-          //  if (client == null || driver == null)
-          //      throw new Exception("Driver or client cannot be null");
-          //
-          //  if (request.SourcePoint == null || request.DestinationPoint == null)
-          //      throw new Exception("Source point or Destionation point cannnot be null");
-          //
-          //  // I have done manually mapping because of different data types between RequestClass and Model/Database Class
-          //  var distanceMeters = DistanceGenerate.GetDistance(request.SourcePoint.Longitude,
-          //                       request.SourcePoint.Latitude, request.DestinationPoint.Longitude, request.DestinationPoint.Latitude);
-          //
-          // var SourcePoint = new Point(request.SourcePoint.Longitude, request.SourcePoint.Latitude) { SRID = request.SourcePoint.SRID };
-          //  var DestinationPoint = new NetTopologySuite.Geometries.Point(request.DestinationPoint.Longitude, request.DestinationPoint.Latitude) { SRID = request.SourcePoint.SRID };
-          //
-          //  var lastPrice = Context.CompanyPrices.OrderByDescending(x => x.Id).FirstOrDefault();
-          //
-          //  entity.SourcePoint = SourcePoint;
-          //  entity.DestinationPoint = DestinationPoint;
-          //  entity.NumberOfKilometars = (decimal)distanceMeters / 1000;
-          //  entity.FullPrice = entity.NumberOfKilometars * lastPrice?.PricePerKilometar;
-          //  entity.Status = "wait";
-          //
-          //  entity.ClientId = request.ClientId;
-          //  entity.DriverID = request.DriverID;
-          //  entity.Client = client;
-          //  entity.Driver = driver;
-          //  entity.CompanyPricesID = lastPrice!.Id;
+        { 
             base.BeforeInsert(request, entity);
         }
         public override void BeforeUpdate(RouteUpdateRequest request, Database.Route entity)
         {
-           // entity.StartDate = DateTime.Now;
-           // entity.Status = "active";
             base.BeforeUpdate(request, entity);
         }
+
+        
     };
 
     

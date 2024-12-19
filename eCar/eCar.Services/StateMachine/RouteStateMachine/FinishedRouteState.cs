@@ -33,5 +33,9 @@ namespace eCar.Services.StateMachine.RouteStateMachine
 
             return result;
         }
+        public override List<Enums.Action> AllowedActions(Route entity)
+        {
+            return new List<Enums.Action> { Enums.Action.UpdateFinish, Enums.Action.Delete };
+        }
     }
 }

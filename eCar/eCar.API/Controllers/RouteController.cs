@@ -16,10 +16,15 @@ namespace eCar.API.Controllers
         {
             
         }
-       [HttpPut("Finish{id}")]
+       [HttpPut("Finish/{id}")]
        public Model.Model.Route UpdateFinish(int id)
        {
            return (_service as IRouteService).UpdateFinsih(id);
        }
+        [HttpGet("Actions/{id}")]
+        public List<Services.Enums.Action> AllowedActions(int id)
+        {
+            return (_service as IRouteService).AllowedActions(id);
+        }
     }
 }

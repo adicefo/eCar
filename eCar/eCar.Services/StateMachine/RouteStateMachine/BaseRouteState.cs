@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using eCar.Model.Requests;
 using eCar.Services.Database;
 using eCar.Services.StateMachine.RentStateMachine;
+using eCar.Model.Helper;
 namespace eCar.Services.StateMachine.RouteStateMachine
 {
     public class BaseRouteState
@@ -24,19 +25,22 @@ namespace eCar.Services.StateMachine.RouteStateMachine
         //state wait
         public virtual Model.Model.Route Insert(RouteInsertRequest request)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
         //state active
         public virtual Model.Model.Route Update(int id,RouteUpdateRequest request)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
         //state finished
         public virtual Model.Model.Route UpdateFinish(int id)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
-
+        public virtual List<Enums.Action> AllowedActions(Database.Route entity)
+        {
+            throw new UserException("Not allowed");
+        }
         public BaseRouteState CreateState(string stateName)
         {
             switch (stateName)

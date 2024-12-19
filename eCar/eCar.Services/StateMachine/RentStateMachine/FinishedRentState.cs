@@ -28,7 +28,10 @@ namespace eCar.Services.StateMachine.RentStateMachine
             return Mapper.Map<Model.Model.Rent>(entity); 
         
         }
-           
+        public override List<Enums.Action> AllowedActions(Database.Rent entity)
+        {
+            return new List<Enums.Action>() { Enums.Action.UpdateFinish};
+        }
 
     }
 }

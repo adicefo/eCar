@@ -13,5 +13,6 @@ namespace eCar.Services.Interfaces
         RouteSearchObject,RouteInsertRequest,RouteUpdateRequest>
     {
        Model.Model.Route UpdateFinsih(int id);
+       List<Enums.Action> AllowedActions(int id);
     }
 }

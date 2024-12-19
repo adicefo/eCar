@@ -13,5 +13,6 @@ namespace eCar.Services.Interfaces
         RentInsertRequest,RentUpdateRequest>
     {
         Model.Model.Rent UpdateFinsih(int id);
+        List<Enums.Action> AllowedActions(int id);
     }
 }

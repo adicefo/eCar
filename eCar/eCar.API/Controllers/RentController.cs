@@ -21,11 +21,15 @@ namespace eCar.API.Controllers
 
         }
 
-        [HttpPut("Finish{id}")]
+        [HttpPut("Finish/{id}")]
         public Model.Model.Rent UpdateFinish(int id)
         {
             return (_service as IRentService).UpdateFinsih(id);
         }
-
+        [HttpGet("Actions/{id}")]
+        public List<Services.Enums.Action> AllowedActions(int id)
+        {
+            return (_service as IRentService).AllowedActions(id);
+        }
     }
 }

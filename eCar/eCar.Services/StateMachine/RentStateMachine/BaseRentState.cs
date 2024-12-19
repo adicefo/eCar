@@ -1,4 +1,5 @@
-﻿using eCar.Model.Requests;
+﻿using eCar.Model.Helper;
+using eCar.Model.Requests;
 using eCar.Services.Database;
 using eCar.Services.StateMachine.RouteStateMachine;
 using MapsterMapper;
@@ -26,24 +27,27 @@ namespace eCar.Services.StateMachine.RentStateMachine
         //state wait
         public virtual Model.Model.Rent Insert(RentInsertRequest request)
         {
-            throw new Exception("Not allowed");
+            throw new UserException("Not allowed");
         }
         //state active
         public virtual Model.Model.Rent Update(int id, RentUpdateRequest request)
         {
-            throw new Exception("Action not allowed");
+            throw new UserException("Action not allowed");
         }
         //state finished
         public virtual Model.Model.Rent UpdateFinish(int id)
         {
-            throw new Exception("Action not allowed");
+            throw new UserException("Action not allowed");
         }
-        //from status wait only you can delete
+        //from only status wait  you can delete
         public virtual Model.Model.Rent Delete(int id)
         {
-            throw new Exception("Action not allowed");
+            throw new UserException("Action not allowed");
         }
-
+        public virtual List<Enums.Action> AllowedActions(Database.Rent entity)
+        {
+            throw new UserException ("Not allowed");
+        }
         public BaseRentState CreateState(string stateName)
         {
             switch (stateName)

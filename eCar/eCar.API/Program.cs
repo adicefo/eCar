@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Microsoft.AspNetCore.SignalR;
 using eCar.Services.StateMachine.RouteStateMachine;
 using eCar.Services.StateMachine.RentStateMachine;
+using eCar.API.Filters;
 
 internal class Program
 {
@@ -30,7 +31,12 @@ internal class Program
         builder.Services.AddTransient<WaitRentState>();
         builder.Services.AddTransient<FinishedRentState>();
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers(x =>
+        {
+            x.Filters.Add<ExceptionFilter>();
+        });
+
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
