@@ -12,29 +12,77 @@ using eCar.Services.Helpers;
 using eCar.Model.SearchObject;
 using System.Data.Entity;
 using Microsoft.Extensions.Logging;
+using eCar.Model.Helper;
+using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
 namespace eCar.Services.Services
 {
-    public class UserService : BaseCRUDService<Model.Model.User,UserSearchObject ,Database.User,UserInsertRequest,UserUpdateRequest> ,IUserService
+    public class UserService : BaseCRUDService<Model.Model.User, UserSearchObject, Database.User, UserInsertRequest, UserUpdateRequest>, IUserService
     {
 
         public ILogger<UserService> _logger { get; set; }
-        public UserService(ECarDbContext context,IMapper mapper,ILogger<UserService> logger):
-            base(context,mapper)
+        public UserService(ECarDbContext context, IMapper mapper, ILogger<UserService> logger) :
+            base(context, mapper)
         {
             _logger = logger;
         }
-       
+        public AuthResponse AuthenticateUser(string email, string password, string role)
+        {
+            var user = Context.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+                return new AuthResponse { Result = AuthResult.UserNotFound };
+
+
+            if (!PasswordGenerate.VerifyPassword(password, user.PasswordHash, user.PasswordSalt))
+                return new AuthResponse { Result = AuthResult.InvalidPassword };
+
+            var token = TokenGenerate.CreateToken(user, role);
+            if (token == null)
+                return new AuthResponse() { Result = AuthResult.UserNotFound };
+
+            int roleId = 0;
+
+            switch (role)
+            {
+                case ("Admin"):
+                    var admin = Context.Admins.FirstOrDefault(a => a.UserID == user.Id);
+                    roleId = admin.Id;
+                    break;
+                case ("Client"):
+                    var client = Context.Clients.FirstOrDefault(c => c.UserId == user.Id);
+                    roleId = client.Id;
+                    break;
+                case ("Driver"):
+                    var driver = Context.Drivers.FirstOrDefault(d => d.UserID == user.Id);
+                    roleId = driver.Id;
+                    break;
+                default:
+                    throw new UserException("Invalid role");
+            }
+
+            return new AuthResponse
+            {
+                Result = AuthResult.Success,
+                UserId = user.Id,
+                Token = token,
+                RoleId = roleId
+            };
+
+        }
         public override IQueryable<Database.User> AddFilter(UserSearchObject search, IQueryable<Database.User> query)
         {
-            var filteredQuery=base.AddFilter(search, query);
+            var filteredQuery = base.AddFilter(search, query);
             if (!string.IsNullOrWhiteSpace(search?.NameGTE))
                 filteredQuery = filteredQuery.Where(x => x.Name.StartsWith(search.NameGTE));
             if (!string.IsNullOrWhiteSpace(search?.SurnameGTE))
                 filteredQuery = filteredQuery.Where(x => x.Surname.StartsWith(search.SurnameGTE));
             if (!string.IsNullOrWhiteSpace(search?.Email))
-                filteredQuery = filteredQuery.Where(x => x.Email==search.Email);
+                filteredQuery = filteredQuery.Where(x => x.Email == search.Email);
             if (!string.IsNullOrWhiteSpace(search?.Username))
-                filteredQuery = filteredQuery.Where(x => x.UserName==search.Username);
+                filteredQuery = filteredQuery.Where(x => x.UserName == search.Username);
             return filteredQuery;
         }
 
@@ -42,30 +90,30 @@ namespace eCar.Services.Services
         {
             _logger.LogInformation($"Adding user: {entity.UserName}");
 
-           if (request.Password != request.PasswordConfirm)
-           {
-               throw new Exception("Password and Confirmed password are not the same");
-           }
-           entity.PasswordSalt = PasswordGenerate.GenerateSalt();
-           entity.PasswordHash = PasswordGenerate.GenerateHash(entity.PasswordSalt, request.Password);
-           entity.RegistrationDate = DateTime.Now;
-           base.BeforeInsert(request, entity);
+            if (request.Password != request.PasswordConfirm)
+            {
+                throw new Exception("Password and Confirmed password are not the same");
+            }
+            entity.PasswordSalt = PasswordGenerate.GenerateSalt();
+            entity.PasswordHash = PasswordGenerate.GenerateHash(entity.PasswordSalt, request.Password);
+            entity.RegistrationDate = DateTime.Now;
+            base.BeforeInsert(request, entity);
         }
         public override void BeforeUpdate(UserUpdateRequest request, User entity)
         {
 
-             if (request.Password != null)
-             {
-                 if (request.Password != request.PasswordConfirm)
-                 {
-                     throw new Exception("Password and Confirm password" +
-                         "must be same values");
-                 }
-                 entity.PasswordSalt = PasswordGenerate.GenerateSalt();
-                 entity.PasswordHash = PasswordGenerate.GenerateHash(entity.PasswordSalt, request.Password);
-             }
+            if (request.Password != null)
+            {
+                if (request.Password != request.PasswordConfirm)
+                {
+                    throw new Exception("Password and Confirm password" +
+                        "must be same values");
+                }
+                entity.PasswordSalt = PasswordGenerate.GenerateSalt();
+                entity.PasswordHash = PasswordGenerate.GenerateHash(entity.PasswordSalt, request.Password);
+            }
             base.BeforeUpdate(request, entity);
         }
-
+      
     }
 }

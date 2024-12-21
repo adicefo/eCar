@@ -20,12 +20,13 @@ namespace eCar.Services.Services
             Mapper = mapper;
         }
 
-        public  List<TModel>Get(TSearch search)
+        public  virtual List<TModel>Get(TSearch search)
         {
             List<TModel> result = new List<TModel>();
             var query = Context.Set<TDbEntity>().AsQueryable();
 
             query=AddFilter(search, query);
+            query=AddInclude(search, query);
             
             if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
                 query = query.Skip(search.Page.Value * search.PageSize.Value)
@@ -38,9 +39,9 @@ namespace eCar.Services.Services
             return result;
         }
 
-       
+     
 
-        public TModel GetById(int id)
+        public virtual TModel GetById(int id)
         {
             var entity= Context.Set<TDbEntity>().Find(id);
             if (entity == null)
@@ -49,6 +50,10 @@ namespace eCar.Services.Services
         }
 
         public virtual IQueryable<TDbEntity> AddFilter(TSearch search,IQueryable<TDbEntity> query)
+        {
+            return query;
+        }
+        public virtual IQueryable<TDbEntity> AddInclude(TSearch search, IQueryable<TDbEntity> query)
         {
             return query;
         }

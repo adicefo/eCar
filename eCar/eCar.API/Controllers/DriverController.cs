@@ -3,7 +3,6 @@ using eCar.Model.Requests;
 using eCar.Model.SearchObject;
 using eCar.Model.SearchObjects;
 using eCar.Services.Interfaces;
-using eCar.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,29 +11,29 @@ namespace eCar.API.Controllers
 {
 
     [ApiController]
-    public class VehicleController : BaseCRUDController<Model.Model.Vehicle,
-        VehicleSearchObject,VehicleInsertRequest,VehicleUpdateRequest>
+    public class DriverController : BaseCRUDController<Model.Model.Driver,DriverSearchObject
+        ,DriverInsertRequest,DriverUpdateRequest>
     {
-        
-        public VehicleController(IVehicleService service):base(service) 
-        { 
-
+        public DriverController(IDriverService service):base(service)
+        {
+           
         }
         [Authorize(Roles ="Admin")]
-        public override Vehicle Insert(VehicleInsertRequest request)
+        public override Driver Insert(DriverInsertRequest request)
         {
             return base.Insert(request);
         }
-        [Authorize(Roles ="Admin")]
-        public override Vehicle Update(int id, VehicleUpdateRequest request)
+
+        [Authorize(Roles = "Admin")]
+        public override Driver Update(int id, DriverUpdateRequest request)
         {
             return base.Update(id, request);
         }
+
         [Authorize(Roles ="Admin")]
-        public override Vehicle Delete(int id)
-        {
+        public override Driver Delete(int id) 
+        { 
             return base.Delete(id);
         }
-
     }
 }

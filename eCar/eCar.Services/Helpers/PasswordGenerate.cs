@@ -29,6 +29,11 @@ namespace eCar.Services.Helpers
             byte[] inArray = algorithm.ComputeHash(dst);
             return Convert.ToBase64String(inArray);
         }
+        public static bool VerifyPassword(string enteredPassword,string storedPassword,string storedSalt)
+        {
+            string enteredHash=GenerateHash(storedSalt, enteredPassword);
+            return enteredHash == storedPassword;
+        }
 
     }
 }

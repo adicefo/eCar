@@ -11,7 +11,6 @@ namespace eCar.API.Controllers
 {
 
     [ApiController]
-    [Route("[controller]")]
     public class RentController : BaseCRUDController<Model.Model.Rent,
         RentSearchObject,RentInsertRequest,RentUpdateRequest>
     {

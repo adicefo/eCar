@@ -30,8 +30,8 @@ namespace eCar.Model.Model
 
         //public virtual ICollection<Admin> Admins { get; set; } = new List<Admin>();
 
-        public virtual ICollection<Client> Clients { get; set; } = new List<Client>();
+       // public virtual ICollection<Client> Clients { get; set; } = new List<Client>();
 
-        public virtual ICollection<Driver> Drivers { get; set; } = new List<Driver>();
+        //public virtual ICollection<Driver> Drivers { get; set; } = new List<Driver>();
     }
 }

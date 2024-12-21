@@ -1,6 +1,10 @@
 ﻿using eCar.Model.DTO;
+using eCar.Model.Model;
+using eCar.Services;
 using Mapster;
-using NetTopologySuite.Geometries; 
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NetTopologySuite.Geometries;
+using System.Data.Entity;
 
 public static class MapsterConfig
 {
@@ -13,7 +17,7 @@ public static class MapsterConfig
         TypeAdapterConfig<Point, PointDTO>
             .NewConfig()
             .MapWith(point => new PointDTO(point.X, point.Y, point.SRID));
-
+     
     }
 }
 
