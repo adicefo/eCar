@@ -11,6 +11,6 @@ namespace eCar.Services.Interfaces
     public interface IAdminService:ICRUDService<Model.Model.Admin,
         AdminSearchObject,AdminInsertRequest,AdminUpdateRequest>
     {
-
+        public Model.Model.Admin InsertBasedOnUser(int userId);
     }
 }

@@ -35,5 +35,11 @@ namespace eCar.API.Controllers
         { 
             return base.Delete(id);
         }
+
+        [HttpPost("/Driver/InsertBasedOnUser/{userId}")]
+        public Model.Model.Driver InsertBasedOnUser(int userId)
+        {
+            return (_service as IDriverService).InsertBasedOnUser(userId);
+        }
     }
 }

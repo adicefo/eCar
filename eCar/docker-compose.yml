@@ -1,0 +1,75 @@
+version: "3"
+services:
+  ecar-sql:
+    image: mcr.microsoft.com/mssql/server:2017-latest-ubuntu
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=${SQL_PASSWORD}
+      - MSSQL_PID=Developer
+    ports:
+      - 1401:1433
+    expose:
+      - 1433
+    networks:
+      - ecar2024
+
+  ecar-api:
+    restart: unless-stopped
+    build:
+      context: .
+    environment:
+      - ConnectionStrings:eCarConnection=Server=${SQL_HOST},1433;Database=${SQL_DB_COMMON};User=${SQL_USER};Password=${SQL_PASSWORD};ConnectRetryCount=0; TrustServerCertificate=True
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+ #     - RABBITMQ_HOST=${RABBITMQ_HOST}
+ #     - RABBITMQ_PORT=${RABBITMQ_PORT}
+ #     - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+ #     - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+ #     - SMTP_SERVER=${SMTP_SERVER}
+ #     - SMTP_PORT=${SMTP_PORT}
+ #     - SMTP_USERNAME=${SMTP_USERNAME}
+ #     - SMTP_PASSWORD=${SMTP_PASSWORD}
+    ports:
+      - 7257:7257
+    networks:
+      - ecar2024
+    links:
+      - ecar-sql
+    depends_on:
+      - ecar-sql
+
+ #rabbitmq:
+ #  image: rabbitmq:3-management
+ #  restart: unless-stopped
+ #  hostname: ${RABBITMQ_HOST}
+ #  environment:
+ #    - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+ #    - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+ #  ports:
+ #    - 5672:5672
+ #    - 15672:15672
+ #  networks:
+ #    - trackit2024
+ #
+ #rabbitmq-service:
+ #  restart: unless-stopped
+ #  build:
+ #    dockerfile: ./TrackIt.Subscriber/Dockerfile
+ #  environment:
+ #    - RABBITMQ_HOST=${RABBITMQ_HOST}
+ #    - RABBITMQ_PORT=${RABBITMQ_PORT}
+ #    - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+ #    - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+ #    - SMTP_SERVER=${SMTP_SERVER}
+ #    - SMTP_PORT=${SMTP_PORT}
+ #    - SMTP_USERNAME=${SMTP_USERNAME}
+ #    - SMTP_PASSWORD=${SMTP_PASSWORD}
+ #  depends_on:
+ #    - rabbitmq
+ #    - trackit-api
+ #  networks:
+ #    - trackit2024
+
+networks:
+  ecar2024:
+    driver: bridge

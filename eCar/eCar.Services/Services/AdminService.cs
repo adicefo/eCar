@@ -12,6 +12,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Core;
 
 
 namespace eCar.Services.Services
@@ -33,7 +34,21 @@ namespace eCar.Services.Services
                 throw new Exception("Non-existed entity");
             return Mapper.Map<Model.Model.Admin>(entity);
         }
+        public Model.Model.Admin InsertBasedOnUser(int userId)
+        {
+            var user = Context.Users.Find(userId);
+            if (user == null)
+                throw new UserException("Non existed user");
+            var entity=new Database.Admin();
+            entity.UserID= userId;
+            Mapper.Map(user, entity?.User);
 
+            Context.Add(entity);
+            Context.SaveChanges();
+
+            return Mapper.Map<Model.Model.Admin>(entity);
+
+        }
 
         public override IQueryable<Admin> AddInclude(AdminSearchObject search, IQueryable<Admin> query)
         {

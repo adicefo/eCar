@@ -23,5 +23,11 @@ namespace eCar.API.Controllers
         {
             return base.Insert(request);
         }
+
+        [HttpPost("/Client/InsertBasedOnUser/{userId}")]
+        public Model.Model.Client InsertBasedOnUser(int userId)
+        {
+            return (_service as IClientService).InsertBasedOnUser(userId);
+        }
     }
 }

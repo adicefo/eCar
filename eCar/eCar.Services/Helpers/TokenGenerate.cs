@@ -20,10 +20,11 @@ namespace eCar.Services.Helpers
 
         public static string CreateToken(User user,string desiredRole)
         {
-           var role=ProvjeriRolu(user,desiredRole);
+           var role=CheckRole(user,desiredRole);
             if (role == null)
                 return null;
             string secretKey = Configuration["Jwt:Secret"];
+
             var securityKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
 
             var credentilas=new SigningCredentials(securityKey,SecurityAlgorithms.HmacSha256);
@@ -49,25 +50,10 @@ namespace eCar.Services.Helpers
 
             return token;
             
-           // List<Claim> claims = new List<Claim>
-           // {
-           //     new Claim(ClaimTypes.Email, user.Email),
-           //     new Claim(ClaimTypes.Role, role)
-           // };
-           // var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(Configuration.GetSection("AppSettings:Token").Value));
-           // var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-           // var token = new JwtSecurityToken(
-           //     claims: claims,
-           //     expires: DateTime.Now.AddDays(1),
-           //     signingCredentials: creds
-           //     );
-           //
-           // var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-           //
-           // return jwt;
+          
         }
 
-        public static string ProvjeriRolu(User user,string desiredRole)
+        public static string CheckRole(User user,string desiredRole)
         {
             switch (desiredRole)
             {

@@ -11,6 +11,6 @@ namespace eCar.Services.Interfaces
     public interface IDriverService:ICRUDService<Model.Model.Driver,
         DriverSearchObject,DriverInsertRequest,DriverUpdateRequest>
     {
-
+        public Model.Model.Driver InsertBasedOnUser(int userId);
     }
 }

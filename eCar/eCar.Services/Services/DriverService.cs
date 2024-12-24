@@ -32,7 +32,21 @@ namespace eCar.Services.Services
             var result=Mapper.Map<Model.Model.Driver>(entity);
             return result;
         }
+        public Model.Model.Driver InsertBasedOnUser(int userId)
+        {
+            var user = Context.Users.Find(userId);
+            if (user == null)
+                throw new UserException("Non existed user");
+            var entity = new Database.Driver();
+            entity.UserID = userId;
+            Mapper.Map(user, entity?.User);
 
+            Context.Add(entity);
+            Context.SaveChanges();
+
+            return Mapper.Map<Model.Model.Driver>(entity);
+
+        }
         public override IQueryable<Driver> AddFilter(DriverSearchObject search, IQueryable<Driver> query)
         {
             var filteredQuery= base.AddFilter(search, query);

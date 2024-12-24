@@ -34,6 +34,21 @@ namespace eCar.Services.Services
             return Mapper.Map<Model.Model.Client>(entity);
             
         }
+        public Model.Model.Client InsertBasedOnUser(int userId)
+        {
+            var user = Context.Users.Find(userId);
+            if (user == null)
+                throw new UserException("Non existed user");
+            var entity = new Database.Client();
+            entity.UserId = userId;
+            Mapper.Map(user, entity?.User);
+
+            Context.Add(entity);
+            Context.SaveChanges();
+
+            return Mapper.Map<Model.Model.Client>(entity);
+
+        }
         public override IQueryable<Client> AddFilter(ClientSearchObject search, IQueryable<Client> query)
         {
             var filteredQuery = base.AddFilter(search, query);

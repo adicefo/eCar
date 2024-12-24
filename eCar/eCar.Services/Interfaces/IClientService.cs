@@ -11,6 +11,6 @@ namespace eCar.Services.Interfaces
     public interface IClientService:ICRUDService<Model.Model.Client,
         ClientSearchObject, ClientUpsertRequest, ClientUpsertRequest>
     {
-
+        public Model.Model.Client InsertBasedOnUser(int userId);
     }
 }

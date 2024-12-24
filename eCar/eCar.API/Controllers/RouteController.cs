@@ -16,11 +16,6 @@ namespace eCar.API.Controllers
         {
             
         }
-        [Authorize(Roles ="Client")]
-        public override List<Model.Model.Route> Get([FromQuery] RouteSearchObject searchObject)
-        {
-            return base.Get(searchObject);
-        }
         [HttpPut("Finish/{id}")]
        public Model.Model.Route UpdateFinish(int id)
        {

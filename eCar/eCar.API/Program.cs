@@ -46,20 +46,6 @@ internal class Program
         builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
         //jwt authentication
-        // builder.Services.AddAuthentication(
-        //    JwtBearerDefaults.AuthenticationScheme
-        // ).AddJwtBearer(options =>
-        // {
-        // options.TokenValidationParameters = new TokenValidationParameters
-        // {
-        //     ValidateIssuerSigningKey = true,
-        //     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-        //     ValidateIssuer = false,
-        //     ValidateAudience = false,
-        //     ClockSkew = TimeSpan.FromSeconds(300)
-        // };
-        // });
-
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
             AddJwtBearer(options =>
             {
@@ -129,7 +115,6 @@ internal class Program
                          options.SerializerSettings.ReferenceLoopHandling =
                          Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-      
 
         var app = builder.Build();
 
@@ -139,6 +124,7 @@ internal class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+
         TokenGenerate.Context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ECarDbContext>();
         TokenGenerate.Configuration = app.Services.GetRequiredService<IConfiguration>();
 
@@ -148,7 +134,13 @@ internal class Program
         app.UseAuthorization();
 
         app.MapControllers();
+        using (var scope = app.Services.CreateScope())
+        {
+            var dataContext = scope.ServiceProvider.GetRequiredService<ECarDbContext>();
+            //dataContext.Database.EnsureCreated();
 
+            dataContext.Database.Migrate();
+        }
         app.Run();
     }
 }
