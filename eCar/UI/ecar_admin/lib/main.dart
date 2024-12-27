@@ -28,10 +28,185 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellowAccent),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: LoginPage(),
+    );
+  }
+}
+
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Stack(
+          alignment: Alignment.center,
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "@eCar",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            Text(
+              "Login page",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 25,
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: Colors.yellowAccent,
+      ),
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Center(
+          child: Container(
+            constraints: BoxConstraints(maxHeight: 400, maxWidth: 400),
+            child: Card(
+              color: Colors.yellowAccent,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Image.asset(
+                        "assets/images/55283.png",
+                        height: 100,
+                        width: 100,
+                      ),
+                      SizedBox(height: 10),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: "Email",
+                          hintText: "Enter your email",
+                          prefixIcon: Icon(Icons.email_sharp),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      TextField(
+                        decoration: InputDecoration(
+                          labelText: "Password",
+                          hintText: "Enter your password",
+                          prefixIcon: Icon(Icons.password),
+                        ),
+                      ),
+                      SizedBox(height: 50),
+                      ElevatedButton(
+                        onPressed: () {
+                          print("login attempt");
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          minimumSize: Size(300, 50),
+                        ),
+                        child: Text("Login"),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "@eCar",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LayoutExamples extends StatelessWidget {
+  const LayoutExamples({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 200,
+          color: Colors.red,
+          child: Center(
+            child: Container(
+              height: 100,
+              width: 50,
+              color: Colors.blue,
+              child: Text("Sample text"),
+            ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Text("1"),
+            Text("2"),
+            Text("3"),
+          ],
+        ),
+        Container(
+          height: 150,
+          color: Colors.red,
+          child: Center(
+            child: Text("Contain"),
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class LayoutExample extends StatelessWidget {
+  const LayoutExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          height: 150,
+          color: Colors.yellowAccent,
+          child: Center(
+            child: Container(
+              height: 100,
+              width: 50,
+              color: Colors.black,
+              child: Text("@eCar"),
+            ),
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [Text("Drivers"), Text("Clients"), Text("Vehicles")],
+        ),
+        Container(
+          height: 150,
+          color: Colors.yellowAccent,
+          child: Center(
+            child: Text("Contain"),
+          ),
+        )
+      ],
     );
   }
 }
