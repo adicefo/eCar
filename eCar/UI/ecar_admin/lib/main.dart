@@ -1,4 +1,11 @@
+// ignore_for_file: must_be_immutable
+
+import 'package:ecar_admin/providers/auth_provider.dart';
+import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/authorization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,7 +44,12 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  AuthProvider _authProvide = new AuthProvider();
+  final _formKey = GlobalKey<FormBuilderState>();
 
   @override
   Widget build(BuildContext context) {
@@ -70,68 +82,131 @@ class LoginPage extends StatelessWidget {
         backgroundColor: Colors.yellowAccent,
       ),
       backgroundColor: Colors.black,
-      body: Center(
-        child: Center(
-          child: Container(
-            constraints: BoxConstraints(maxHeight: 400, maxWidth: 400),
-            child: Card(
-              color: Colors.yellowAccent,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Center(
+              child: Container(
+                constraints:
+                    const BoxConstraints(maxHeight: 400, maxWidth: 400),
+                child: Card(
+                  color: Colors.yellowAccent,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset(
-                        "assets/images/55283.png",
-                        height: 100,
-                        width: 100,
-                      ),
-                      SizedBox(height: 10),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: "Email",
-                          hintText: "Enter your email",
-                          prefixIcon: Icon(Icons.email_sharp),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      TextField(
-                        decoration: InputDecoration(
-                          labelText: "Password",
-                          hintText: "Enter your password",
-                          prefixIcon: Icon(Icons.password),
-                        ),
-                      ),
-                      SizedBox(height: 50),
-                      ElevatedButton(
-                        onPressed: () {
-                          print("login attempt");
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          minimumSize: Size(300, 50),
-                        ),
-                        child: Text("Login"),
+                      Column(
+                        children: [
+                          Image.asset(
+                            "assets/images/55283.png",
+                            height: 100,
+                            width: 100,
+                          ),
+                          SizedBox(height: 10),
+                          TextField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              labelText: "Email",
+                              hintText: "Enter your email",
+                              prefixIcon: Icon(Icons.email_sharp),
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          TextField(
+                            obscureText: true,
+                            controller: _passwordController,
+                            decoration: InputDecoration(
+                              labelText: "Password",
+                              hintText: "Enter your password",
+                              prefixIcon: Icon(Icons.password),
+                            ),
+                          ),
+                          SizedBox(height: 50),
+                          ElevatedButton(
+                            onPressed: () async {
+                              if (_emailController.text.isEmpty ||
+                                  _passwordController.text.isEmpty) {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    title: Text("Invalid Input"),
+                                    content: Text(
+                                        "Please enter both email and password."),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: Text("OK"),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                                return; // Stop further execution if inputs are invalid
+                              }
+
+                              Authorization.email = _emailController.text;
+                              Authorization.password = _passwordController.text;
+
+                              try {
+                                var loginResponse = await _authProvide.login();
+                                if (loginResponse.result == 0) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => MasterScreen()));
+                                } else {
+                                  if (context.mounted) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                              title:
+                                                  const Text("Invalid login"),
+                                              content: const Text(
+                                                  "Invalid login credentials."),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () => {
+                                                          Navigator.pop(context)
+                                                        },
+                                                    child: const Text("OK"))
+                                              ],
+                                            ));
+                                  }
+                                }
+                              } on Exception catch (e) {
+                                if (context.mounted) {
+                                  AlertHelpers.showAlert(
+                                      context, "Error", e.toString());
+                                }
+                              }
+                              print(
+                                  "Credentials: ${_emailController.text} : ${_passwordController.text}");
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
+                              minimumSize: Size(300, 50),
+                            ),
+                            child: Text("Login"),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "@eCar",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "@eCar",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 24,
+                color:
+                    Colors.white, // White text for contrast on black background
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
