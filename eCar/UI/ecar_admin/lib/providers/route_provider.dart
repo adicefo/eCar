@@ -1,21 +1,25 @@
 import "dart:convert";
 
+import "package:ecar_admin/models/Route/route.dart";
 import "package:flutter_secure_storage/flutter_secure_storage.dart";
 import "package:http/http.dart" as http;
 import "package:http/http.dart";
+import 'package:ecar_admin/models/Route/route.dart' as Model;
 
 class RouteProvider {
   final FlutterSecureStorage _storage = const FlutterSecureStorage();
   RouteProvider() {}
 
-  Future<dynamic> get() async {
+  Future<List<Route>> get() async {
     var url = "https://localhost:7257/Route";
     var uri = Uri.parse(url);
     var headers = await createHeaders();
     var response = await http.get(uri, headers: headers);
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
-      return data;
+      var result =
+          data.map((e) => Model.Route.fromJson(e)).toList().cast<Route>();
+      return result;
     } else {
       throw new Exception("Unknown exception");
     }

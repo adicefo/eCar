@@ -2,6 +2,7 @@
 
 import 'package:ecar_admin/providers/auth_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:ecar_admin/utils/authorization.dart';
 import 'package:flutter/material.dart';
@@ -150,7 +151,7 @@ class LoginPage extends StatelessWidget {
                                 var loginResponse = await _authProvide.login();
                                 if (loginResponse.result == 0) {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => MasterScreen()));
+                                      builder: (context) => RouteListScreen()));
                                 } else {
                                   if (context.mounted) {
                                     showDialog(

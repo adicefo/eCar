@@ -4,9 +4,9 @@ import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:flutter/material.dart';
 
 class MasterScreen extends StatefulWidget {
-  MasterScreen({super.key});
-  String? title;
-  Widget? child;
+  MasterScreen(this.title, this.child, {super.key});
+  String title;
+  Widget child;
 
   @override
   State<MasterScreen> createState() => _MasterScreenState();
@@ -17,8 +17,10 @@ class _MasterScreenState extends State<MasterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("@username"),
-        backgroundColor: Colors.white,
+        title:
+            Text(widget.title, style: TextStyle(fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        backgroundColor: Colors.yellowAccent,
       ),
       backgroundColor: Colors.black,
       drawer: Drawer(

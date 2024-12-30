@@ -18,6 +18,8 @@ using eCar.Model.SearchObjects;
 using System.Data.Entity;
 using eCar.Services.StateMachine.RouteStateMachine;
 using Microsoft.Extensions.Logging;
+using EFCore = Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace eCar.Services.Services
 
@@ -76,6 +78,13 @@ namespace eCar.Services.Services
                 filteredQuery = filteredQuery.Where(x => x.Status == search.Status);
             if (search.NumberOfKilometarsGTE != null)
                 filteredQuery = filteredQuery.Where(x => x.NumberOfKilometars > search.NumberOfKilometarsGTE);
+            return filteredQuery;
+        }
+        public override IQueryable<Database.Route> AddInclude(RouteSearchObject search, IQueryable<Database.Route> query)
+        {
+            var filteredQuery=base.AddInclude(search, query);
+            filteredQuery = EFCore.EntityFrameworkQueryableExtensions.Include(filteredQuery, x => x.Client).ThenInclude(x=>x.User);
+            filteredQuery = EFCore.EntityFrameworkQueryableExtensions.Include(filteredQuery, x => x.Driver).ThenInclude(x=>x.User);
             return filteredQuery;
         }
         public override List<Model.Model.Route> Map(List<Database.Route> list, List<Model.Model.Route> result)
