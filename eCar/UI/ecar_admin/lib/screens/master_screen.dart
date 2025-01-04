@@ -27,6 +27,25 @@ class _MasterScreenState extends State<MasterScreen> {
         backgroundColor: Colors.yellowAccent,
         child: ListView(
           children: [
+            DrawerHeader(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "@ eCar",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                Center(
+                    child: Image.asset(
+                  "assets/images/65476-200.png",
+                  height: 70,
+                  width: 70,
+                )),
+                //TODO:Get username from token
+                Center(child: Text("Username"))
+              ],
+            )),
             ListTile(
               title: Text("Back"),
               onTap: () {

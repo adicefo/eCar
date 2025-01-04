@@ -13,6 +13,7 @@ class AuthProvider with ChangeNotifier {
   final String _endpoint = "Users/admin_login";
   final _storage = const FlutterSecureStorage();
 
+//TODO:Promijeniti zbog Dockera na http
   AuthProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "https://localhost:7257/");

@@ -6,6 +6,8 @@ using eCar.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using RentACar.Model;
 
 namespace eCar.API.Controllers
 {
@@ -22,7 +24,7 @@ namespace eCar.API.Controllers
 
 
         [HttpGet]
-        public virtual List<TModel> Get([FromQuery] TSearch searchObject)
+        public virtual PagedResult<TModel> Get([FromQuery] TSearch searchObject)
         {
             return _service.Get(searchObject);
         }

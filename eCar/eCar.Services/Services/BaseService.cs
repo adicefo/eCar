@@ -2,6 +2,8 @@
 using eCar.Services.Database;
 using eCar.Services.Interfaces;
 using MapsterMapper;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using RentACar.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +22,16 @@ namespace eCar.Services.Services
             Mapper = mapper;
         }
 
-        public  virtual List<TModel>Get(TSearch search)
+        public  virtual PagedResult<TModel> Get(TSearch search)
         {
             List<TModel> result = new List<TModel>();
             var query = Context.Set<TDbEntity>().AsQueryable();
 
             query=AddFilter(search, query);
             query=AddInclude(search, query);
-            
+
+            int count = query.Count();
+
             if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
                 query = query.Skip(search.Page.Value * search.PageSize.Value)
                    .Take(search.PageSize.Value);
@@ -36,7 +40,12 @@ namespace eCar.Services.Services
             var list = query.ToList();
 
             result = Map(list, result);
-            return result;
+
+            PagedResult<TModel> pageResult = new PagedResult<TModel>();
+            pageResult.Result= result;
+            pageResult.Count= count;
+
+            return pageResult;
         }
 
      

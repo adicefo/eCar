@@ -1,7 +1,9 @@
+import 'package:ecar_admin/models/search_result.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/models/Route/route.dart' as Model;
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RouteListScreen extends StatefulWidget {
   const RouteListScreen({super.key});
@@ -11,8 +13,16 @@ class RouteListScreen extends StatefulWidget {
 }
 
 class _RouteListScreenState extends State<RouteListScreen> {
-  RouteProvider provider = new RouteProvider();
-  List<Model.Route>? result;
+  late RouteProvider provider;
+
+  @override
+  void didChangeDependencies() {
+    provider = context.read<RouteProvider>();
+    super.didChangeDependencies();
+  }
+
+  String? _selectedStatus;
+  SearchResult<Model.Route>? result;
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
@@ -24,8 +34,6 @@ class _RouteListScreenState extends State<RouteListScreen> {
   }
 
   Widget _buildSearch() {
-    String? _selectedStatus; // Variable to store the selected value
-
     return Row(
       children: [
         SizedBox(width: 50),
@@ -53,30 +61,35 @@ class _RouteListScreenState extends State<RouteListScreen> {
         SizedBox(width: 200),
         SizedBox(
           width: 300,
-          child: ElevatedButton(
-            onPressed: () async {
-              var data = await provider.get();
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                var filter = {'Status': _selectedStatus};
+                result = await provider.get(filter: filter);
 
-              setState(() {
-                result = data;
-              });
+                setState(() {});
 
-              print(result);
-            },
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+                print(result);
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              ),
+              child: Text("Search"),
             ),
-            child: Text("Search"),
           ),
         ),
         SizedBox(width: 100),
         SizedBox(
           width: 300,
-          child: ElevatedButton(
-            onPressed: () {},
-            child: Text("Add"),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: ElevatedButton(
+              onPressed: () {},
+              child: Text("Add"),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              ),
             ),
           ),
         ),
@@ -91,11 +104,10 @@ class _RouteListScreenState extends State<RouteListScreen> {
         child: Padding(
           padding: const EdgeInsets.only(top: 50.0),
           child: Align(
-            alignment: Alignment.center, // Center horizontally
+            alignment: Alignment.center,
             child: Container(
-              width:
-                  MediaQuery.of(context).size.width * 0.95, // Set width to 90%
-              color: Colors.white, // Gray background for the table
+              width: MediaQuery.of(context).size.width * 0.91,
+              color: Colors.white,
               child: DataTable(
                 columnSpacing: 25,
                 columns: [
@@ -145,8 +157,8 @@ class _RouteListScreenState extends State<RouteListScreen> {
                               color: Colors.black,
                               fontWeight: FontWeight.bold))),
                 ],
-                rows: result
-                        ?.map((e) => DataRow(cells: [
+                rows: result?.result
+                        .map((e) => DataRow(cells: [
                               DataCell(Text(e.id.toString(),
                                   style: TextStyle(
                                       color: Colors.black,

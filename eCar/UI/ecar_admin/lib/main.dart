@@ -1,15 +1,22 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:ecar_admin/providers/auth_provider.dart';
+import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:ecar_admin/utils/authorization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => RouteProvider()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -141,7 +148,7 @@ class LoginPage extends StatelessWidget {
                                     ],
                                   ),
                                 );
-                                return; // Stop further execution if inputs are invalid
+                                return;
                               }
 
                               Authorization.email = _emailController.text;
