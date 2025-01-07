@@ -8,7 +8,7 @@ class User {
   int? id;
   String? name;
   String? surname;
-  String? username;
+  String? userName;
   String? email;
   String? telephoneNumber;
   String? gender;
@@ -19,7 +19,7 @@ class User {
     this.id,
     this.name,
     this.surname,
-    this.username,
+    this.userName,
     this.email,
     this.telephoneNumber,
     this.gender,

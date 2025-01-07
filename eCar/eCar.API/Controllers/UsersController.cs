@@ -38,5 +38,12 @@ namespace eCar.API.Controllers
             return (_service as IUserService).AuthenticateUser(login.Email, login.Password, "Driver");
 
         }
+        [HttpGet("token/{token}")]
+        [AllowAnonymous]
+        public Model.Model.User GetBasedOnToken(string token)
+        {
+            return (_service as IUserService).GetBasedOnToken(token);
+
+        }
     }
 }

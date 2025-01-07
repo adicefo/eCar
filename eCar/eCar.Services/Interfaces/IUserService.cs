@@ -14,5 +14,6 @@ namespace eCar.Services.Interfaces
         UserInsertRequest,UserUpdateRequest>
     {
         public AuthResponse AuthenticateUser(string username,string password,string role);
+        public Model.Model.User GetBasedOnToken(string token);
     }
 }

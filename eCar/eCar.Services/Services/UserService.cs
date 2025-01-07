@@ -114,6 +114,24 @@ namespace eCar.Services.Services
             }
             base.BeforeUpdate(request, entity);
         }
-      
+
+        public Model.Model.User GetBasedOnToken(string token)
+        {
+            var principles=TokenGenerate.ValidateToken(token);
+
+            if (principles == null)
+                throw new UserException("Invalid token");
+
+            var emailClaim = principles.FindFirst(ClaimTypes.Email)?.Value;
+            if (emailClaim == null)
+                throw new UserException("Invalid emaill");
+
+            var entity = Context.Users.FirstOrDefault(x => x.Email == emailClaim);
+            if (entity == null)
+                throw new UserException("User not found");
+
+            return Mapper.Map<Model.Model.User>(entity);
+
+        }
     }
 }

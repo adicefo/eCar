@@ -1,7 +1,11 @@
+import 'package:ecar_admin/providers/user_provider.dart';
 import 'package:ecar_admin/screens/clients_screen.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:ecar_admin/models/User/user.dart' as Model;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 class MasterScreen extends StatefulWidget {
   MasterScreen(this.title, this.child, {super.key});
@@ -13,6 +17,25 @@ class MasterScreen extends StatefulWidget {
 }
 
 class _MasterScreenState extends State<MasterScreen> {
+  Model.User? user = null;
+  late UserProvider userProvider;
+  bool isLoading = true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userProvider = context.read<UserProvider>();
+    initForm();
+  }
+
+  Future initForm() async {
+    user = await userProvider.getUserFromToken();
+    print("Retrived: ${user?.userName}");
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,16 +66,12 @@ class _MasterScreenState extends State<MasterScreen> {
                   width: 70,
                 )),
                 //TODO:Get username from token
-                Center(child: Text("Username"))
+                Center(
+                    child: isLoading
+                        ? Text("Username")
+                        : Text("${user?.userName}"))
               ],
             )),
-            ListTile(
-              title: Text("Back"),
-              onTap: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-            ),
             ListTile(
               title: Text("Drivers"),
               onTap: () {
@@ -72,6 +91,41 @@ class _MasterScreenState extends State<MasterScreen> {
               onTap: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => RouteListScreen()));
+              },
+            ),
+            ListTile(
+              title: Text("Vehicles"),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => RouteListScreen()));
+              },
+            ),
+            ListTile(
+              title: Text("Reviews"),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => RouteListScreen()));
+              },
+            ),
+            ListTile(
+              title: Text("Notifications"),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => RouteListScreen()));
+              },
+            ),
+            ListTile(
+              title: Text("Rents"),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => RouteListScreen()));
+              },
+            ),
+            ListTile(
+              title: Text("Log out"),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
               },
             )
           ],
