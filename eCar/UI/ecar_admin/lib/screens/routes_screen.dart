@@ -2,6 +2,7 @@ import 'package:ecar_admin/models/search_result.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/models/Route/route.dart' as Model;
+import 'package:ecar_admin/screens/route_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +43,7 @@ class _RouteListScreenState extends State<RouteListScreen> {
               padding: const EdgeInsets.only(top: 20.0),
               child: DropdownButtonFormField<String>(
                 isDense: true,
-                focusColor: const Color.fromARGB(255, 165, 165, 165),
+                focusColor: const Color.fromARGB(255, 255, 255, 255),
                 decoration: InputDecoration(
                     labelText: "Status", labelStyle: TextStyle(fontSize: 20)),
                 value: _selectedStatus,
@@ -85,7 +86,10 @@ class _RouteListScreenState extends State<RouteListScreen> {
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => RouteDetailsScreen()));
+              },
               child: Text("Add"),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
@@ -106,7 +110,7 @@ class _RouteListScreenState extends State<RouteListScreen> {
           child: Align(
             alignment: Alignment.center,
             child: Container(
-              width: MediaQuery.of(context).size.width * 0.91,
+              width: MediaQuery.of(context).size.width * 1,
               color: Colors.white,
               child: DataTable(
                 columnSpacing: 25,
@@ -158,49 +162,69 @@ class _RouteListScreenState extends State<RouteListScreen> {
                               fontWeight: FontWeight.bold))),
                 ],
                 rows: result?.result
-                        .map((e) => DataRow(cells: [
-                              DataCell(Text(e.id.toString(),
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(e.client?.user?.name ?? " ",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(e.driver?.user?.name ?? " ",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(e.status ?? " ",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(
-                                  e.startDate?.toString() ??
-                                      DateTime.now().toString(),
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(
-                                  e.endDate?.toString() ??
-                                      DateTime.now().toString(),
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(e.duration?.toString() ?? "0",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(
-                                  e.numberOfKilometars?.toString() ?? "0",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(e.fullPrice?.toString() ?? "0",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                            ]))
+                        .map((e) => DataRow(
+                                color: WidgetStateProperty<
+                                    Color?>.fromMap(<WidgetStatesConstraint, Color?>{
+                                  WidgetState.hovered & WidgetState.focused:
+                                      Colors.blueGrey,
+                                  ~WidgetState.disabled: Colors.grey,
+                                }),
+                                onSelectChanged: (selected) => {
+                                      if (selected == true)
+                                        {
+                                          Navigator.of(context).pushReplacement(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      RouteDetailsScreen(
+                                                          route: e)))
+                                        }
+                                    },
+                                cells: [
+                                  DataCell(Text(e.id.toString(),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold))),
+                                  DataCell(Text(e.client?.user?.name ?? " ",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold))),
+                                  DataCell(Text(e.driver?.user?.name ?? " ",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold))),
+                                  DataCell(Text(e.status ?? " ",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold))),
+                                  DataCell(Text(
+                                      e.startDate?.toString() ??
+                                          DateTime.now().toString(),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold))),
+                                  DataCell(Text(
+                                      e.endDate?.toString() ??
+                                          DateTime.now().toString(),
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold))),
+                                  DataCell(Text(e.duration?.toString() ?? "0",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold))),
+                                  DataCell(Text(
+                                      e.numberOfKilometars?.toString() ?? "0",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold))),
+                                  DataCell(Text(
+                                      e.fullPrice != null
+                                          ? "${e.fullPrice.toString()} KM"
+                                          : "0KM",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold))),
+                                ]))
                         .toList()
                         .cast<DataRow>() ??
                     [],

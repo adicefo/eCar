@@ -22,7 +22,7 @@ namespace eCar.Services.StateMachine.RouteStateMachine
         public override Model.Model.Route Insert(RouteInsertRequest request)
         {
             var set = Context.Set<Route>();
-            var entity = Mapper.Map < Database.Route>(request);
+            var entity = Mapper.Map <Database.Route>(request);
 
             var client = Context.Clients.Find(request.ClientId);
             var driver = Context.Drivers.Find(request.DriverID);

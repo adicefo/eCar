@@ -10,6 +10,6 @@ namespace eCar.Model.SearchObjects
     {
         public string? NameGTE { get; set; }
         public string? SurnameGTE { get; set; }
-        public bool IsUserIncluded { get; set; }
+        public bool IsUserIncluded { get; set; } = true;
     }
 }

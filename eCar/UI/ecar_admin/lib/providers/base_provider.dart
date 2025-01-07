@@ -68,7 +68,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-  Future<T> update(int id, [dynamic request]) async {
+  Future<T> update(int? id, [dynamic request]) async {
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
     var headers = await createHeaders();
@@ -84,7 +84,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
-  Future<T> delete(int id) async {
+  Future<T> delete(int? id) async {
     var url = "$_baseUrl$_endpoint/$id";
     var uri = Uri.parse(url);
     var headers = await createHeaders();

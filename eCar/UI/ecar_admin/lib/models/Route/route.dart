@@ -19,7 +19,7 @@ class Route {
   int? duration;
   double? numberOfKilometars;
   double? fullPrice;
-  int? driverId;
+  int? driverID;
   int? clientId;
   Driver? driver;
   Model.Client? client;
@@ -33,7 +33,7 @@ class Route {
       this.duration,
       this.numberOfKilometars,
       this.fullPrice,
-      this.driverId,
+      this.driverID,
       this.clientId,
       this.driver,
       this.client});

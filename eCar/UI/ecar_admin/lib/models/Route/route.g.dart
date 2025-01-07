@@ -24,7 +24,7 @@ Route _$RouteFromJson(Map<String, dynamic> json) => Route(
       duration: (json['duration'] as num?)?.toInt(),
       numberOfKilometars: (json['numberOfKilometars'] as num?)?.toDouble(),
       fullPrice: (json['fullPrice'] as num?)?.toDouble(),
-      driverId: (json['driverId'] as num?)?.toInt(),
+      driverID: (json['driverID'] as num?)?.toInt(),
       clientId: (json['clientId'] as num?)?.toInt(),
       driver: json['driver'] == null
           ? null
@@ -44,7 +44,7 @@ Map<String, dynamic> _$RouteToJson(Route instance) => <String, dynamic>{
       'duration': instance.duration,
       'numberOfKilometars': instance.numberOfKilometars,
       'fullPrice': instance.fullPrice,
-      'driverId': instance.driverId,
+      'driverID': instance.driverID,
       'clientId': instance.clientId,
       'driver': instance.driver,
       'client': instance.client,

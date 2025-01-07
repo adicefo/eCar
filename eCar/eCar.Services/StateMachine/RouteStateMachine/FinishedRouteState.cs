@@ -1,10 +1,12 @@
 ﻿using eCar.Services.Database;
 using MapsterMapper;
+using EF=Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace eCar.Services.StateMachine.RouteStateMachine
 {
@@ -18,9 +20,10 @@ namespace eCar.Services.StateMachine.RouteStateMachine
 
         public override Model.Model.Route UpdateFinish(int id)
         {
-            var entity = Context.Routes.Find(id);
+            var set = Context.Set<Database.Route>().AsQueryable();
+            var entity = set.Include(x => x.Client).ThenInclude(x=>x.User).Include(d=>d.Driver).ThenInclude(x=>x.User).FirstOrDefault(x => x.Id == id);
             if (entity == null)
-                throw new Exception("Non-existed route");
+                throw new Exception("Non-existed model");
 
             entity.EndDate = DateTime.Now;
             entity.Duration = (int)(entity.EndDate.Value - entity.StartDate!.Value).TotalMinutes;

@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:ecar_admin/providers/auth_provider.dart';
+import 'package:ecar_admin/providers/client_provider.dart';
+import 'package:ecar_admin/providers/driver_provider.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
@@ -14,6 +16,9 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => RouteProvider()),
+      ChangeNotifierProvider(create: (_) => ClientProvider()),
+      ChangeNotifierProvider(create: (_) => DriverProvider()),
+      ChangeNotifierProvider(create: (_) => AuthProvider()),
     ],
     child: const MyApp(),
   ));
