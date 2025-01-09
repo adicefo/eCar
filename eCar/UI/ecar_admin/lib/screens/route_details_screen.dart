@@ -91,8 +91,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   child: FormBuilderTextField(
                     decoration: InputDecoration(
                       labelText: "Source point latitude",
-                      filled: isDisabled,
-                      fillColor: isDisabled ? Colors.grey[200] : null,
+                      filled: true,
+                      fillColor: Colors.grey[200],
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey),
                       ),
@@ -101,7 +101,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                       ),
                     ),
                     style: TextStyle(
-                      color: isDisabled ? Colors.black : Colors.white,
+                      color: Colors.black,
                     ),
                     name: "sourcePoint_latitude",
                     enabled: !isDisabled,
@@ -112,8 +112,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   child: FormBuilderTextField(
                     decoration: InputDecoration(
                       labelText: "Source point longitude",
-                      filled: isDisabled,
-                      fillColor: isDisabled ? Colors.grey[200] : null,
+                      filled: true,
+                      fillColor: Colors.grey[200],
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey),
                       ),
@@ -122,7 +122,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                       ),
                     ),
                     style: TextStyle(
-                      color: isDisabled ? Colors.black : Colors.white,
+                      color: Colors.black,
                     ),
                     name: "sourcePoint_longitude",
                     enabled: !isDisabled,
@@ -136,8 +136,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   child: FormBuilderTextField(
                     decoration: InputDecoration(
                       labelText: "Destination point latitude",
-                      filled: isDisabled,
-                      fillColor: isDisabled ? Colors.grey[200] : null,
+                      filled: true,
+                      fillColor: Colors.grey[200],
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey),
                       ),
@@ -146,7 +146,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                       ),
                     ),
                     style: TextStyle(
-                      color: isDisabled ? Colors.black : Colors.white,
+                      color: Colors.black,
                     ),
                     name: "destinationPoint_latitude",
                     enabled: !isDisabled,
@@ -157,8 +157,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   child: FormBuilderTextField(
                     decoration: InputDecoration(
                       labelText: "Destination point longitude",
-                      filled: isDisabled,
-                      fillColor: isDisabled ? Colors.grey[200] : null,
+                      filled: true,
+                      fillColor: Colors.grey[200],
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey),
                       ),
@@ -167,7 +167,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                       ),
                     ),
                     style: TextStyle(
-                      color: isDisabled ? Colors.black : Colors.white,
+                      color: Colors.black,
                     ),
                     name: "destinationPoint_longitude",
                     enabled: !isDisabled,
@@ -182,8 +182,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                     name: "driverID",
                     decoration: InputDecoration(
                       labelText: "Driver",
-                      filled: isDisabled,
-                      fillColor: isDisabled ? Colors.grey[200] : null,
+                      filled: true,
+                      fillColor: Colors.grey[200],
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey),
                       ),
@@ -213,8 +213,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                     name: "clientId",
                     decoration: InputDecoration(
                       labelText: "Client",
-                      filled: isDisabled,
-                      fillColor: isDisabled ? Colors.grey[200] : null,
+                      filled: true,
+                      fillColor: Colors.grey[200],
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey),
                       ),
@@ -277,7 +277,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 routeProvider.insert(requestPayload);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 237, 240, 245),
+                backgroundColor: Colors.yellowAccent,
                 foregroundColor: Colors.black,
                 minimumSize: Size(300, 50),
               ),
@@ -298,19 +298,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
               ),
               child: const Text("Active"),
             ),
-            const SizedBox(width: 10),
-            ElevatedButton(
-              onPressed: () {
-                routeProvider.delete(widget.route?.id);
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.black,
-                minimumSize: Size(150, 50),
-              ),
-              child: const Text("Delete"),
-            ),
           ] else if (widget.route?.status == "active") ...[
             const SizedBox(width: 10),
             ElevatedButton(
@@ -325,20 +312,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
               child: const Text("Finish"),
             ),
           ],
-          if (widget.route?.status == "finished") ...[
-            ElevatedButton(
-              onPressed: () {
-                routeProvider.delete(widget.route?.id);
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.black,
-                minimumSize: Size(300, 50),
-              ),
-              child: const Text("Delete"),
-            ),
-          ]
         ],
       ),
     );

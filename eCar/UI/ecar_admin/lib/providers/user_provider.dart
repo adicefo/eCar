@@ -25,8 +25,6 @@ class UserProvider extends BaseProvider<Model.User> {
       var data = jsonDecode(response.body);
       var result = Model.User.fromJson(data);
       return result;
-    } else if (response.statusCode == 204) {
-      return Model.User();
     } else {
       throw Exception("Unknown error in GET request");
     }

@@ -8,7 +8,7 @@ part of 'driver.dart';
 
 Driver _$DriverFromJson(Map<String, dynamic> json) => Driver(
       id: (json['id'] as num?)?.toInt(),
-      userId: (json['userId'] as num?)?.toInt(),
+      userID: (json['userID'] as num?)?.toInt(),
       user: json['user'] == null
           ? null
           : User.fromJson(json['user'] as Map<String, dynamic>),
@@ -18,7 +18,7 @@ Driver _$DriverFromJson(Map<String, dynamic> json) => Driver(
 
 Map<String, dynamic> _$DriverToJson(Driver instance) => <String, dynamic>{
       'id': instance.id,
-      'userId': instance.userId,
+      'userID': instance.userID,
       'user': instance.user,
       'numberOfHoursAmount': instance.numberOfHoursAmount,
       'numberOfClientsAmount': instance.numberOfClientsAmount,

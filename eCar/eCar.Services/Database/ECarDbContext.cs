@@ -71,7 +71,7 @@ public partial class ECarDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Clients)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Client_User");
         });
 
@@ -111,7 +111,7 @@ public partial class ECarDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Drivers)
                 .HasForeignKey(d => d.UserID)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Driver_User");
         });
 

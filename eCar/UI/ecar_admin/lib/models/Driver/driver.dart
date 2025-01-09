@@ -5,14 +5,14 @@ part 'driver.g.dart';
 @JsonSerializable()
 class Driver {
   int? id;
-  int? userId;
+  int? userID;
   User? user;
   int? numberOfHoursAmount;
   int? numberOfClientsAmount;
 
   Driver(
       {this.id,
-      this.userId,
+      this.userID,
       this.user,
       this.numberOfHoursAmount,
       this.numberOfClientsAmount});

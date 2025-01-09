@@ -160,6 +160,16 @@ class _RouteListScreenState extends State<RouteListScreen> {
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("Edit",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("Delete",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold))),
                 ],
                 rows: result?.result
                         .map((e) => DataRow(
@@ -169,16 +179,6 @@ class _RouteListScreenState extends State<RouteListScreen> {
                                       Colors.blueGrey,
                                   ~WidgetState.disabled: Colors.grey,
                                 }),
-                                onSelectChanged: (selected) => {
-                                      if (selected == true)
-                                        {
-                                          Navigator.of(context).pushReplacement(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      RouteDetailsScreen(
-                                                          route: e)))
-                                        }
-                                    },
                                 cells: [
                                   DataCell(Text(e.id.toString(),
                                       style: TextStyle(
@@ -224,6 +224,47 @@ class _RouteListScreenState extends State<RouteListScreen> {
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold))),
+                                  DataCell(
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                RouteDetailsScreen(route: e),
+                                          ),
+                                        );
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.yellowAccent),
+                                      ),
+                                      child: Text(
+                                        "Edit",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        provider.delete(e.id);
+                                        await Future.delayed(
+                                            const Duration(seconds: 1));
+                                        result = await provider.get();
+                                        setState(() {});
+                                      },
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Colors.redAccent),
+                                      ),
+                                      child: Text(
+                                        "Delete",
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                  ),
                                 ]))
                         .toList()
                         .cast<DataRow>() ??

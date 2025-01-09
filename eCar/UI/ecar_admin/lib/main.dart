@@ -5,6 +5,7 @@ import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/driver_provider.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/providers/user_provider.dart';
+import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
@@ -165,7 +166,8 @@ class LoginPage extends StatelessWidget {
                                 var loginResponse = await _authProvide.login();
                                 if (loginResponse.result == 0) {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => RouteListScreen()));
+                                      builder: (context) =>
+                                          DriversListScreen()));
                                 } else {
                                   if (context.mounted) {
                                     showDialog(

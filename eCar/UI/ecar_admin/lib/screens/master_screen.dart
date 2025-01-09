@@ -78,6 +78,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => DriversListScreen()));
               },
+              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
             ),
             ListTile(
               title: Text("Clients"),
@@ -85,6 +86,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => ClientListScreen()));
               },
+              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
             ),
             ListTile(
               title: Text("Routes"),
@@ -92,6 +94,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => RouteListScreen()));
               },
+              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
             ),
             ListTile(
               title: Text("Vehicles"),
@@ -99,6 +102,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => RouteListScreen()));
               },
+              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
             ),
             ListTile(
               title: Text("Reviews"),
@@ -106,6 +110,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => RouteListScreen()));
               },
+              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
             ),
             ListTile(
               title: Text("Notifications"),
@@ -113,6 +118,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => RouteListScreen()));
               },
+              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
             ),
             ListTile(
               title: Text("Rents"),
@@ -120,6 +126,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => RouteListScreen()));
               },
+              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
             ),
             ListTile(
               title: Text("Log out"),
@@ -127,6 +134,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 Navigator.pop(context);
                 Navigator.pop(context);
               },
+              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
             )
           ],
         ),

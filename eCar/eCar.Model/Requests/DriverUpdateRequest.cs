@@ -10,11 +10,10 @@ namespace eCar.Model.Requests
     public class DriverUpdateRequest
     {
         [Required]
-        [MinLength(8)]
         public string Password { get; set; }
         [Required]
-        [MinLength(8)]
         public string PasswordConfirm { get; set; }
         public string? TelephoneNumber { get; set; }
+        public string? Email { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:flutter/material.dart';
 
 class ClientListScreen extends StatefulWidget {
@@ -10,6 +11,6 @@ class ClientListScreen extends StatefulWidget {
 class _ClientListScreenState extends State<ClientListScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return MasterScreen("Clients", Container());
   }
 }
