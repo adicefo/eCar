@@ -3,6 +3,7 @@ import 'package:ecar_admin/models/search_result.dart';
 import 'package:ecar_admin/providers/review_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/review_details_screen.dart';
+import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -188,11 +189,16 @@ class _ReviewScreenState extends State<ReviewScreen> {
                               DataCell(
                                 ElevatedButton(
                                   onPressed: () async {
-                                    provider.delete(e.id);
-                                    await Future.delayed(
-                                        const Duration(seconds: 1));
-                                    result = await provider.get();
-                                    setState(() {});
+                                    bool? confirmDelete =
+                                        await AlertHelpers.deleteConfirmation(
+                                            context);
+                                    if (confirmDelete == true) {
+                                      provider.delete(e.id);
+                                      await Future.delayed(
+                                          const Duration(seconds: 1));
+                                      result = await provider.get();
+                                      setState(() {});
+                                    }
                                   },
                                   style: ButtonStyle(
                                     backgroundColor: MaterialStateProperty.all(

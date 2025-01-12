@@ -3,6 +3,7 @@ import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/models/Route/route.dart' as Model;
 import 'package:ecar_admin/screens/route_details_screen.dart';
+import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -248,11 +249,15 @@ class _RouteListScreenState extends State<RouteListScreen> {
                                   DataCell(
                                     ElevatedButton(
                                       onPressed: () async {
-                                        provider.delete(e.id);
-                                        await Future.delayed(
-                                            const Duration(seconds: 1));
-                                        result = await provider.get();
-                                        setState(() {});
+                                        bool? confirmDelete = await AlertHelpers
+                                            .deleteConfirmation(context);
+                                        if (confirmDelete == true) {
+                                          provider.delete(e.id);
+                                          await Future.delayed(
+                                              const Duration(seconds: 1));
+                                          result = await provider.get();
+                                          setState(() {});
+                                        }
                                       },
                                       style: ButtonStyle(
                                         backgroundColor:
