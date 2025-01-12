@@ -3,6 +3,7 @@
 import 'package:ecar_admin/providers/auth_provider.dart';
 import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/driver_provider.dart';
+import 'package:ecar_admin/providers/review_provider.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/providers/user_provider.dart';
 import 'package:ecar_admin/providers/vehicle_provider.dart';
@@ -23,7 +24,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => DriverProvider()),
       ChangeNotifierProvider(create: (_) => AuthProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
-      ChangeNotifierProvider(create: (_) => VehicleProvider())
+      ChangeNotifierProvider(create: (_) => VehicleProvider()),
+      ChangeNotifierProvider(create: (_) => ReviewProvider())
     ],
     child: const MyApp(),
   ));

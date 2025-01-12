@@ -7,7 +7,7 @@ public partial class Review
 {
     public int Id { get; set; }
 
-    public byte? Value { get; set; }
+    public int? Value { get; set; }
 
     public string? Description { get; set; }
 

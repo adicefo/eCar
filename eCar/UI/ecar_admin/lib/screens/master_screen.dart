@@ -3,6 +3,7 @@ import 'package:ecar_admin/providers/auth_provider.dart';
 import 'package:ecar_admin/providers/user_provider.dart';
 import 'package:ecar_admin/screens/clients_screen.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
+import 'package:ecar_admin/screens/review_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:ecar_admin/screens/vehicle_screen.dart';
 import 'package:flutter/material.dart';
@@ -113,7 +114,7 @@ class _MasterScreenState extends State<MasterScreen> {
               title: Text("Reviews"),
               onTap: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => RouteListScreen()));
+                    MaterialPageRoute(builder: (context) => ReviewScreen()));
               },
               hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
             ),

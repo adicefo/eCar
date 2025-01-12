@@ -34,6 +34,7 @@ internal class Program
         builder.Services.AddTransient<IRouteService, RouteService>();
         builder.Services.AddTransient<IRentService,RentService>();
         builder.Services.AddTransient<IVehicleService, VehicleService>();
+        builder.Services.AddTransient<IRevieweService,ReviewService>();
         builder.Services.AddTransient<BaseRouteState>();
         builder.Services.AddTransient<InitialRouteState>();
         builder.Services.AddTransient<WaitRouteState>();
