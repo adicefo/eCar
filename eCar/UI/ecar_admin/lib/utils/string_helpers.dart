@@ -1,3 +1,8 @@
+import 'dart:convert';
+import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
+import 'dart:typed_data';
+
 class StringHelpers {
   static String getQueryString(Map<String, dynamic> filter,
       {String? prefix, bool inRecursion = false}) {
@@ -35,4 +40,7 @@ class StringHelpers {
 
     return query;
   }
+
+  static Image imageFromBase64String(String base64Image) =>
+      Image.memory(base64Decode(base64Image));
 }

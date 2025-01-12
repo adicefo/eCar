@@ -44,8 +44,8 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-  void logout() {
-    _storage.delete(key: "jwt");
+  void logout() async {
+    await _storage.delete(key: "jwt");
   }
 
   Future<Map<String, String>> createHeaders() async {

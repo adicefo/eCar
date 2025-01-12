@@ -5,6 +5,7 @@ import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/driver_provider.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/providers/user_provider.dart';
+import 'package:ecar_admin/providers/vehicle_provider.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
@@ -21,7 +22,8 @@ void main() {
       ChangeNotifierProvider(create: (_) => ClientProvider()),
       ChangeNotifierProvider(create: (_) => DriverProvider()),
       ChangeNotifierProvider(create: (_) => AuthProvider()),
-      ChangeNotifierProvider(create: (_) => UserProvider())
+      ChangeNotifierProvider(create: (_) => UserProvider()),
+      ChangeNotifierProvider(create: (_) => VehicleProvider())
     ],
     child: const MyApp(),
   ));
@@ -165,6 +167,9 @@ class LoginPage extends StatelessWidget {
                               try {
                                 var loginResponse = await _authProvide.login();
                                 if (loginResponse.result == 0) {
+                                  //added delay because of User get method in MasterScreen
+                                  await Future.delayed(
+                                      const Duration(seconds: 1));
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) =>
                                           DriversListScreen()));

@@ -130,6 +130,9 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 ),
               ],
             ),
+            SizedBox(
+              height: 10,
+            ),
             Row(
               children: [
                 Expanded(
@@ -174,6 +177,9 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   ),
                 ),
               ],
+            ),
+            SizedBox(
+              height: 10,
             ),
             Row(
               children: [

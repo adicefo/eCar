@@ -99,6 +99,7 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
               ),
               SizedBox(
                 width: 20,
+                height: 10,
               ),
               Row(
                 children: [
@@ -145,6 +146,7 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
               ),
               SizedBox(
                 width: 20,
+                height: 10,
               ),
               Row(
                 children: [
@@ -193,6 +195,7 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
               ),
               SizedBox(
                 width: 80,
+                height: 10,
               ),
               Row(
                 children: [
@@ -294,6 +297,7 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
               ),
               SizedBox(
                 width: 20,
+                height: 10,
               ),
               Row(
                 children: [
@@ -340,6 +344,7 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
               ),
               SizedBox(
                 width: 20,
+                height: 10,
               ),
               Row(
                 children: [
@@ -388,6 +393,7 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
               ),
               SizedBox(
                 width: 80,
+                height: 10,
               ),
               Row(
                 children: [
