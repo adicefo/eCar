@@ -5,6 +5,7 @@ import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
+import 'package:ecar_admin/utils/alert_helpers.dart' as help;
 
 class DriverDetailsScreen extends StatefulWidget {
   Driver? driver;
@@ -452,19 +453,20 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
   }
 
   Widget _save() {
+    bool? confirmEdit;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
-              print(request);
+              confirmEdit = await help.AlertHelpers.editConfirmation(context);
               if (widget.driver == null) {
                 driverProvider.insert(request);
-              } else {
+              } else if (widget.driver != null && confirmEdit == true) {
                 userProvider.update(widget.driver?.userID, request);
               }
             },

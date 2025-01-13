@@ -4,6 +4,7 @@ import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
+import 'package:ecar_admin/utils/alert_helpers.dart' as help;
 
 class ReviewDetailsScreen extends StatefulWidget {
   Review? review;
@@ -96,16 +97,20 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
   }
 
   Widget _save() {
+    bool? confirmEdit;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
-              provider.update(widget.review?.id, request);
+              confirmEdit = await help.AlertHelpers.editConfirmation(context);
+              if (confirmEdit == true) {
+                provider.update(widget.review?.id, request);
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,

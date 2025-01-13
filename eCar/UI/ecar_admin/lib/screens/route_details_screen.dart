@@ -9,6 +9,7 @@ import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
+import 'package:ecar_admin/utils/alert_helpers.dart' as help;
 
 class RouteDetailsScreen extends StatefulWidget {
   Model.Route? route;
@@ -256,6 +257,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
 //TODO: Fix insert and finish edit for Route
   Widget _save() {
+    bool? confirmEdit;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(

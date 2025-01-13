@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:ecar_admin/utils/alert_helpers.dart' as help;
 import 'package:ecar_admin/models/Vehicle/vehicle.dart';
 import 'package:ecar_admin/providers/vehicle_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
@@ -198,19 +198,21 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
   }
 
   Widget _save() {
+    bool? confirmEdit;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
               request['image'] = _base64Image;
+              confirmEdit = await help.AlertHelpers.editConfirmation(context);
               if (widget.vehicle == null) {
                 provider.insert(request);
-              } else {
+              } else if (widget.vehicle != null && confirmEdit == true) {
                 provider.update(widget.vehicle?.id, request);
               }
             },

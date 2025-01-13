@@ -5,6 +5,7 @@ import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
+import 'package:ecar_admin/utils/alert_helpers.dart' as help;
 
 class ClientsDetailsScreen extends StatefulWidget {
   Client? client;
@@ -454,20 +455,20 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
   }
 
   Widget _save() {
+    bool? confirmEdit;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
-              print(request);
+              confirmEdit = await help.AlertHelpers.editConfirmation(context);
               if (widget.client == null) {
                 clientProvider.insert(request);
-              } else {
-                print("User id of client is: ${widget.client?.userId}");
+              } else if (widget.client != null && confirmEdit == true) {
                 userProvider.update(widget.client?.userId, request);
               }
             },
