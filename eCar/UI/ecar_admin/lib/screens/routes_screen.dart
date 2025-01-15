@@ -6,6 +6,7 @@ import 'package:ecar_admin/screens/route_details_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:number_pagination/number_pagination.dart';
 
 class RouteListScreen extends StatefulWidget {
   const RouteListScreen({super.key});
@@ -15,23 +16,26 @@ class RouteListScreen extends StatefulWidget {
 }
 
 class _RouteListScreenState extends State<RouteListScreen> {
+  int _currentPage = 0; // Track the current page
+  int _totalPages = 1; // Total pages (fetched from API)
+  int _pageSize = 8;
   late RouteProvider provider;
-
+  String? _selectedStatus;
+  SearchResult<Model.Route>? result;
   @override
   void didChangeDependencies() {
     provider = context.read<RouteProvider>();
+    _fetchData();
     super.didChangeDependencies();
   }
 
-  String? _selectedStatus;
-  SearchResult<Model.Route>? result;
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
         "Routes",
         Container(
             child: Column(
-          children: [_buildSearch(), _buildResultView()],
+          children: [_buildSearch(), _buildResultView(), _buildPagination()],
         )));
   }
 
@@ -67,12 +71,8 @@ class _RouteListScreenState extends State<RouteListScreen> {
             padding: const EdgeInsets.only(top: 20.0),
             child: ElevatedButton(
               onPressed: () async {
-                var filter = {'Status': _selectedStatus};
-                result = await provider.get(filter: filter);
-
-                setState(() {});
-
-                print(result);
+                _currentPage = 0;
+                await _fetchData();
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
@@ -104,6 +104,21 @@ class _RouteListScreenState extends State<RouteListScreen> {
   }
 
   Widget _buildResultView() {
+    if (result == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (result!.result == null) {
+      return const Center(child: Text("No routes found"));
+    }
+    if (result!.count == null) {
+      return Container(
+        child: Text(
+          "Error",
+          style: TextStyle(color: Colors.amber),
+        ),
+      );
+    }
     return Expanded(
       child: SingleChildScrollView(
         child: Padding(
@@ -255,7 +270,11 @@ class _RouteListScreenState extends State<RouteListScreen> {
                                           provider.delete(e.id);
                                           await Future.delayed(
                                               const Duration(seconds: 1));
-                                          result = await provider.get();
+                                          result = await provider.get(filter: {
+                                            'Status': _selectedStatus,
+                                            'Page': _currentPage,
+                                            'PageSize': _pageSize
+                                          });
                                           setState(() {});
                                         }
                                       },
@@ -280,5 +299,95 @@ class _RouteListScreenState extends State<RouteListScreen> {
         ),
       ),
     );
+  }
+
+  Widget _buildPagination() {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.yellowAccent,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: _currentPage > 0 ? _goToPreviousPage : null,
+            icon: Icon(
+              Icons.arrow_left,
+              color: _currentPage > 0 ? Colors.black : Colors.grey,
+            ),
+            tooltip: 'Previous Page',
+          ),
+          const SizedBox(width: 16),
+          if (_totalPages > 0) ...[
+            Text(
+              '${_currentPage + 1} of $_totalPages',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ] else if (_totalPages == 0) ...[
+            Text(
+              '0 of 0',
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            )
+          ],
+          const SizedBox(width: 16),
+          IconButton(
+            onPressed: _currentPage < _totalPages - 1 ? _goToNextPage : null,
+            icon: Icon(
+              Icons.arrow_right,
+              color:
+                  _currentPage < _totalPages - 1 ? Colors.black : Colors.grey,
+            ),
+            tooltip: 'Next Page',
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _fetchData() async {
+    var filter = {
+      'Status': _selectedStatus,
+      'Page': _currentPage,
+      'PageSize': _pageSize,
+    };
+
+    result = await provider.get(filter: filter);
+    setState(() {
+      print("Count ${result!.count!}");
+      _totalPages = (result!.count! / _pageSize).ceil();
+      print(_totalPages);
+    });
+  }
+
+  void _goToNextPage() async {
+    if (_currentPage < _totalPages - 1) {
+      setState(() => _currentPage++);
+      await _fetchData();
+    } else {
+      AlertHelpers.showAlert(context, "Warning", "Something went wrong!");
+    }
+  }
+
+  void _goToPreviousPage() async {
+    if (_currentPage > 0) {
+      setState(() => _currentPage--);
+      await _fetchData();
+    } else {
+      AlertHelpers.showAlert(context, "Warning", "Something went wrong!");
+    }
   }
 }

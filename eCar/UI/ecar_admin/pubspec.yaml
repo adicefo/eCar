@@ -44,6 +44,7 @@ dependencies:
   file_picker: ^8.1.7
   intl: ^0.19.0
   typed_data: ^1.4.0
+  number_pagination: ^1.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

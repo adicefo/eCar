@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:ecar_admin/models/Vehicle/vehicle.dart';
 import 'package:ecar_admin/models/search_result.dart';
 import 'package:ecar_admin/providers/vehicle_provider.dart';

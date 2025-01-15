@@ -31,13 +31,12 @@ abstract class BaseProvider<T> with ChangeNotifier {
     if (filter != null) {
       var queryString = StringHelpers.getQueryString(filter);
       url = "$url?$queryString";
-      print("Generated url: $queryString");
+      print("Generated url: $url");
     }
 
     var uri = Uri.parse(url);
     var headers = await createHeaders();
     var response = await http.get(uri, headers: headers);
-
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
       var result = SearchResult<T>();
@@ -45,7 +44,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
       for (var item in data['result']) {
         result.result.add(fromJson(item));
       }
-
+      result.count = data['count'];
       return result;
     } else {
       throw Exception("Unknown error in a GET request");

@@ -61,7 +61,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   Future initForm() async {
     clientResult = await clientProvider.get();
     driverResult = await driverProvider.get();
-    print("Retrived ${clientResult?.result[0]} : ${driverResult?.result[0]}");
     setState(() {
       isLoading = false;
     });
@@ -200,7 +199,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                     ),
                     style: TextStyle(color: Colors.black),
                     enabled: !isDisabled,
-                    items: driverResult?.result
+                    items: driverResult?.result!
                             .map((item) => DropdownMenuItem(
                                   value: item.id.toString(),
                                   child: Text(
@@ -233,7 +232,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                       color: Colors.black,
                     ),
                     enabled: !isDisabled,
-                    items: clientResult?.result
+                    items: clientResult?.result!
                             .map((item) => DropdownMenuItem(
                                   value: item.id.toString(),
                                   child: Text(
