@@ -11,6 +11,7 @@ namespace eCar.Services.Enums
     {
         Insert=1,
         Update,
+        UpdateActive,
         UpdateFinish,
         Delete
     }

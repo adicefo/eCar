@@ -23,7 +23,17 @@ class _ReviewScreenState extends State<ReviewScreen> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     provider = context.read<ReviewProvider>();
+    _fetchData();
     super.didChangeDependencies();
+  }
+
+  Future<void> _fetchData() async {
+    var filter = {'ReviewedName': _nameController.text ?? null};
+    result = await provider.get(filter: filter);
+
+    setState(() {});
+
+    print(result);
   }
 
   @override

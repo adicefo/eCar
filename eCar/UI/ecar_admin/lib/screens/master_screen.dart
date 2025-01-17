@@ -4,6 +4,7 @@ import 'package:ecar_admin/providers/user_provider.dart';
 import 'package:ecar_admin/screens/clients_screen.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/screens/notification_screen.dart';
+import 'package:ecar_admin/screens/rent_screen.dart';
 import 'package:ecar_admin/screens/review_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:ecar_admin/screens/vehicle_screen.dart';
@@ -131,7 +132,7 @@ class _MasterScreenState extends State<MasterScreen> {
               title: Text("Rents"),
               onTap: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => RouteListScreen()));
+                    MaterialPageRoute(builder: (context) => RentScreen()));
               },
               hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
             ),

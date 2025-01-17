@@ -338,11 +338,13 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
               request['image'] = _base64Image;
-              confirmEdit = await help.AlertHelpers.editConfirmation(context);
               if (widget.notification == null) {
                 provider.insert(request);
-              } else if (widget.notification != null && confirmEdit == true) {
-                provider.update(widget.notification?.id, request);
+              } else if (widget.notification != null) {
+                confirmEdit = await help.AlertHelpers.editConfirmation(context);
+                if (confirmEdit == true) {
+                  provider.update(widget.notification?.id, request);
+                }
               }
             },
             style: ElevatedButton.styleFrom(

@@ -232,7 +232,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                       color: Colors.black,
                     ),
                     enabled: !isDisabled,
-                    items: clientResult?.result!
+                    items: clientResult?.result
                             .map((item) => DropdownMenuItem(
                                   value: item.id.toString(),
                                   child: Text(
@@ -293,10 +293,15 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           ],
           if (widget.route?.status == "wait") ...[
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                bool? confirmEdit =
+                    await help.AlertHelpers.editConfirmation(context);
+
                 _formKey.currentState?.saveAndValidate();
-                routeProvider.update(
-                    widget.route?.id, _formKey.currentState?.value);
+                if (confirmEdit == true) {
+                  routeProvider.update(
+                      widget.route?.id, _formKey.currentState?.value);
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
@@ -308,8 +313,12 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           ] else if (widget.route?.status == "active") ...[
             const SizedBox(width: 10),
             ElevatedButton(
-              onPressed: () {
-                routeProvider.updateFinish(widget.route?.id);
+              onPressed: () async {
+                bool? confirmEdit =
+                    await help.AlertHelpers.editConfirmation(context);
+                if (confirmEdit == true) {
+                  routeProvider.updateFinish(widget.route?.id);
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,

@@ -16,14 +16,24 @@ namespace eCar.API.Controllers
     {
         
         public RentController(IRentService service):base(service) 
-        { 
+        {
 
+        }
+        [HttpPut("Active/{id}")]
+        public Model.Model.Rent UpdateActive(int id)
+        {
+            return (_service as IRentService).UpdateActive(id);
         }
 
         [HttpPut("Finish/{id}")]
         public Model.Model.Rent UpdateFinish(int id)
         {
             return (_service as IRentService).UpdateFinsih(id);
+        }
+        [HttpPost("ChechAvailability/{id}")]
+        public IActionResult CheckAvailability(int id,[FromBody]RentAvailabilityRequest request)
+        {
+            return (_service as IRentService).CheckAvailability(id,request);
         }
         [HttpGet("Actions/{id}")]
         public List<Services.Enums.Action> AllowedActions(int id)

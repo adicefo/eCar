@@ -463,11 +463,14 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
             onPressed: () async {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
-              confirmEdit = await help.AlertHelpers.editConfirmation(context);
+
               if (widget.driver == null) {
                 driverProvider.insert(request);
-              } else if (widget.driver != null && confirmEdit == true) {
-                userProvider.update(widget.driver?.userID, request);
+              } else if (widget.driver != null) {
+                confirmEdit = await help.AlertHelpers.editConfirmation(context);
+                if (confirmEdit == true) {
+                  userProvider.update(widget.driver?.userID, request);
+                }
               }
             },
             style: ElevatedButton.styleFrom(

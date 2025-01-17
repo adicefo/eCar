@@ -7,9 +7,9 @@ public partial class Statistic
 {
     public int Id { get; set; }
 
-    public byte? NumberOfHours { get; set; }
+    public int? NumberOfHours { get; set; }
 
-    public byte? NumberOfClients { get; set; }
+    public int? NumberOfClients { get; set; }
 
     public decimal? PriceAmount { get; set; }
 

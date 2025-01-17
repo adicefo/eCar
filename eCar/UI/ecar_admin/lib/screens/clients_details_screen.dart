@@ -465,11 +465,13 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
             onPressed: () async {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
-              confirmEdit = await help.AlertHelpers.editConfirmation(context);
               if (widget.client == null) {
                 clientProvider.insert(request);
-              } else if (widget.client != null && confirmEdit == true) {
-                userProvider.update(widget.client?.userId, request);
+              } else if (widget.client != null) {
+                confirmEdit = await help.AlertHelpers.editConfirmation(context);
+                if (confirmEdit == true) {
+                  userProvider.update(widget.client?.userId, request);
+                }
               }
             },
             style: ElevatedButton.styleFrom(

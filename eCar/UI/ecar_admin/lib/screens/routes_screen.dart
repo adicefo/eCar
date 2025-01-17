@@ -213,14 +213,20 @@ class _RouteListScreenState extends State<RouteListScreen> {
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold))),
                                   DataCell(Text(
-                                      e.startDate?.toString() ??
-                                          DateTime.now().toString(),
+                                      e.startDate
+                                              ?.toString()
+                                              .substring(0, 19) ??
+                                          DateTime.now()
+                                              .toString()
+                                              .substring(0, 19),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold))),
                                   DataCell(Text(
-                                      e.endDate?.toString() ??
-                                          DateTime.now().toString(),
+                                      e.endDate?.toString().substring(0, 19) ??
+                                          DateTime.now()
+                                              .toString()
+                                              .substring(0, 19),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold))),

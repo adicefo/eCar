@@ -1,4 +1,5 @@
-﻿using eCar.Services.Database;
+﻿using eCar.Model.Requests;
+using eCar.Services.Database;
 using MapsterMapper;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,34 @@ namespace eCar.Services.StateMachine.RentStateMachine
         {
             
         }
+        public override Model.Model.Rent Update(int id, RentUpdateRequest request)
+        {
+            var set = Context.Set<Database.Rent>();
+            var entity = set.Find(id);
+            if (entity == null)
+                throw new Exception("Non-existed model");
 
+            entity = Mapper.Map(request, entity);
+
+            if (request.EndingDate != null)
+            {
+                if (entity.EndingDate < entity.RentingDate)
+                    throw new Exception("Input valid dates");
+                if (entity.EndingDate != null && entity.RentingDate != null)
+                    entity.NumberOfDays = (int)(request.EndingDate.Value - entity.RentingDate.Value).TotalDays;
+                else
+                    entity.NumberOfDays = 0;
+            }
+            var vehicle = Context.Vehicles.Find(request.VehicleId);
+            if (vehicle != null)
+                entity.FullPrice = entity.NumberOfDays * vehicle.Price;
+            else
+                entity.FullPrice = 0;
+
+            Context.SaveChanges();
+
+            return Mapper.Map<Model.Model.Rent>(entity);
+        }
         public override Model.Model.Rent UpdateFinish(int id)
         {
             var entity = Context.Rents.Find(id);

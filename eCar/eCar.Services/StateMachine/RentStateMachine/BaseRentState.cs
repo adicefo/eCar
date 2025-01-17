@@ -3,6 +3,7 @@ using eCar.Model.Requests;
 using eCar.Services.Database;
 using eCar.Services.StateMachine.RouteStateMachine;
 using MapsterMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,11 @@ namespace eCar.Services.StateMachine.RentStateMachine
         {
             throw new UserException("Action not allowed");
         }
+        //state wait
+        public virtual Model.Model.Rent UpdateActive(int id)
+        {
+            throw new UserException("Action not allowed");
+        }
         //state finished
         public virtual Model.Model.Rent UpdateFinish(int id)
         {
@@ -41,6 +47,10 @@ namespace eCar.Services.StateMachine.RentStateMachine
         }
         //from only status wait  you can delete
         public virtual Model.Model.Rent Delete(int id)
+        {
+            throw new UserException("Action not allowed");
+        }
+        public virtual IActionResult ChechAvailability(int id,RentAvailabilityRequest request)
         {
             throw new UserException("Action not allowed");
         }

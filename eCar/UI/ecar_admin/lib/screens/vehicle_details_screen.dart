@@ -209,11 +209,14 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
               request['image'] = _base64Image;
-              confirmEdit = await help.AlertHelpers.editConfirmation(context);
+
               if (widget.vehicle == null) {
                 provider.insert(request);
-              } else if (widget.vehicle != null && confirmEdit == true) {
-                provider.update(widget.vehicle?.id, request);
+              } else if (widget.vehicle != null) {
+                confirmEdit = await help.AlertHelpers.editConfirmation(context);
+                if (confirmEdit == true) {
+                  provider.update(widget.vehicle?.id, request);
+                }
               }
             },
             style: ElevatedButton.styleFrom(

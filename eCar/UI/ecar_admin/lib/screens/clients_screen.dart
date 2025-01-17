@@ -22,7 +22,18 @@ class _ClientListScreenState extends State<ClientListScreen> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     provider = context.read<ClientProvider>();
+    _fetchData();
     super.didChangeDependencies();
+  }
+
+  Future<void> _fetchData() async {
+    var filter = {
+      'NameGTE': _nameEditingController.text ?? "",
+      'SurnameGTE': _surnameEditingController.text ?? ""
+    };
+    result = await provider.get(filter: filter);
+    setState(() {});
+    print(result);
   }
 
   @override
@@ -84,13 +95,7 @@ class _ClientListScreenState extends State<ClientListScreen> {
             padding: const EdgeInsets.only(top: 20.0),
             child: ElevatedButton(
               onPressed: () async {
-                var filter = {
-                  'NameGTE': _nameEditingController.text,
-                  'SurnameGTE': _surnameEditingController.text
-                };
-                result = await provider.get(filter: filter);
-                setState(() {});
-                print(result);
+                _fetchData();
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),

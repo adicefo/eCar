@@ -1,50 +1,44 @@
-import 'package:ecar_admin/models/Vehicle/vehicle.dart';
+import 'package:ecar_admin/models/Rent/rent.dart';
 import 'package:ecar_admin/models/search_result.dart';
-import 'package:ecar_admin/providers/vehicle_provider.dart';
+import 'package:ecar_admin/providers/rent_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
-import 'package:ecar_admin/screens/vehicle_details_screen.dart';
+import 'package:ecar_admin/screens/rent_details_screen.dart';
+import 'package:ecar_admin/screens/rent_request_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ecar_admin/utils/string_helpers.dart' as help;
 
-class VehicleScreen extends StatefulWidget {
-  const VehicleScreen({super.key});
+class RentScreen extends StatefulWidget {
+  const RentScreen({super.key});
 
   @override
-  State<VehicleScreen> createState() => _VehicleScreenState();
+  State<RentScreen> createState() => _RentScreenState();
 }
 
-class _VehicleScreenState extends State<VehicleScreen> {
-  int _currentPage = 0;
-  int _totalPages = 1;
-  int _pageSize = 8;
-  late VehicleProvider provider;
-  final Map<String, bool> availabilityOptions = {
-    'Available': true,
-    'Unavailable': false,
-  };
-  String? selectedOption;
-  bool? selectedValue;
-  SearchResult<Vehicle>? result;
+class _RentScreenState extends State<RentScreen> {
+  late RentProvider provider;
+  String? _selectedStatus;
+  SearchResult<Rent>? result;
 
+  int _currentPage = 0;
+  int _pageSize = 8;
+  int _totalPages = 1;
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
-    provider = context.read<VehicleProvider>();
+    provider = context.read<RentProvider>();
     _fetchData();
     super.didChangeDependencies();
   }
 
   Future<void> _fetchData() async {
     var filter = {
-      'IsAvailable': selectedValue,
+      'Status': _selectedStatus,
       'Page': _currentPage,
       'PageSize': _pageSize
     };
     result = await provider.get(filter: filter);
     setState(() {
-      print("Count: ${result?.count}");
       _totalPages = (result!.count! / _pageSize).ceil();
     });
   }
@@ -52,47 +46,39 @@ class _VehicleScreenState extends State<VehicleScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
-        "Vehicle",
-        Container(
-          child: Column(
-            children: [_buildSearch(), _buildResultView(), _buildPagination()],
-          ),
+        "Rent",
+        Column(
+          children: [_buildSearch(), _buildResultView(), _buildPagination()],
         ));
   }
 
   Widget _buildSearch() {
     return Row(
       children: [
-        SizedBox(
-          width: 50,
-        ),
+        const SizedBox(width: 50),
         Expanded(
           child: Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: DropdownButtonFormField<String>(
-                isDense: true,
-                focusColor: const Color.fromARGB(255, 255, 255, 255),
-                decoration: InputDecoration(
-                    labelText: "availability",
-                    labelStyle: TextStyle(fontSize: 20)),
-                value: selectedOption,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedOption = newValue;
-                    selectedValue = availabilityOptions[newValue];
-                  });
-                },
-                items: availabilityOptions.keys.map((String key) {
-                  return DropdownMenuItem<String>(
-                    value: key,
-                    child: Text(key),
-                  );
-                }).toList(),
-              )),
+            padding: const EdgeInsets.only(top: 20.0),
+            child: DropdownButtonFormField<String>(
+              isDense: true,
+              focusColor: const Color.fromARGB(255, 255, 255, 255),
+              decoration: const InputDecoration(
+                  labelText: "Status", labelStyle: TextStyle(fontSize: 20)),
+              value: _selectedStatus,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedStatus = newValue;
+                });
+              },
+              items: const [
+                DropdownMenuItem(value: "wait", child: Text("Wait")),
+                DropdownMenuItem(value: "active", child: Text("Active")),
+                DropdownMenuItem(value: "finished", child: Text("Finished")),
+              ],
+            ),
+          ),
         ),
-        SizedBox(
-          width: 200,
-        ),
+        SizedBox(width: 200),
         SizedBox(
           width: 300,
           child: Padding(
@@ -105,28 +91,31 @@ class _VehicleScreenState extends State<VehicleScreen> {
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
               ),
-              child: Text("Search"),
+              child: const Text("Search"),
             ),
           ),
         ),
-        SizedBox(width: 100),
+        const SizedBox(width: 100),
         SizedBox(
           width: 300,
           child: Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => VehicleDetailsScreen()));
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => RentDetailsScreen(),
+                  ),
+                );
               },
-              child: Text("Add"),
+              child: const Text("Add"),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
               ),
             ),
           ),
         ),
-        SizedBox(width: 50),
+        const SizedBox(width: 50),
       ],
     );
   }
@@ -149,23 +138,31 @@ class _VehicleScreenState extends State<VehicleScreen> {
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold))),
                 DataColumn(
-                    label: Text("Available",
+                    label: Text("RentingDate",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold))),
                 DataColumn(
-                    label: Text("Average consumption",
+                    label: Text("EndingDate",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold))),
                 DataColumn(
-                    label: Text("Name",
+                    label: Text("FullPrice",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold))),
                 DataColumn(
-                    label: Text("Image",
+                    label: Text("Status",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold))),
                 DataColumn(
-                    label: Text("Price",
+                    label: Text("Vehicle name",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold))),
+                DataColumn(
+                    label: Text("Client name",
+                        style: TextStyle(
+                            color: Colors.black, fontWeight: FontWeight.bold))),
+                DataColumn(
+                    label: Text("Active",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold))),
                 DataColumn(
@@ -190,38 +187,65 @@ class _VehicleScreenState extends State<VehicleScreen> {
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),
-                              DataCell(Text(e.available.toString(),
+                              DataCell(Text(
+                                  e.rentingDate.toString().substring(0, 19),
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),
                               DataCell(Text(
-                                  "${e.averageConsumption.toString()} l/km",
+                                  e.endingDate.toString().substring(0, 19),
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),
-                              DataCell(Text(e.name.toString(),
+                              DataCell(Text(e.fullPrice.toString(),
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),
-                              DataCell(e.image != null
-                                  ? Container(
-                                      width: 100,
-                                      height: 100,
-                                      child: help.StringHelpers
-                                          .imageFromBase64String(e.image!),
-                                    )
-                                  : Text("null")),
-                              DataCell(Text("${e.price.toString()}KM",
+                              DataCell(Text(e.status!,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),
+                              DataCell(Text(e.vehicle!.name!,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold))),
+                              DataCell(Text(
+                                  "${e.client?.user?.name} ${e.client?.user?.surname}",
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold))),
+                              DataCell(
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    e.status == "wait"
+                                        ? Navigator.of(context).pushReplacement(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RentRequestScreen(rent: e),
+                                            ),
+                                          )
+                                        : AlertHelpers.showAlert(
+                                            context,
+                                            "Invalid action",
+                                            "Unabled operation. Your status is not wait!");
+                                  },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Colors.blueAccent),
+                                  ),
+                                  child: Text(
+                                    "Active",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ),
                               DataCell(
                                 ElevatedButton(
                                   onPressed: () {
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            VehicleDetailsScreen(vehicle: e),
+                                            RentDetailsScreen(rent: e),
                                       ),
                                     );
                                   },

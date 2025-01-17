@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace eCar.Model.Requests
 {
-    public class RentUpdateRequest
+    public class RentAvailabilityRequest
     {
-       public  DateTime? EndingDate { get; set; }
         public int VehicleId { get; set; }
+        public DateTime RentingDate { get; set; }
+        public DateTime EndingDate { get; set; }
     }
 }

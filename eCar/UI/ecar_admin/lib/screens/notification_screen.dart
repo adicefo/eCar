@@ -31,7 +31,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     provider = context.read<NotificationProvider>();
+    _fetchData();
     super.didChangeDependencies();
+  }
+
+  Future<void> _fetchData() async {
+    var filter = {
+      'HeadingGTE': _headingController.text ?? null,
+      'IsForClient': selectedValue
+    };
+    result = await provider.get(filter: filter);
+
+    setState(() {});
+
+    print(result);
   }
 
   @override
@@ -102,15 +115,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             padding: const EdgeInsets.only(top: 20.0),
             child: ElevatedButton(
               onPressed: () async {
-                var filter = {
-                  'HeadingGTE': _headingController.text,
-                  'IsForClient': selectedValue
-                };
-                result = await provider.get(filter: filter);
-
-                setState(() {});
-
-                print(result);
+                _fetchData();
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),

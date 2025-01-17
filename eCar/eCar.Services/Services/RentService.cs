@@ -4,12 +4,16 @@ using eCar.Services.Database;
 using eCar.Services.Interfaces;
 using eCar.Services.StateMachine.RentStateMachine;
 using eCar.Services.StateMachine.RouteStateMachine;
+using EFCore = Microsoft.EntityFrameworkCore;
 using MapsterMapper;
+using Nest;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace eCar.Services.Services
 {
@@ -38,11 +42,23 @@ namespace eCar.Services.Services
             var state = BaseRentState.CreateState(entity.Status);
             return state.Delete(id);
         }
+        public Model.Model.Rent UpdateActive(int id)
+        {
+            var entity = GetById(id);
+            var state = BaseRentState.CreateState(entity.Status);
+            return state.UpdateActive(id);
+        }
         public Model.Model.Rent UpdateFinsih(int id)
         {
             var entity= GetById(id);
             var state=BaseRentState.CreateState(entity.Status);
             return state.UpdateFinish(id);
+        }
+        public IActionResult CheckAvailability(int id,RentAvailabilityRequest request)
+        {
+            var entity = GetById(id);
+            var state = BaseRentState.CreateState(entity.Status);
+            return state.ChechAvailability(id,request);
         }
         public List<Enums.Action> AllowedActions(int id)
         {
@@ -74,9 +90,17 @@ namespace eCar.Services.Services
             if(search.FullPriceGTE!=null)
                 filteredQuery=filteredQuery.Where(x=>x.FullPrice>search.FullPriceGTE);
             if(search.RentingDate!=null)
-                filteredQuery=filteredQuery.Where(x=>x.Equals(search.RentingDate));
+                filteredQuery=filteredQuery.Where(x=>x.RentingDate.Value.Date==search.RentingDate.Value.Date);
             if (search.EndingDate != null)
-                filteredQuery = filteredQuery.Where(x => x.Equals(search.EndingDate));
+                filteredQuery = filteredQuery.Where(x => x.EndingDate.Value.Date== search.EndingDate.Value.Date);
+            return filteredQuery;
+        }
+
+        public override IQueryable<Rent> AddInclude(RentSearchObject search, IQueryable<Rent> query)
+        {
+            var filteredQuery = base.AddInclude(search, query);
+            filteredQuery = EFCore.EntityFrameworkQueryableExtensions.Include(filteredQuery, x => x.Client).ThenInclude(x => x.User);
+            filteredQuery = EFCore.EntityFrameworkQueryableExtensions.Include(filteredQuery, x => x.Vehicle);
             return filteredQuery;
         }
         public override void BeforeInsert(RentInsertRequest request, Rent entity)
