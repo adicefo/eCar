@@ -8,6 +8,7 @@ public partial class CompanyPrice
     public int Id { get; set; }
 
     public decimal PricePerKilometar { get; set; }
+    public DateTime? AddingDate { get; set; }
 
     public virtual ICollection<CompanyDetail> CompanyDetails { get; set; } = new List<CompanyDetail>();
 

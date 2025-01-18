@@ -76,12 +76,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
             padding: const EdgeInsets.only(top: 20.0),
             child: ElevatedButton(
               onPressed: () async {
-                var filter = {'ReviewedName': _nameController.text};
-                result = await provider.get(filter: filter);
-
-                setState(() {});
-
-                print(result);
+                _fetchData();
               },
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),

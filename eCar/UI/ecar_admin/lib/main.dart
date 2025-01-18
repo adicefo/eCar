@@ -2,6 +2,7 @@
 
 import 'package:ecar_admin/providers/auth_provider.dart';
 import 'package:ecar_admin/providers/client_provider.dart';
+import 'package:ecar_admin/providers/companyPrice_provider.dart';
 import 'package:ecar_admin/providers/driver_provider.dart';
 import 'package:ecar_admin/providers/notification_provider.dart';
 import 'package:ecar_admin/providers/rent_provider.dart';
@@ -30,6 +31,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => ReviewProvider()),
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(create: (_) => RentProvider()),
+      ChangeNotifierProvider(create: (_) => CompanyPriceProvider()),
     ],
     child: const MyApp(),
   ));

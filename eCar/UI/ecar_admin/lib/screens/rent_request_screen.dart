@@ -194,6 +194,15 @@ class _RentRequestScreenState extends State<RentRequestScreen> {
             onPressed: () async {
               confirmEdit = await AlertHelpers.editConfirmation(context);
               if (confirmEdit == true) {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    duration: Duration(seconds: 2),
+                    backgroundColor: Colors.redAccent,
+                    content: Text(
+                      'Request has been denied',
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    )));
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => RentScreen()));
                 provider.delete(widget.rent?.id);
@@ -214,7 +223,16 @@ class _RentRequestScreenState extends State<RentRequestScreen> {
               confirmEdit = await AlertHelpers.editConfirmation(context);
               if (confirmEdit == true) {
                 provider.updateActive(widget.rent?.id);
-                await Future.delayed(const Duration(seconds: 1));
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    duration: Duration(seconds: 2),
+                    backgroundColor: Colors.lightGreen,
+                    content: Text(
+                      'Request has been accepted',
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    )));
+                await Future.delayed(const Duration(seconds: 2));
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => RentScreen()));
               }
