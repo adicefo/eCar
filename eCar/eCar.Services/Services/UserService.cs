@@ -43,21 +43,21 @@ namespace eCar.Services.Services
             if (token == null)
                 return new AuthResponse() { Result = AuthResult.UserNotFound };
 
-            int roleId = 0;
+            string rola="nesto";
 
             switch (role)
             {
                 case ("Admin"):
                     var admin = Context.Admins.FirstOrDefault(a => a.UserID == user.Id);
-                    roleId = admin.Id;
+                    rola = "admin";
                     break;
                 case ("Client"):
                     var client = Context.Clients.FirstOrDefault(c => c.UserId == user.Id);
-                    roleId = client.Id;
+                    rola = "client";
                     break;
                 case ("Driver"):
                     var driver = Context.Drivers.FirstOrDefault(d => d.UserID == user.Id);
-                    roleId = driver.Id;
+                    rola = "driver"; 
                     break;
                 default:
                     throw new UserException("Invalid role");
@@ -68,7 +68,7 @@ namespace eCar.Services.Services
                 Result = AuthResult.Success,
                 UserId = user.Id,
                 Token = token,
-                RoleId = roleId
+                Role = rola,
             };
 
         }
