@@ -1,12 +1,19 @@
 import 'package:ecar_mobile/providers/auth_provider.dart';
+import 'package:ecar_mobile/providers/client_provider.dart';
+import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/screens/register_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/authorization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => AuthProvider("Users/client_login")),
+    ChangeNotifierProvider(create: (_) => ClientProvider()),
+    ChangeNotifierProvider(create: (_) => UserProvider()),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -105,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       SizedBox(height: 10),
                       DropdownButton<String>(
-                        style: TextStyle(color: Colors.red),
+                        style: TextStyle(color: Colors.yellowAccent),
                         value: _userType,
                         items: [
                           DropdownMenuItem(
@@ -118,6 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                             _userType = value!;
                           });
                         },
+                        dropdownColor: Colors.transparent,
                       ),
                       TextField(
                         enabled: true,
@@ -130,7 +138,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderSide: BorderSide(color: Colors.yellowAccent),
                           ),
                         ),
-                        style: TextStyle(color: Colors.redAccent),
+                        style: TextStyle(color: Colors.yellowAccent),
                       ),
                       SizedBox(height: 10),
                       TextField(
@@ -144,20 +152,21 @@ class _LoginPageState extends State<LoginPage> {
                             borderSide: BorderSide(color: Colors.yellowAccent),
                           ),
                         ),
-                        style: TextStyle(color: Colors.redAccent),
+                        style: TextStyle(color: Colors.yellowAccent),
                       ),
                       SizedBox(height: 50),
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => RegisterScreen()));
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => RegisterScreen()));
                           },
                           child: Text(
                             "Not registred yet? Register now",
                             style: TextStyle(
-                                color: Colors.red,
+                                color: Colors.yellowAccent,
                                 decoration: TextDecoration.lineThrough),
                           ),
                         ),
@@ -245,8 +254,7 @@ class _LoginPageState extends State<LoginPage> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
-                color:
-                    Colors.black, // White text for contrast on black background
+                color: Colors.black,
               ),
             ),
           ),

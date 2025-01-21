@@ -43,7 +43,7 @@ namespace eCar.Services.Services
             if (token == null)
                 return new AuthResponse() { Result = AuthResult.UserNotFound };
 
-            string rola="nesto";
+            string rola="";
 
             switch (role)
             {

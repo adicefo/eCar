@@ -231,8 +231,7 @@ class LoginPage extends StatelessWidget {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 24,
-                color:
-                    Colors.white, // White text for contrast on black background
+                color: Colors.white,
               ),
             ),
           ),

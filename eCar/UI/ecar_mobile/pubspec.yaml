@@ -39,12 +39,13 @@ dependencies:
   provider: ^6.1.2
   json_annotation: ^4.8.1
   flutter_form_builder: ^9.4.1
-  form_builder_validators: ^11.0.0
+  form_builder_validators: ^11.1.1
   jwt_decoder: ^2.0.1
   file_picker: ^8.1.7
   intl: ^0.19.0
   typed_data: ^1.4.0
   number_pagination: ^1.1.0
+  flutter_regex: ^0.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
