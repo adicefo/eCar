@@ -74,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _buildScreen() {
-    RegExp phoneExp = new RegExp(r"^06\d-\d{3}-\d{3}$");
+    RegExp phoneExp = new RegExp(r"^06\d-\d{3}-\d{3,4}$");
     RegExp emailExp = new RegExp(
         "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?\$");
     RegExp nameSurname = new RegExp(r"[A-Z][a-z]{2,}");
@@ -300,7 +300,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         name: "telephoneNumber",
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.match(phoneExp,
-                              errorText: "Number format: 06x-xxx-xxx")
+                              errorText: "Number format: 06x-xxx-xxx(x)")
                         ]),
                       ),
                       SizedBox(

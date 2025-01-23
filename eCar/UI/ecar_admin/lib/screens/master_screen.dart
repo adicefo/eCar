@@ -91,7 +91,6 @@ class _MasterScreenState extends State<MasterScreen> {
                   height: 70,
                   width: 70,
                 )),
-                //TODO:Get username from token
                 Center(
                     child: isLoading
                         ? Text("Username")

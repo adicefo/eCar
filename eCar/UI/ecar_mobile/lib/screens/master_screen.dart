@@ -1,11 +1,12 @@
 import 'package:ecar_mobile/models/User/user.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class MasterScreen extends StatefulWidget {
-  String? clientOrDriver;
-  MasterScreen({super.key, this.clientOrDriver});
+  Widget child;
+  MasterScreen(this.child, {super.key});
 
   @override
   State<MasterScreen> createState() => _MasterScreenState();
@@ -14,6 +15,9 @@ class MasterScreen extends StatefulWidget {
 class _MasterScreenState extends State<MasterScreen> {
   User? user = null;
   bool isLoading = true;
+  int _currentPageIndex = 0;
+  bool? isClient;
+  final _storage = FlutterSecureStorage();
   late UserProvider userProvider;
   @override
   void initState() {
@@ -25,6 +29,13 @@ class _MasterScreenState extends State<MasterScreen> {
 
   Future _initForm() async {
     user = await userProvider.getUserFromToken();
+    var role = await _storage.read(key: "role") ?? "";
+    if (role == "client") {
+      isClient = true;
+    } else {
+      isClient = false;
+    }
+    print("Client is: ${isClient.toString()}");
     print("Result: ${user?.userName}");
     setState(() {
       isLoading = false;
@@ -41,12 +52,64 @@ class _MasterScreenState extends State<MasterScreen> {
                 },
                 child: Text("Pritisni")),
           )
-        : Container(
-            child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text("Welcome ${user?.userName}")),
-          );
+        : _buildScafforld();
+  }
+
+  Widget _buildScafforld() {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("eCar",
+            style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+      ),
+      backgroundColor: Colors.white,
+      bottomNavigationBar: isClient! ? _buildNavClient() : _buildNavDriver(),
+      body: widget.child,
+    );
+  }
+
+  Widget _buildNavClient() {
+    return NavigationBar(
+      destinations: [
+        NavigationDestination(icon: Icon(Icons.home_sharp), label: "Home"),
+        NavigationDestination(
+            icon: Icon(Icons.date_range_rounded), label: "Order"),
+        NavigationDestination(icon: Icon(Icons.car_rental), label: "Rent"),
+        NavigationDestination(icon: Icon(Icons.stars_rounded), label: "Review"),
+        NavigationDestination(icon: Icon(Icons.person_sharp), label: "Profile"),
+      ],
+      onDestinationSelected: (int index) => {
+        setState(() {
+          _currentPageIndex = index;
+        })
+      },
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+      backgroundColor: Colors.yellowAccent,
+      selectedIndex: _currentPageIndex,
+    );
+  }
+
+  Widget _buildNavDriver() {
+    return NavigationBar(
+      destinations: [
+        NavigationDestination(icon: Icon(Icons.home_sharp), label: "Home"),
+        NavigationDestination(
+            icon: Icon(Icons.arrow_forward_outlined), label: "Requests"),
+        NavigationDestination(icon: Icon(Icons.car_rental), label: "Drives"),
+        NavigationDestination(icon: Icon(Icons.person_sharp), label: "Profile"),
+      ],
+      onDestinationSelected: (int index) => {
+        setState(() {
+          _currentPageIndex = index;
+        })
+      },
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+      backgroundColor: Colors.yellowAccent,
+      selectedIndex: _currentPageIndex,
+    );
   }
 }

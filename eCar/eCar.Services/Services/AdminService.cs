@@ -53,12 +53,11 @@ namespace eCar.Services.Services
         public override IQueryable<Admin> AddInclude(AdminSearchObject search, IQueryable<Admin> query)
         {
             var filteredQuery= base.AddInclude(search, query);
-            if (search?.IsUserIncluded == true)
-            {
-                filteredQuery = EFCore.EntityFrameworkQueryableExtensions.Include(filteredQuery,x=>x.User);
-            }
+            filteredQuery = EFCore.EntityFrameworkQueryableExtensions.Include(filteredQuery,x=>x.User);
             return filteredQuery;
+            
         }
+           
         public override void BeforeInsert(AdminInsertRequest request, Admin entity)
         {
             if (request.Password != request.PasswordConfirm)

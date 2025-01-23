@@ -45,6 +45,7 @@ class AuthProvider with ChangeNotifier {
       var data = LoginResponse.fromJson(jsonDecode(response.body));
       if (data.result == 0) {
         _storage.write(key: "jwt", value: data.token);
+        _storage.write(key: "role", value: data.role);
       }
       return data;
     } else {
