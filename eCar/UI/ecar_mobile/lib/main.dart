@@ -1,6 +1,8 @@
 import 'package:ecar_mobile/providers/auth_provider.dart';
 import 'package:ecar_mobile/providers/client_provider.dart';
+import 'package:ecar_mobile/providers/driver_provider.dart';
 import 'package:ecar_mobile/providers/notification_provider.dart';
+import 'package:ecar_mobile/providers/statistics_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/screens/notification_screen.dart';
@@ -16,6 +18,8 @@ void main() {
     ChangeNotifierProvider(create: (_) => ClientProvider()),
     ChangeNotifierProvider(create: (_) => UserProvider()),
     ChangeNotifierProvider(create: (_) => NotificationProvider()),
+    ChangeNotifierProvider(create: (_) => DriverProvider()),
+    ChangeNotifierProvider(create: (_) => StatisticsProvider()),
   ], child: const MyApp()));
 }
 
@@ -208,7 +212,8 @@ class _LoginPageState extends State<LoginPage> {
                               //added delay because of User get method in MasterScreen
                               await Future.delayed(const Duration(seconds: 1));
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => NotificationScreen()));
+                                  builder: (context) =>
+                                      NotificationScreen(true)));
                             } else {
                               if (context.mounted) {
                                 showDialog(

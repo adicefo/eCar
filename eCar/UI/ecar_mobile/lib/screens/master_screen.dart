@@ -1,5 +1,7 @@
 import 'package:ecar_mobile/models/User/user.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
+import 'package:ecar_mobile/screens/notification_screen.dart';
+import 'package:ecar_mobile/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -75,7 +77,10 @@ class _MasterScreenState extends State<MasterScreen> {
   Widget _buildNavClient() {
     return NavigationBar(
       destinations: [
-        NavigationDestination(icon: Icon(Icons.home_sharp), label: "Home"),
+        NavigationDestination(
+          icon: Icon(Icons.home_sharp),
+          label: "Home",
+        ),
         NavigationDestination(
             icon: Icon(Icons.date_range_rounded), label: "Order"),
         NavigationDestination(icon: Icon(Icons.car_rental), label: "Rent"),
@@ -85,6 +90,22 @@ class _MasterScreenState extends State<MasterScreen> {
       onDestinationSelected: (int index) => {
         setState(() {
           _currentPageIndex = index;
+          switch (index) {
+            case 0:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NotificationScreen(false)),
+              );
+            case 3:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+              break;
+            default:
+              break;
+          }
         })
       },
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
@@ -96,7 +117,11 @@ class _MasterScreenState extends State<MasterScreen> {
   Widget _buildNavDriver() {
     return NavigationBar(
       destinations: [
-        NavigationDestination(icon: Icon(Icons.home_sharp), label: "Home"),
+        NavigationDestination(
+            icon: Icon(
+              Icons.home_sharp,
+            ),
+            label: "Home"),
         NavigationDestination(
             icon: Icon(Icons.arrow_forward_outlined), label: "Requests"),
         NavigationDestination(icon: Icon(Icons.car_rental), label: "Drives"),
@@ -105,6 +130,23 @@ class _MasterScreenState extends State<MasterScreen> {
       onDestinationSelected: (int index) => {
         setState(() {
           _currentPageIndex = index;
+          switch (index) {
+            case 0:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => NotificationScreen(false)),
+              );
+              break;
+            case 3:
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ProfileScreen()),
+              );
+              break;
+            default:
+              break;
+          }
         })
       },
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,

@@ -1,6 +1,7 @@
 import 'package:ecar_mobile/main.dart';
 import 'package:ecar_mobile/providers/client_provider.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
+import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -353,17 +354,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                             var request = _formKey.currentState?.value;
                             provider.insert(request);
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                    duration: Duration(seconds: 5),
-                                    backgroundColor: Colors.redAccent,
-                                    content: Text(
-                                      'Registration valid',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    )));
+                            ScaffoldHelpers.showScaffold(
+                                context, "Registration valid");
+
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(
                                     builder: (context) => LoginPage()));

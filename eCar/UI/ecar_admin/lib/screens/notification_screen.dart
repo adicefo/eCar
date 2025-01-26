@@ -220,7 +220,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       child: help.StringHelpers
                                           .imageFromBase64String(e.image!),
                                     )
-                                  : Text("null")),
+                                  : Container(
+                                      width: 100,
+                                      height: 100,
+                                      child: Image.asset(
+                                        "assets/images/no_image_placeholder.png",
+                                        height: 100,
+                                        width: 100,
+                                      ),
+                                    )),
                               DataCell(Text(
                                   e.addingDate.toString().substring(0, 19),
                                   style: TextStyle(

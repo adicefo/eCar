@@ -135,10 +135,14 @@ class _RentRequestScreenState extends State<RentRequestScreen> {
                         child: help.StringHelpers.imageFromBase64String(
                             widget.rent?.vehicle?.image),
                       )
-                    : Image.asset(
-                        "assets/images/55283.png",
-                        height: 1000,
-                        width: 1000,
+                    : Container(
+                        width: 100,
+                        height: 100,
+                        child: Image.asset(
+                          "assets/images/no_image_placeholder.png",
+                          height: 100,
+                          width: 100,
+                        ),
                       ),
                 SizedBox(height: 20),
                 Tooltip(
