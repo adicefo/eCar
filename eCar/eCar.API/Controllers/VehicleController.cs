@@ -7,6 +7,7 @@ using eCar.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RentACar.Model;
 
 namespace eCar.API.Controllers
 {
@@ -19,6 +20,12 @@ namespace eCar.API.Controllers
         public VehicleController(IVehicleService service):base(service) 
         { 
 
+        }
+        [Authorize(Roles="Driver")]
+        [HttpGet("GetAvailableForDriver")]
+        public PagedResult<Model.Model.Vehicle> GetAvailableForDriver()
+        {
+            return (_service as IVehicleService).GetAvailableForDriver();
         }
         [Authorize(Roles ="Admin")]
         public override Vehicle Insert(VehicleInsertRequest request)

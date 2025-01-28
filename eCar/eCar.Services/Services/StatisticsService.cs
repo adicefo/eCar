@@ -67,7 +67,7 @@ namespace eCar.Services.Services
         }
         public override void BeforeInsert(StatisticsInsertRequest request, Statistic entity)
         {
-            entity.BeginningOfWork = DateTime.Parse("2025 - 01 - 26T07: 00:00.148Z");
+            entity.BeginningOfWork = DateTime.Now;//DateTime.Parse("2025 - 01 - 26T07: 00:00.148Z");
             entity.NumberOfHours = 0;
             entity.NumberOfClients = 0;
             entity.PriceAmount=0;

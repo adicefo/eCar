@@ -38,6 +38,7 @@ internal class Program
         builder.Services.AddTransient<INotificationService,NotificationService>();
         builder.Services.AddTransient<ICompanyPriceService,CompanyPriceService>();
         builder.Services.AddTransient<IStatisticsService,StatisticsService>();
+        builder.Services.AddTransient<IDriverVehicleService,DriverVehicleService>();
         builder.Services.AddTransient<BaseRouteState>();
         builder.Services.AddTransient<InitialRouteState>();
         builder.Services.AddTransient<WaitRouteState>();

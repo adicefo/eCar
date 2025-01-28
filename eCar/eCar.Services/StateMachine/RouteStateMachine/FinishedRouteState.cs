@@ -25,7 +25,7 @@ namespace eCar.Services.StateMachine.RouteStateMachine
             if (entity == null)
                 throw new Exception("Non-existed model");
 
-            entity.EndDate = DateTime.Parse("2025 - 01 - 26T10: 00:00.148Z");
+            entity.EndDate = DateTime.Now;//DateTime.Parse("2025 - 01 - 26T10: 00:00.148Z");
             entity.Duration = (int)(entity.EndDate.Value - entity.StartDate!.Value).TotalMinutes;
             entity.Status = "finished";
 

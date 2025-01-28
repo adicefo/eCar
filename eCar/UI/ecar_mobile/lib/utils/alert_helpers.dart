@@ -45,13 +45,14 @@ class AlertHelpers {
     );
   }
 
-  static Future<bool?> editConfirmation(BuildContext context) async {
+  static Future<bool?> editConfirmation(BuildContext context,
+      {String text = "Are you sure you want to edit this item?"}) async {
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Confirm Edit"),
-          content: Text("Are you sure you want to edit this item?"),
+          content: Text(text),
           actions: [
             TextButton(
               onPressed: () {

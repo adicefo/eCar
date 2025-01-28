@@ -11,7 +11,8 @@ public partial class DriverVehicle
 
     public int VehicleId { get; set; }
 
-    public DateOnly? DateOfUsing { get; set; }
+    public DateTime? DatePickUp { get; set; }
+    public DateTime? DateDropOff { get; set; }
 
     public virtual Driver Driver { get; set; } = null!;
 

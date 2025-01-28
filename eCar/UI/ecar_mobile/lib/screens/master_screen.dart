@@ -1,5 +1,6 @@
 import 'package:ecar_mobile/models/User/user.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
+import 'package:ecar_mobile/screens/vehicle_assigment_screen.dart';
 import 'package:ecar_mobile/screens/notification_screen.dart';
 import 'package:ecar_mobile/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class MasterScreen extends StatefulWidget {
+  String title;
   Widget child;
-  MasterScreen(this.child, {super.key});
+  MasterScreen(this.title, this.child, {super.key});
 
   @override
   State<MasterScreen> createState() => _MasterScreenState();
@@ -60,11 +62,31 @@ class _MasterScreenState extends State<MasterScreen> {
   Widget _buildScafforld() {
     return Scaffold(
       appBar: AppBar(
-        title: Text("eCar",
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold)),
+        automaticallyImplyLeading: false,
+        title: Text(
+          widget.title,
+          style: TextStyle(
+              color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        actions: isClient!
+            ? []
+            : <Widget>[
+                IconButton(
+                  icon: const Icon(Icons.car_repair_sharp),
+                  color: Colors.black,
+                  padding: EdgeInsets.only(right: 90.0),
+                  tooltip: "Pick up car",
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            VehicleAssigmentScreen(user: user),
+                      ),
+                    );
+                  },
+                )
+              ],
         centerTitle: true,
         backgroundColor: Colors.transparent,
       ),
@@ -87,30 +109,33 @@ class _MasterScreenState extends State<MasterScreen> {
         NavigationDestination(icon: Icon(Icons.stars_rounded), label: "Review"),
         NavigationDestination(icon: Icon(Icons.person_sharp), label: "Profile"),
       ],
-      onDestinationSelected: (int index) => {
-        setState(() {
-          _currentPageIndex = index;
-          switch (index) {
-            case 0:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NotificationScreen(false)),
-              );
-            case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()),
-              );
-              break;
-            default:
-              break;
-          }
-        })
+      onDestinationSelected: (int index) {
+        switch (index) {
+          case 0:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => NotificationScreen(false),
+              ),
+            );
+            break;
+
+          case 4:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfileScreen(),
+              ),
+            );
+            break;
+
+          default:
+            break;
+        }
       },
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       backgroundColor: Colors.yellowAccent,
-      selectedIndex: _currentPageIndex,
+      indicatorColor: Colors.transparent,
     );
   }
 
@@ -118,40 +143,49 @@ class _MasterScreenState extends State<MasterScreen> {
     return NavigationBar(
       destinations: [
         NavigationDestination(
-            icon: Icon(
-              Icons.home_sharp,
-            ),
-            label: "Home"),
+          icon: Icon(Icons.home_sharp),
+          label: "Home",
+        ),
         NavigationDestination(
-            icon: Icon(Icons.arrow_forward_outlined), label: "Requests"),
-        NavigationDestination(icon: Icon(Icons.car_rental), label: "Drives"),
-        NavigationDestination(icon: Icon(Icons.person_sharp), label: "Profile"),
+          icon: Icon(Icons.arrow_forward_outlined),
+          label: "Requests",
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.car_rental),
+          label: "Drives",
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.person_sharp),
+          label: "Profile",
+        ),
       ],
-      onDestinationSelected: (int index) => {
-        setState(() {
-          _currentPageIndex = index;
-          switch (index) {
-            case 0:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NotificationScreen(false)),
-              );
-              break;
-            case 3:
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()),
-              );
-              break;
-            default:
-              break;
-          }
-        })
+      onDestinationSelected: (int index) {
+        switch (index) {
+          case 0:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => NotificationScreen(false),
+              ),
+            );
+            break;
+
+          case 3:
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProfileScreen(),
+              ),
+            );
+            break;
+
+          default:
+            break;
+        }
       },
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       backgroundColor: Colors.yellowAccent,
-      selectedIndex: _currentPageIndex,
+      indicatorColor: Colors.transparent,
     );
   }
 }

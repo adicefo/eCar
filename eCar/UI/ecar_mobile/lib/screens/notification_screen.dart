@@ -45,6 +45,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     notificationProvider = context.read<NotificationProvider>();
     driverProvider = context.read<DriverProvider>();
     statisticsProvider = context.read<StatisticsProvider>();
+    super.initState();
     _initForm();
   }
 
@@ -111,6 +112,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             ),
           )
         : MasterScreen(
+            "Home",
             SingleChildScrollView(
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.8,

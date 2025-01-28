@@ -82,20 +82,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Text("Go back"),
             ),
           )
-        : MasterScreen(SingleChildScrollView(
-            child: Container(
-              height: 300,
-              width: 300,
-              child: ElevatedButton(
-                  onPressed: () async {
-                    statistics =
-                        await statisticsProvider.updateFinish(statistics?.id);
-                    ScaffoldHelpers.showScaffold(
-                        context, "Working day finished");
-                    authProvider.logout(context);
-                  },
-                  child: Text("Logout")),
-            ),
-          ));
+        : MasterScreen(
+            "Profile",
+            SingleChildScrollView(
+              child: Container(
+                height: 300,
+                width: 300,
+                child: ElevatedButton(
+                    onPressed: () async {
+                      if (_role == "driver") {
+                        statistics = await statisticsProvider
+                            .updateFinish(statistics?.id);
+                      }
+                      authProvider.logout(context);
+                    },
+                    child: Text("Logout")),
+              ),
+            ));
   }
 }

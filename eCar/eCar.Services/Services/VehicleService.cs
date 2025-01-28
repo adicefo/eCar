@@ -3,6 +3,7 @@ using eCar.Model.SearchObjects;
 using eCar.Services.Database;
 using eCar.Services.Interfaces;
 using MapsterMapper;
+using RentACar.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,35 @@ namespace eCar.Services.Services
             base(context, mapper)
         {
         }
+        public PagedResult<Model.Model.Vehicle> GetAvailableForDriver()
+        {
+            List<Model.Model.Vehicle> result = new List<Model.Model.Vehicle>();
+            var query = Context.Set<Vehicle>().AsQueryable();
 
+            //all available cars
+            query = query.Where(x => x.Available == true);
+
+            //rents for that cars that are in status active
+            var rents=Context.Rents.Where(x=>x.Status=="active"&&
+            (DateTime.Now.Date>=x.RentingDate!.Value.Date)&&
+            (DateTime.Now<=x.EndingDate!.Value.Date)).Select(x=>x.Vehicle.Id).ToList();
+
+            //exclude rents from query
+            query=query.Where(x=>!rents.Contains(x.Id));
+
+
+            int count = query.Count();
+
+            var list = query.ToList();
+
+            result = Map(list, result);
+
+            PagedResult<Model.Model.Vehicle> pageResult = new PagedResult<Model.Model.Vehicle>();
+            pageResult.Result = result;
+            pageResult.Count = count;
+
+            return pageResult;
+        }
         public override IQueryable<Database.Vehicle> AddFilter(VehicleSearchObject search, IQueryable<Database.Vehicle> query)
         {
             var filteredQuery = base.AddFilter(search, query);
@@ -40,5 +69,7 @@ namespace eCar.Services.Services
                 throw new Exception("Set valid price between 40 and 65");
             base.BeforeInsert(request, entity);
         }
+
+       
     }
 }

@@ -26,7 +26,7 @@ namespace eCar.Services.StateMachine.RouteStateMachine
 
             entity = Mapper.Map(request, entity);
 
-            entity.StartDate = DateTime.Parse("2025 - 01 - 26T08: 00:00.148Z");
+            entity.StartDate = DateTime.Now;//DateTime.Parse("2025 - 01 - 26T08: 00:00.148Z");
             entity.Status = "active";
 
             Context.SaveChanges();
