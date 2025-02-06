@@ -3,6 +3,8 @@ import 'package:ecar_mobile/providers/client_provider.dart';
 import 'package:ecar_mobile/providers/driverVehicle_provider.dart';
 import 'package:ecar_mobile/providers/driver_provider.dart';
 import 'package:ecar_mobile/providers/notification_provider.dart';
+import 'package:ecar_mobile/providers/request_provider.dart';
+import 'package:ecar_mobile/providers/route_provider.dart';
 import 'package:ecar_mobile/providers/statistics_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/providers/vehicle_provider.dart';
@@ -13,8 +15,17 @@ import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/authorization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    await dotenv.load(fileName: ".env");
+    print("✅ .env file loaded successfully!");
+  } catch (e) {
+    print("❌ Error loading .env file: $e");
+  }
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => AuthProvider("Users/client_login")),
     ChangeNotifierProvider(create: (_) => ClientProvider()),
@@ -24,6 +35,8 @@ void main() {
     ChangeNotifierProvider(create: (_) => StatisticsProvider()),
     ChangeNotifierProvider(create: (_) => VehicleProvider()),
     ChangeNotifierProvider(create: (_) => DriverVehicleProvider()),
+    ChangeNotifierProvider(create: (_) => RouteProvider()),
+    ChangeNotifierProvider(create: (_) => RequestProvider()),
   ], child: const MyApp()));
 }
 

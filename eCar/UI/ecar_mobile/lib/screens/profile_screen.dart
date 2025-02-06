@@ -51,6 +51,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (_role == "driver") {
       _setStatisticsLogic();
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future _setStatisticsLogic() async {

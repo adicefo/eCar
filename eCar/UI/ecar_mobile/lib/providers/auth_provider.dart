@@ -19,7 +19,7 @@ class AuthProvider with ChangeNotifier {
   IOClient? http;
   AuthProvider(String endpoint) {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://10.0.2.2:7257/");
+        defaultValue: "http://10.0.2.2:7257/");
     _endpoint = endpoint;
 
     if (_baseUrl!.endsWith("/") == false) {

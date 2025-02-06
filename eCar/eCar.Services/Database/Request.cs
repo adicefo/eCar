@@ -7,7 +7,7 @@ public partial class Request
 {
     public int Id { get; set; }
 
-    public bool IsAccepted { get; set; }
+    public bool? IsAccepted { get; set; }
 
     public int RouteId { get; set; }
 

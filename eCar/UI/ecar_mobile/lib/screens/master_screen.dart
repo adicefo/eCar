@@ -1,5 +1,6 @@
 import 'package:ecar_mobile/models/User/user.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
+import 'package:ecar_mobile/screens/route_order_screen.dart';
 import 'package:ecar_mobile/screens/vehicle_assigment_screen.dart';
 import 'package:ecar_mobile/screens/notification_screen.dart';
 import 'package:ecar_mobile/screens/profile_screen.dart';
@@ -62,7 +63,7 @@ class _MasterScreenState extends State<MasterScreen> {
   Widget _buildScafforld() {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        //automaticallyImplyLeading: false,
         title: Text(
           widget.title,
           style: TextStyle(
@@ -119,7 +120,14 @@ class _MasterScreenState extends State<MasterScreen> {
               ),
             );
             break;
-
+          case 1:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => RouteOrderScreen(),
+              ),
+            );
+            break;
           case 4:
             Navigator.pushReplacement(
               context,

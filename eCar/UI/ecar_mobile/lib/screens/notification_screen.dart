@@ -146,7 +146,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           Align(
               alignment: Alignment.center,
               child: Text(
-                "Dobrodošli!",
+                "Welcome!",
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               )),
           SizedBox(
@@ -165,7 +165,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   List<Widget> _buildGridView() {
     if (data?.result?.length == 0) {
-      return [Text("Loading...")];
+      return [Text("Sorry there is no current available cars...")];
     }
     List<Widget> list = data!.result
         .map(

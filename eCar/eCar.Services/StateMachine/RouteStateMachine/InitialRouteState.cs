@@ -2,6 +2,7 @@
 using eCar.Services.Database;
 using eCar.Services.Helpers;
 using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,8 @@ namespace eCar.Services.StateMachine.RouteStateMachine
             var set = Context.Set<Route>();
             var entity = Mapper.Map <Database.Route>(request);
 
-            var client = Context.Clients.Find(request.ClientId);
-            var driver = Context.Drivers.Find(request.DriverID);
+            var client = Context.Clients.Include(x => x.User).FirstOrDefault(x => x.Id == request.ClientId);
+            var driver = Context.Drivers.Include(x=>x.User).FirstOrDefault(x=>request.DriverID==x.Id);
             if (client == null || driver == null)
                 throw new Exception("Driver or client cannot be null");
 

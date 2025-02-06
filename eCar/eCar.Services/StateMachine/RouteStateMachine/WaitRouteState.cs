@@ -1,6 +1,7 @@
 ﻿using eCar.Model.Requests;
 using eCar.Services.Database;
 using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,26 @@ namespace eCar.Services.StateMachine.RouteStateMachine
             Context.SaveChanges();
 
             return Mapper.Map<Model.Model.Route>(entity);
+        }
+        
+        public override Model.Model.Route UpdateFinish(int id)
+        {
+            var set = Context.Set<Database.Route>().AsQueryable();
+            var entity = set.Include(x => x.Client).ThenInclude(x => x.User).Include(d => d.Driver).ThenInclude(x => x.User).FirstOrDefault(x => x.Id == id);
+            if (entity == null)
+                throw new Exception("Non-existed model");
+
+            
+            entity.EndDate = DateTime.Now;//DateTime.Parse("2025 - 01 - 26T10: 00:00.148Z");
+            entity.Duration = (int)(entity.EndDate.Value - entity.StartDate!.Value).TotalMinutes;
+            entity.Status = "finished";
+
+            Context.Routes.Update(entity);
+            Context.SaveChanges();
+
+            var result = Mapper.Map<Model.Model.Route>(entity);
+
+            return result;
         }
         public override List<Enums.Action> AllowedActions(Route entity)
         {

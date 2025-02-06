@@ -76,6 +76,10 @@ namespace eCar.Services.Services
             var filteredQuery=base.AddFilter(search, query);
             if (!string.IsNullOrWhiteSpace(search.Status))
                 filteredQuery = filteredQuery.Where(x => x.Status == search.Status);
+            if (!string.IsNullOrWhiteSpace(search.StatusNot))
+                filteredQuery = filteredQuery.Where(x => x.Status!=search.StatusNot);
+            if (search.ClientId.HasValue)
+                filteredQuery = filteredQuery.Where(x => x.ClientId == search.ClientId);
             if (search.NumberOfKilometarsGTE != null)
                 filteredQuery = filteredQuery.Where(x => x.NumberOfKilometars > search.NumberOfKilometarsGTE);
             return filteredQuery;

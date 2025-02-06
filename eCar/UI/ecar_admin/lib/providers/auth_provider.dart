@@ -16,7 +16,7 @@ class AuthProvider with ChangeNotifier {
 //TODO:Promijeniti zbog Dockera na http
   AuthProvider() {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7257/");
+        defaultValue: "http://localhost:7257/");
   }
 
   Future<LoginResponse> login() async {

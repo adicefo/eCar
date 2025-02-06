@@ -39,6 +39,7 @@ internal class Program
         builder.Services.AddTransient<ICompanyPriceService,CompanyPriceService>();
         builder.Services.AddTransient<IStatisticsService,StatisticsService>();
         builder.Services.AddTransient<IDriverVehicleService,DriverVehicleService>();
+        builder.Services.AddTransient<IRequestService,RequestService>();
         builder.Services.AddTransient<BaseRouteState>();
         builder.Services.AddTransient<InitialRouteState>();
         builder.Services.AddTransient<WaitRouteState>();
@@ -119,8 +120,19 @@ internal class Program
         .AddNewtonsoftJson(options =>
                          options.SerializerSettings.ReferenceLoopHandling =
                          Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
-
+        //for testing on real device
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll",
+                policy => policy.AllowAnyOrigin()
+                                .AllowAnyMethod()
+                                .AllowAnyHeader());
+        });
+        //for testing on real device
+        builder.WebHost.ConfigureKestrel(options =>
+        {
+            options.ListenAnyIP(7257);
+        });
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -133,8 +145,8 @@ internal class Program
         TokenGenerate.Context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ECarDbContext>();
         TokenGenerate.Configuration = app.Services.GetRequiredService<IConfiguration>();
 
-        app.UseHttpsRedirection();
-
+        //app.UseHttpsRedirection();
+        app.UseCors("AllowAll"); //for testing on real device
         app.UseAuthentication();
         app.UseAuthorization();
 

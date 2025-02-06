@@ -39,8 +39,8 @@ namespace eCar.Services.Services
             var drives= Context.Routes.Where(r => r.DriverID == entity.DriverId &&
             r.Status == "finished" && r.StartDate.Value.Date == entity.BeginningOfWork.Value.Date);
 
-            driver.NumberOfClientsAmount= drives.Count();
-            driver.NumberOfHoursAmount = (int)entity.EndOfWork.Value.Hour - entity.BeginningOfWork.Value.Hour;
+            driver.NumberOfClientsAmount+= drives.Count();
+            driver.NumberOfHoursAmount += (int)entity.EndOfWork.Value.Hour - entity.BeginningOfWork.Value.Hour;
 
             Context.Statistics.Update(entity);
             Context.Drivers.Update(driver);

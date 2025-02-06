@@ -16,7 +16,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   BaseProvider(String endpoint) {
     _endpoint = endpoint;
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7257/");
+        defaultValue: "http://localhost:7257/");
 
     if (_baseUrl!.endsWith("/") == false) {
       _baseUrl = "$_baseUrl/";

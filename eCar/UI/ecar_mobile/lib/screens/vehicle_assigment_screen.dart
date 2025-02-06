@@ -179,7 +179,7 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                       bool? confirmEdit = await AlertHelpers.editConfirmation(
                           context,
                           text:
-                              "Are you sure that you have not already assigned a car?");
+                              "Are you sure that you have not already assigned a vehicle?");
                       if (confirmEdit == true) {
                         _formKey.currentState?.save();
                         var formData = _formKey.currentState?.value;
@@ -189,7 +189,7 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                         };
                         driverVehicleProvider.insert(request);
                         AlertHelpers.showAlert(
-                            context, "Info", "Successful assigned car");
+                            context, "Info", "Successful assigned vehicle");
                       }
                     },
                     child: Text("Assign"),
@@ -202,7 +202,7 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                       bool? confirmEdit = await AlertHelpers.editConfirmation(
                           context,
                           text:
-                              "Are you sure that you want to return your car?");
+                              "Are you sure that you want to return your vehicle?");
                       if (confirmEdit == true) {
                         var request = {
                           "driverId": driverInstance?.id,
