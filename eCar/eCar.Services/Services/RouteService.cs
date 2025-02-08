@@ -55,6 +55,12 @@ namespace eCar.Services.Services
             var state=BaseRouteState.CreateState(entity.Status);
             return state.UpdateFinish(id);
         }
+        public Model.Model.Route UpdatePayment(int id)
+        {
+            var entity = GetById(id);
+            var state = BaseRouteState.CreateState(entity.Status);
+            return state.UpdatePayment(id);
+        }
         public List<Enums.Action> AllowedActions(int id)
         {
             _logger.LogInformation($"Allowed actions called for: {id} ");
@@ -119,7 +125,7 @@ namespace eCar.Services.Services
             base.BeforeUpdate(request, entity);
         }
 
-        
+       
     };
 
     

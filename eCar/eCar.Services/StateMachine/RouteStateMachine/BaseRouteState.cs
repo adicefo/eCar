@@ -37,6 +37,11 @@ namespace eCar.Services.StateMachine.RouteStateMachine
         {
             throw new UserException("Not allowed");
         }
+        public virtual Model.Model.Route UpdatePayment(int id)
+        {
+            throw new UserException("Not allowed");
+
+        }
         public virtual List<Enums.Action> AllowedActions(Database.Route entity)
         {
             throw new UserException("Not allowed");

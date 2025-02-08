@@ -34,7 +34,23 @@ namespace eCar.Services.StateMachine.RouteStateMachine
 
             return Mapper.Map<Model.Model.Route>(entity);
         }
-        
+        public override Model.Model.Route UpdatePayment(int id)
+        {
+            var set = Context.Set<Database.Route>().AsQueryable();
+            var entity = set.Include(x => x.Client).ThenInclude(x => x.User).Include(d => d.Driver).ThenInclude(x => x.User).FirstOrDefault(x => x.Id == id);
+            if (entity == null)
+                throw new Exception("Non-existed model");
+
+            entity.Paid = true;
+
+            Context.Routes.Update(entity);
+            Context.SaveChanges();
+
+            var result = Mapper.Map<Model.Model.Route>(entity);
+
+            return result;
+        }
+
         public override Model.Model.Route UpdateFinish(int id)
         {
             var set = Context.Set<Database.Route>().AsQueryable();

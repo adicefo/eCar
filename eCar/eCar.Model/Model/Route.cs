@@ -22,6 +22,7 @@ namespace eCar.Model.Model
         public int? Duration { get; set; }
         public decimal? NumberOfKilometars { get; set; }
         public decimal? FullPrice { get; set; }
+        public bool? Paid { get; set; }
         public string? Status { get; set; }
         public int DriverID { get; set; }
         public virtual Driver Driver { get; set; } = null!;

@@ -8,5 +8,6 @@ namespace eCar.Model.Requests
 {
     public class RouteUpdateRequest
     {
+        public bool? Paid { get; set; }
     }
 }

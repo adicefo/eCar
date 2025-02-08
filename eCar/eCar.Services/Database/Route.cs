@@ -23,6 +23,7 @@ public partial class Route
     public decimal? NumberOfKilometars { get; set; }
 
     public decimal? FullPrice { get; set; }
+    public bool? Paid { get; set; }
 
     public string? Status { get; set; }
 

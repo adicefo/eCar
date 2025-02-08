@@ -13,6 +13,8 @@ import 'package:ecar_mobile/screens/notification_screen.dart';
 import 'package:ecar_mobile/screens/register_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/authorization.dart';
+import 'package:flutter_stripe/flutter_stripe.dart'
+    as stripe; //because it is naming conflict with flutter/material.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -20,12 +22,15 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    await dotenv.load(fileName: ".env");
-    print("✅ .env file loaded successfully!");
-  } catch (e) {
-    print("❌ Error loading .env file: $e");
+  await dotenv.load(fileName: ".env");
+  String? stripeKey = dotenv.env['STRIPE_PUBLISH_KEY'];
+  if (stripeKey == null || stripeKey.isEmpty) {
+    print("❌ Stripe key is missing in .env file!");
+  } else {
+    stripe.Stripe.publishableKey = stripeKey;
+    await stripe.Stripe.instance.applySettings();
   }
+
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_) => AuthProvider("Users/client_login")),
     ChangeNotifierProvider(create: (_) => ClientProvider()),

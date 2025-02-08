@@ -17,6 +17,7 @@ class Route {
   int? duration;
   double? numberOfKilometars;
   double? fullPrice;
+  bool? paid;
   int? driverID;
   int? clientId;
   Driver? driver;
@@ -31,6 +32,7 @@ class Route {
       this.duration,
       this.numberOfKilometars,
       this.fullPrice,
+      this.paid,
       this.driverID,
       this.clientId,
       this.driver,

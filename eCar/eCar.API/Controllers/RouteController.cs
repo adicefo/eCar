@@ -14,7 +14,12 @@ namespace eCar.API.Controllers
     {
         public RouteController(IRouteService service):base(service)
         {
-            
+
+        }
+        [HttpPut("UpdatePayment/{id}")]
+        public Model.Model.Route UpdatePayment(int id)
+        {
+            return (_service as IRouteService).UpdatePayment(id);
         }
         [HttpPut("Finish/{id}")]
        public Model.Model.Route UpdateFinish(int id)
