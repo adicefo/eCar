@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using eCar.Model.Requests;
 
 namespace eCar.Services.StateMachine.RouteStateMachine
 {
@@ -16,6 +17,22 @@ namespace eCar.Services.StateMachine.RouteStateMachine
            base(context, mapper, serviceProvider)
         {
 
+        }
+        public override Model.Model.Route Update(int id, RouteUpdateRequest request)
+        {
+            var set = Context.Set<Database.Route>();
+            var entity = set.Find(id);
+            if (entity == null)
+                throw new Exception("Non-existed model");
+
+            entity = Mapper.Map(request, entity);
+
+            entity.StartDate = DateTime.Now;//DateTime.Parse("2025 - 01 - 26T08: 00:00.148Z");
+            entity.Status = "active";
+
+            Context.SaveChanges();
+
+            return Mapper.Map<Model.Model.Route>(entity);
         }
         public override Model.Model.Route UpdatePayment(int id)
         {

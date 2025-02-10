@@ -44,7 +44,7 @@ namespace eCar.Services.Services
 
             var filteredQuery = base.AddInclude(search, query);
             filteredQuery = EFCore.EntityFrameworkQueryableExtensions.Include(filteredQuery, x => x.Driver).ThenInclude(x => x.User);
-            filteredQuery = EFCore.EntityFrameworkQueryableExtensions.Include(filteredQuery, x => x.RouteId);
+            filteredQuery = EFCore.EntityFrameworkQueryableExtensions.Include(filteredQuery, x => x.Route).ThenInclude(x=>x.Client).ThenInclude(x=>x.User);
             return filteredQuery;
         }
         public override void BeforeInsert(RequestInsertRequest request, Request entity)

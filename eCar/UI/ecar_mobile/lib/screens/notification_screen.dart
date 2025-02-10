@@ -165,7 +165,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   List<Widget> _buildGridView() {
     if (data?.result?.length == 0) {
-      return [Text("Sorry there is no current available cars...")];
+      return [Text("Sorry there is no current available notifications...")];
     }
     List<Widget> list = data!.result
         .map(

@@ -8,7 +8,6 @@ import 'package:ecar_mobile/providers/client_provider.dart';
 import 'package:ecar_mobile/providers/request_provider.dart';
 import 'package:ecar_mobile/providers/route_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
-import 'package:ecar_mobile/screens/map_screen.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/screens/route_order_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
@@ -445,7 +444,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
       String stripeSecretKey = dotenv.env['STRIPE_SECRET_KEY'] ?? '';
       String customerId = await createStripeCustomer();
       paymentIntentData = await createPaymentIntent(
-          route!.fullPrice.toString(), 'USD', c?.user?.email, customerId);
+          route!.fullPrice.toString(), 'BAM', c?.user?.email, customerId);
       await Stripe.instance
           .initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
@@ -501,7 +500,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
         'customer': customerId,
         'receipt_email': c?.user?.email,
         'description':
-            'Payment for car reservation by ${c?.user?.name} ${c?.user?.surname}',
+            'Payment for drive by ${c?.user?.name} ${c?.user?.surname}',
       };
       var response = await http.post(
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
@@ -527,18 +526,14 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
       }
       final confirmed = await confirmPaymentSheetPayment();
       if (confirmed) {
-        await ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                "Payment successful via Stripe servise for ${route?.driver?.user?.name} ${route?.driver?.user?.surname}"),
-            backgroundColor: Colors.red,
-          ),
-        );
+        ScaffoldHelpers.showScaffold(context,
+            "Payment successful via Stripe servise for ${route?.driver?.user?.name} ${route?.driver?.user?.surname}");
         await routeProvider.updatePaymant(route?.id);
         var filter = {
           "ClientId": c?.id,
           "StatusNot": "finished",
         };
+        routeProvider.get(filter: filter);
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -547,13 +542,8 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
         );
       } else {
         print('Payment failed.');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-                "Payment is not successful for ${route?.driver?.user?.name} ${route?.driver?.user?.surname} "),
-            backgroundColor: Colors.red,
-          ),
-        );
+        ScaffoldHelpers.showScaffold(context,
+            "Payment is not successful for ${route?.driver?.user?.name} ${route?.driver?.user?.surname}");
       }
     } on StripeException catch (e) {
       print('Exception/DISPLAYPAYMENTSHEET==> $e');
