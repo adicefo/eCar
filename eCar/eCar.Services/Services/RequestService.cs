@@ -11,15 +11,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using eCar.Model.Helper;
+using EasyNetQ;
+using eCar.Subsrciber;
 
 namespace eCar.Services.Services
 {
     public class RequestService:BaseCRUDService<Model.Model.Request,
         RequestSearchObject,Database.Request,RequestInsertRequest,RequestUpdateRequest>,IRequestService
     {
-        public RequestService(ECarDbContext context,IMapper mapper):base(context,mapper)
+        private IRabbitMQProducer _rabbitMQProducer;
+        public RequestService(ECarDbContext context,IMapper mapper,IRabbitMQProducer rabbitMQProducer):base(context,mapper)
         {
-            
+            _rabbitMQProducer = rabbitMQProducer;
         }
 
         public override IQueryable<Request> AddFilter(RequestSearchObject search, IQueryable<Request> query)
@@ -60,12 +63,23 @@ namespace eCar.Services.Services
 
         public override void BeforeUpdate(RequestUpdateRequest request, Request entity)
         {
-            var route = Context.Routes.Include(x => x.Client).ThenInclude(x => x.User).FirstOrDefault(x => x.Id == entity.RouteId);
+            var route = Context.Routes.Include(x => x.Client).ThenInclude(x => x.User).
+                Include(x=>x.Driver).ThenInclude(x=>x.User).FirstOrDefault(x => x.Id == entity.RouteId);
             if (entity.IsAccepted == true)
                 route!.Status = "active";
             else
                 route!.Status = "finished";
-                
+            var emailModel = new EmailModel()
+            {
+                Sender=route?.Driver?.User?.UserName,
+                Recipient=route.Client.User.Email,
+                Subject="Status of your route has been changed",
+                Content=route.Status=="active"?$"Dear {route.Client.User.Name} {route.Client.User.Surname},your route has been " +
+                $"accepted and now is active. Thank you... Your eCar!":$"Dear {route.Client.User.Name} {route.Client.User.Surname}" +
+                $",your route has been rejected. " +
+                $"Appreciate your patience, but our driver is too busy now. Please try again. Your eCar!"
+            };
+            _rabbitMQProducer.SendMessage(emailModel);
         }
 
     }

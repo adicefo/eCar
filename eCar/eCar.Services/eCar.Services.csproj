@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EasyNetQ" Version="7.8.0" />
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.1" />
@@ -23,11 +24,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="NEST" Version="7.17.5" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <PackageReference Include="ServiceStack.Interfaces" Version="8.5.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\eCar.Model\eCar.Model.csproj" />
+    <ProjectReference Include="..\eCar.Subsrciber\eCar.Subsrciber.csproj" />
   </ItemGroup>
 
 </Project>
