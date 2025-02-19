@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:ecar_mobile/models/Client/client.dart';
 import 'package:ecar_mobile/models/DriverVehicle/driverVehicle.dart';
@@ -14,15 +15,16 @@ import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:ecar_mobile/models/Route/route.dart' as Model;
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 
 class RouteOrderDetailsScreen extends StatefulWidget {
   DriverVehicle? object;
@@ -51,12 +53,15 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
   String? _sourceAddress;
   String? _destinationAddress;
 
-  static const _initialPosition =
-      CameraPosition(target: LatLng(44.0571, 17.4501), zoom: 12);
+  static const _initialPosition = CameraPosition(
+      target: LatLng(latitude: 44.0571, longitude: 17.4501), zoom: 12);
   LatLng? sourcePoint;
   LatLng? destinationPoint;
 
-  late GoogleMapController _controller;
+  late GoogleMapViewController _controller;
+
+  Marker? _sourceMark;
+  Marker? _destinationMark;
 
   Map<String, dynamic>? paymentIntentData;
   bool isLoading = true;
@@ -111,7 +116,8 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
 
     Position position = await Geolocator.getCurrentPosition();
     setState(() {
-      sourcePoint = LatLng(position.latitude, position.longitude);
+      sourcePoint =
+          LatLng(latitude: position.latitude, longitude: position.longitude);
     });
   }
 
@@ -143,30 +149,13 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                 height: 400,
                 width: double.infinity,
                 child: Center(
-                  child: GoogleMap(
-                      initialCameraPosition: _initialPosition,
-                      onMapCreated: (GoogleMapController controller) {
-                        _controller = controller;
-                      },
-                      markers: {
-                        if (sourcePoint != null)
-                          Marker(
-                              markerId: const MarkerId("sourceMark"),
-                              infoWindow:
-                                  const InfoWindow(title: "Source point"),
-                              icon: BitmapDescriptor.defaultMarker,
-                              position: sourcePoint!),
-                        if (destinationPoint != null)
-                          Marker(
-                              markerId: const MarkerId("destinationMark"),
-                              infoWindow:
-                                  const InfoWindow(title: "Destination point"),
-                              icon: BitmapDescriptor.defaultMarkerWithHue(
-                                  BitmapDescriptor.hueOrange),
-                              position: destinationPoint!),
-                      },
-                      onLongPress: addMarker,
-                      mapType: MapType.normal),
+                  child: GoogleMapsMapView(
+                    initialCameraPosition: _initialPosition,
+                    onViewCreated: (GoogleMapViewController controller) {
+                      _controller = controller;
+                    },
+                    onMapLongClicked: addMarker,
+                  ),
                 ))),
         SizedBox(
           height: 50,
@@ -202,22 +191,13 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
             Padding(
               padding: EdgeInsets.only(left: 10.0),
               child: Text(
-                "Source point:",
+                "Source point:\n ${_sourceAddress == null ? "Unknown" : _sourceAddress!}",
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
             ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  _sourceAddress == null ? "Unknown" : _sourceAddress!,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black),
-                )),
           ],
         ),
         SizedBox(
@@ -228,24 +208,13 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
             Padding(
               padding: EdgeInsets.only(left: 10.0),
               child: Text(
-                "Destination point:",
+                "Destination point:\n ${_destinationAddress == null ? "Unknown" : _destinationAddress!}",
                 style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
             ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  _destinationAddress == null
-                      ? "Unknown"
-                      : _destinationAddress!,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black),
-                )),
           ],
         ),
         SizedBox(
@@ -379,16 +348,52 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
     if (sourcePoint == null) {
       sourcePoint = pos;
       _sourceAddress = await _getAddressFromLatLng(pos);
+
+      _sourceMark = Marker(
+        markerId: "sourceMark",
+        options: MarkerOptions(
+          infoWindow: const InfoWindow(title: "Source point"),
+          icon: ImageDescriptor.defaultImage,
+          position: sourcePoint!,
+        ),
+      );
+
+      _controller.addMarkers([_sourceMark!.options]);
     } else if (destinationPoint == null) {
       destinationPoint = pos;
       _destinationAddress = await _getAddressFromLatLng(pos);
-    } else {
-      sourcePoint = pos;
-      _sourceAddress = await _getAddressFromLatLng(pos);
 
+      _destinationMark = Marker(
+        markerId: "destinationMark",
+        options: MarkerOptions(
+          infoWindow: const InfoWindow(title: "Destination point"),
+          icon: ImageDescriptor.defaultImage,
+          position: destinationPoint!,
+        ),
+      );
+
+      _controller.addMarkers([_destinationMark!.options]);
+    } else {
+      _controller.clearMarkers();
+
+      sourcePoint = pos;
       destinationPoint = null;
+      _sourceAddress = await _getAddressFromLatLng(pos);
       _destinationAddress = null;
+
+      _sourceMark = Marker(
+        markerId: "sourceMark",
+        options: MarkerOptions(
+          infoWindow: const InfoWindow(title: "Source point"),
+          icon: ImageDescriptor.defaultImage,
+          position: sourcePoint!,
+        ),
+      );
+
+      _controller.addMarkers([_sourceMark!.options]);
     }
+
+    // Refresh UI
     setState(() {});
   }
 

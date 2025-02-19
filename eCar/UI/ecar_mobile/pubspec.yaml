@@ -46,14 +46,13 @@ dependencies:
   typed_data: ^1.4.0
   number_pagination: ^1.1.0
   flutter_regex: ^0.0.3
-  google_maps_flutter: ^2.5.0
-  geolocator: ^10.1.0
-  flutter_polyline_points: ^2.1.0
+  geolocator: ^13.0.2
   flutter_dotenv: ^5.0.2
   dio: ^5.8.0
   flutter_stripe: ^11.4.0
   geocoding: ^3.0.0
-
+  google_navigation_flutter: ^0.5.0
+  permission_handler: ^11.3.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

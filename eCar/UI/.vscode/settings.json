@@ -1,7 +1,8 @@
 {
-    "workbench.colorCustomizations": {
-        "editorError.foreground":   "#00000000",
-        "editorWarning.foreground": "#00000000",
-        "editorInfo.foreground":    "#00000000"
-    }
+  "workbench.colorCustomizations": {
+    "editorError.foreground": "#00000000",
+    "editorWarning.foreground": "#00000000",
+    "editorInfo.foreground": "#00000000"
+  },
+  "cmake.sourceDirectory": "C:/Users/adice/OneDrive/Desktop/FAKULTET/RS2/eCar/eCar/UI/ecar_admin/linux/runner"
 }

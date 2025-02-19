@@ -11,7 +11,7 @@ namespace eCar.Model.SearchObjects
         public string? Status { get; set; }
         public string? StatusNot { get; set; }
         public int? ClientId { get; set; }
-        public decimal? NumberOfKilometarsGTE { get; set; }
+        public int? DriverId { get; set; }
    
 
     }

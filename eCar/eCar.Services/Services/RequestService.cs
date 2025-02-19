@@ -75,9 +75,9 @@ namespace eCar.Services.Services
                 Recipient=route.Client.User.Email,
                 Subject="Status of your route has been changed",
                 Content=route.Status=="active"?$"Dear {route.Client.User.Name} {route.Client.User.Surname},your route has been " +
-                $"accepted and now is active. Thank you... Your eCar!":$"Dear {route.Client.User.Name} {route.Client.User.Surname}" +
-                $",your route has been rejected. " +
-                $"Appreciate your patience, but our driver is too busy now. Please try again. Your eCar!"
+                $"accepted and now is active.\nThank you...\nYour eCar!":$"Dear {route.Client.User.Name} {route.Client.User.Surname}" +
+                $",your route has been rejected.\n" +
+                $"Appreciate your patience, but our driver is too busy now.\nPlease try again.\nYour eCar!"
             };
             _rabbitMQProducer.SendMessage(emailModel);
         }

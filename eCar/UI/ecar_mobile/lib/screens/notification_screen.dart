@@ -299,7 +299,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 children: [
                   Icon(Icons.watch_later_outlined),
                   Text(
-                    statistics!.numberOfHours!.toString(),
+                    statistics?.numberOfHours?.toString() ?? "0",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text("Total hours",
@@ -309,7 +309,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               Column(
                 children: [
                   Icon(Icons.attach_money),
-                  Text(statistics!.priceAmount!.toString(),
+                  Text(statistics?.priceAmount?.toString() ?? "0",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Text("Total amount",
                       style: TextStyle(fontWeight: FontWeight.bold))
@@ -318,7 +318,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
               Column(
                 children: [
                   Icon(Icons.directions_walk_rounded),
-                  Text(statistics!.numberOfClients!.toString(),
+                  Text(statistics?.numberOfClients?.toString() ?? "0",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   Text("Total clients",
                       style: TextStyle(fontWeight: FontWeight.bold))
