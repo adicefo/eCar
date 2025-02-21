@@ -364,11 +364,11 @@ class _DrivesNavigationScreenState
   Future<void> _arrivedToWaypoint(NavigationWaypoint waypoint) async {
     debugPrint('Arrived to waypoint: ${waypoint.title}');
 
-    // Remove the first waypoint from the list.
+    // remove the first waypoint from the list.
     if (_waypoints.isNotEmpty) {
       _waypoints.removeAt(0);
     }
-    // Remove the first destination marker from the list.
+    // remove the first destination marker from the list.
     if (_destinationWaypointMarkers.isNotEmpty) {
       final Marker markerToRemove = _destinationWaypointMarkers.first;
       await _navigationViewController!.removeMarkers(<Marker>[markerToRemove]);
@@ -383,7 +383,7 @@ class _DrivesNavigationScreenState
     if (_waypoints.isEmpty) {
       debugPrint('Arrived to last waypoint, stopping navigation.');
 
-      // If there is no next waypoint, it means we have arrived at the last
+      // if there is no next waypoint, it means we have arrived at the last
       // destination. Hence, stop navigation.
       await _stopGuidedNavigation();
     }
@@ -392,7 +392,7 @@ class _DrivesNavigationScreenState
   }
 
   Future<void> _clearNavigationWaypoints() async {
-    // Stopping guided navigation will also clear the waypoints.
+    // stopping guided navigation will also clear the waypoints.
     _useFinsihAPI = false;
     await _stopGuidedNavigation();
     setState(() {

@@ -9,6 +9,7 @@ import 'package:ecar_mobile/providers/statistics_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
+import 'package:ecar_mobile/utils/isLoading_helper.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:ecar_mobile/utils/string_helpers.dart';
 import 'package:flutter/material.dart';
@@ -103,14 +104,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? Container(
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Go back"),
-            ),
-          )
+        ? getisLoadingHelper()
         : MasterScreen(
             "Home",
             SingleChildScrollView(

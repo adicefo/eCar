@@ -1,41 +1,48 @@
-import 'package:ecar_mobile/models/DriverVehicle/driverVehicle.dart';
+import 'package:ecar_mobile/models/Client/client.dart';
+import 'package:ecar_mobile/models/User/user.dart';
+import 'package:ecar_mobile/models/Vehicle/vehicle.dart';
 import 'package:ecar_mobile/models/search_result.dart';
-import 'package:ecar_mobile/providers/driverVehicle_provider.dart';
+import 'package:ecar_mobile/providers/client_provider.dart';
+import 'package:ecar_mobile/providers/user_provider.dart';
+import 'package:ecar_mobile/providers/vehicle_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
-import 'package:ecar_mobile/screens/route_order_details_screen.dart';
+import 'package:ecar_mobile/screens/rent_details_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/isLoading_helper.dart';
 import 'package:ecar_mobile/utils/string_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class RouteOrderScreen extends StatefulWidget {
-  const RouteOrderScreen({super.key});
+class RentScreen extends StatefulWidget {
+  const RentScreen({super.key});
 
   @override
-  State<RouteOrderScreen> createState() => _RouteOrderScreenState();
+  State<RentScreen> createState() => _RentScreenState();
 }
 
-class _RouteOrderScreenState extends State<RouteOrderScreen> {
-  late DriverVehicleProvider driverVehicleProvider;
+class _RentScreenState extends State<RentScreen> {
+  User? user = null;
 
-  SearchResult<DriverVehicle>? driverVehicles = null;
+  SearchResult<Client>? client;
+  SearchResult<Vehicle>? data;
+
+  Client? c;
+
+  late VehicleProvider vehicleProvider;
+
   bool isLoading = true;
 
   @override
   void initState() {
-    // TODO: implement initState
-    driverVehicleProvider = context.read<DriverVehicleProvider>();
+    vehicleProvider = context.read<VehicleProvider>();
     super.initState();
     _initForm();
   }
 
-  Future _initForm() async {
-    var filter = {"DatePickUp": DateTime.now().toIso8601String()};
-    driverVehicles = await driverVehicleProvider.get(filter: filter);
+  Future<void> _initForm() async {
+    data = await vehicleProvider.get();
 
     setState(() {
-      print("Number of driverVehicle items: ${driverVehicles?.count}");
       isLoading = false;
     });
   }
@@ -45,7 +52,7 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
     return isLoading
         ? getisLoadingHelper()
         : MasterScreen(
-            "Order",
+            "Rent",
             SingleChildScrollView(
               child: Container(
                 height: MediaQuery.of(context).size.height * 0.8,
@@ -56,7 +63,7 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
                       height: 20,
                     ),
                     Container(
-                      height: 400,
+                      height: 450,
                       width: 400,
                       child: GridView(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -92,7 +99,7 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
   }
 
   List<Widget> _buildGridView() {
-    if (driverVehicles?.result.length == 0) {
+    if (data?.result.length == 0) {
       return [
         Center(
             child: Text(
@@ -102,14 +109,13 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
         ))
       ];
     }
-    List<Widget> list = driverVehicles!.result
+    List<Widget> list = data!.result
         .map((x) => GestureDetector(
               onTap: () {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => RouteOrderDetailsScreen(
-                      true,
+                    builder: (context) => RentDetailsScreen(
                       object: x,
                     ),
                   ),
@@ -129,9 +135,8 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
                         child: Container(
                       height: 400,
                       width: 400,
-                      child: x.vehicle?.image != null
-                          ? StringHelpers.imageFromBase64String(
-                              x.vehicle?.image!)
+                      child: x.image != null
+                          ? StringHelpers.imageFromBase64String(x.image!)
                           : Image.asset(
                               "assets/images/no_image_placeholder.png",
                               height: 300,
@@ -145,7 +150,7 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
                       right: 0,
                       child: Center(
                         child: Text(
-                          x.vehicle?.name ?? "",
+                          x.name ?? "",
                           style: TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.bold,
@@ -170,19 +175,14 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
         padding: EdgeInsets.only(top: 50.0),
         child: ElevatedButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RouteOrderDetailsScreen(false),
-                ),
-              );
+              AlertHelpers.showAlert(context, "Info", "Still not implemented");
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(79, 255, 255, 255),
                 foregroundColor: Colors.black,
                 minimumSize: Size(300, 50)),
             child: Text(
-              "My orders",
+              "My rents",
               style: TextStyle(fontWeight: FontWeight.bold),
             )),
       ),

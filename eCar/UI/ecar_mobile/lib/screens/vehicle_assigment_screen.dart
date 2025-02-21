@@ -8,6 +8,7 @@ import 'package:ecar_mobile/providers/driver_provider.dart';
 import 'package:ecar_mobile/providers/vehicle_provider.dart';
 import 'package:ecar_mobile/screens/notification_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
+import 'package:ecar_mobile/utils/isLoading_helper.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:ecar_mobile/utils/string_helpers.dart';
 import 'package:flutter/material.dart';
@@ -85,16 +86,7 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
           backgroundColor: Colors.transparent,
         ),
         backgroundColor: vehicles == null ? Colors.black : Colors.white,
-        body: isLoading
-            ? Container(
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text("Go back"),
-                ),
-              )
-            : _buildScreen());
+        body: isLoading ? getisLoadingHelper() : _buildScreen());
   }
 
   Widget _buildScreen() {

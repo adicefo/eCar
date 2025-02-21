@@ -9,6 +9,7 @@ import 'package:ecar_mobile/screens/drives_navigation_screen.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/utils/PointDTO/point_dto.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
+import 'package:ecar_mobile/utils/isLoading_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:provider/provider.dart';
@@ -57,14 +58,7 @@ class _DrivesScreenState extends State<DrivesScreen> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? Container(
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Go back"),
-            ),
-          )
+        ? getisLoadingHelper()
         : MasterScreen(
             "Drives",
             _buildScreen(),
