@@ -11,6 +11,7 @@ class Rent {
   DateTime? endingDate;
   int? numberOfDays;
   double? fullPrice;
+  bool? paid;
   String? status;
   int? vehicleId;
   int? clientId;
@@ -23,6 +24,7 @@ class Rent {
       this.endingDate,
       this.numberOfDays,
       this.fullPrice,
+      this.paid,
       this.status,
       this.vehicleId,
       this.clientId,

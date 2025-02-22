@@ -14,6 +14,7 @@ namespace eCar.Services.Interfaces
         RentInsertRequest,RentUpdateRequest>
     {
         Model.Model.Rent UpdateActive(int id);
+        Model.Model.Rent UpdatePayment(int id);
 
         Model.Model.Rent UpdateFinsih(int id);
 

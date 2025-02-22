@@ -14,6 +14,7 @@ public partial class Rent
     public int? NumberOfDays { get; set; }
 
     public decimal? FullPrice { get; set; }
+    public bool? Paid { get; set; }
 
     public string? Status { get; set; }
 

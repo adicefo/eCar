@@ -14,6 +14,7 @@ import 'package:ecar_mobile/screens/route_order_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/isLoading_helper.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
+import 'package:ecar_mobile/utils/stripe_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -441,9 +442,10 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
   Future<void> makePayment(Model.Route? route) async {
     try {
       String stripeSecretKey = dotenv.env['STRIPE_SECRET_KEY'] ?? '';
-      String customerId = await createStripeCustomer();
-      paymentIntentData = await createPaymentIntent(
-          route!.fullPrice.toString(), 'BAM', c?.user?.email, customerId);
+      String customerId = await createStripeCustomer(
+          c?.user?.email, c?.user?.name, c?.user?.surname);
+      paymentIntentData = await createPaymentIntent(route!.fullPrice.toString(),
+          'BAM', c?.user?.email, customerId, c?.user?.name, c?.user?.surname);
       await Stripe.instance
           .initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
@@ -458,62 +460,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
       displayPaymentSheet(route);
     } catch (e) {
       print("Payment exception: $e");
-    }
-  }
-
-  Future<String> createStripeCustomer() async {
-    try {
-      String stripeSecretKey = await dotenv.env['STRIPE_SECRET_KEY'] ?? '';
-      if (stripeSecretKey.isEmpty) {
-        print("Stripe secret key is not set in .env file");
-      }
-      var response = await http.post(
-        Uri.parse('https://api.stripe.com/v1/customers'),
-        body: {
-          'email': c?.user?.email,
-          'name': '${c?.user?.name} ${c?.user?.surname}',
-        },
-        headers: {
-          'Authorization': 'Bearer $stripeSecretKey',
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      );
-
-      var customerResponse = jsonDecode(response.body);
-      String customerId = customerResponse['id'];
-      return customerId;
-    } catch (err) {
-      print('err creating stripe customer: ${err.toString()}');
-      throw err;
-    }
-  }
-
-  Future<Map<String, dynamic>> createPaymentIntent(String amount,
-      String currency, String? customerEmail, String customerId) async {
-    try {
-      String stripeSecretKey = await dotenv.env['STRIPE_SECRET_KEY'] ?? '';
-      Map<String, dynamic> body = {
-        'amount': calculateAmount(amount),
-        'currency': currency,
-        'payment_method_types[]': 'card',
-        'customer': customerId,
-        'receipt_email': c?.user?.email,
-        'description':
-            'Payment for drive by ${c?.user?.name} ${c?.user?.surname}',
-      };
-      var response = await http.post(
-        Uri.parse('https://api.stripe.com/v1/payment_intents'),
-        body: body,
-        headers: {
-          'Authorization': 'Bearer $stripeSecretKey',
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      );
-      print('Create Intent reponse ===> ${response.body.toString()}');
-      return jsonDecode(response.body);
-    } catch (err) {
-      print('err charging user: ${err.toString()}');
-      throw err;
     }
   }
 
@@ -542,7 +488,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
       } else {
         print('Payment failed.');
         ScaffoldHelpers.showScaffold(context,
-            "Payment is not successful for ${route?.driver?.user?.name} ${route?.driver?.user?.surname}");
+            "Payment is unsuccessfull for ${route?.driver?.user?.name} ${route?.driver?.user?.surname}");
       }
     } on StripeException catch (e) {
       print('Exception/DISPLAYPAYMENTSHEET==> $e');
@@ -555,21 +501,5 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
     } catch (e) {
       print('$e');
     }
-  }
-
-  Future<bool> confirmPaymentSheetPayment() async {
-    try {
-      await Stripe.instance.confirmPaymentSheetPayment();
-      return true;
-    } on StripeException catch (e) {
-      print('Error confirming payment: $e');
-      return false;
-    }
-  }
-
-  String calculateAmount(String amount) {
-    final double parsedAmount = double.parse(amount);
-    final int multipliedAmount = (parsedAmount * 100).toInt();
-    return multipliedAmount.toString();
   }
 }

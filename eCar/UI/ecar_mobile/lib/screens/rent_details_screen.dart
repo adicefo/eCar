@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:ecar_mobile/models/Client/client.dart';
+import 'package:ecar_mobile/models/Rent/rent.dart';
 import 'package:ecar_mobile/models/User/user.dart';
 import 'package:ecar_mobile/models/Vehicle/vehicle.dart';
 import 'package:ecar_mobile/models/search_result.dart';
@@ -6,16 +9,22 @@ import 'package:ecar_mobile/providers/client_provider.dart';
 import 'package:ecar_mobile/providers/rent_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
+import 'package:ecar_mobile/screens/rent_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/isLoading_helper.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
+import 'package:ecar_mobile/utils/stripe_helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 class RentDetailsScreen extends StatefulWidget {
+  bool? isOrder;
   Vehicle? object;
-  RentDetailsScreen({super.key, required this.object});
+  RentDetailsScreen(this.isOrder, {super.key, this.object});
 
   @override
   State<RentDetailsScreen> createState() => _RentDetailsScreenState();
@@ -28,8 +37,10 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   int _duration = 1;
   double? _price;
   double? _fullPrice;
-  bool _showPicker = false;
+
   User? user = null;
+
+  SearchResult<Rent>? data;
 
   SearchResult<Client>? client;
   Client? c;
@@ -37,6 +48,8 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   late UserProvider userProvider;
   late ClientProvider clientProvider;
   late RentProvider rentProvider;
+
+  Map<String, dynamic>? paymentIntentData;
 
   bool isLoading = true;
   @override
@@ -59,6 +72,11 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
     client = await clientProvider.get(filter: filterClient);
 
     c = client?.result.first;
+
+    if (widget.isOrder == false) {
+      var filter = {"ClientId": c?.id, "StatusNot": "finished"};
+      data = await rentProvider.get(filter: filter);
+    }
     setState(() {
       isLoading = false;
     });
@@ -87,7 +105,8 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   Widget build(BuildContext context) {
     return isLoading
         ? getisLoadingHelper()
-        : MasterScreen("Rent", _buildScreen());
+        : MasterScreen(
+            "Rent", widget.isOrder! ? _buildScreen() : _buildListRents());
   }
 
   Widget _buildScreen() {
@@ -142,14 +161,12 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
 
   Widget _buildButtonPick() {
     return Padding(
-      padding: EdgeInsets.only(top: 60),
-      child: ElevatedButton(
+      padding: EdgeInsets.only(top: 30),
+      child: IconButton(
         onPressed: _selectDateRange,
-        child: Text("Pick Date Range"),
-        style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(255, 218, 212, 196),
-            foregroundColor: Colors.black,
-            minimumSize: Size(70, 70)),
+        icon: Icon(Icons.date_range),
+        iconSize: 100,
+        color: Colors.amber,
       ),
     );
   }
@@ -299,5 +316,185 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
         )
       ],
     );
+  }
+
+  Widget _buildListRents() {
+    return SingleChildScrollView(
+        child: Container(
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: Column(
+              children: [
+                _buildHeaderRents(),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  height: 350,
+                  child: GridView(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: 1),
+                    scrollDirection: Axis.horizontal,
+                    children: _buildOrderGrid(),
+                  ),
+                ),
+                SizedBox(
+                  height: 90,
+                ),
+                Container(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RentScreen(),
+                        ),
+                      );
+                    },
+                    child: Text("Go back"),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(76, 255, 255, 255),
+                        foregroundColor: Colors.black,
+                        minimumSize: Size(200, 50)),
+                  ),
+                )
+              ],
+            )));
+  }
+
+  Widget _buildHeaderRents() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      child: Column(
+        children: [
+          Align(
+              alignment: Alignment.center,
+              child: Text(
+                "My rents",
+                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+              )),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildOrderGrid() {
+    if (data?.result?.length == 0) {
+      return [SizedBox.shrink()];
+    }
+    List<Widget> list = data!.result
+        .map((x) => Container(
+              height: 300,
+              width: 300,
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                border: Border.all(color: Colors.black, strokeAlign: 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    "Renting date: ${x?.rentingDate.toString().substring(0, 10)}",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                      "Ending date: ${x?.endingDate.toString().substring(0, 10)}",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text("Full price: ${x?.fullPrice.toString()} KM",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Center(
+                      child: Text(
+                          "Status: ${x.status == "wait" ? "Waiting for response" : "Rent is active"}",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  IconButton(
+                      onPressed: () async {
+                        if (x?.paid == true) {
+                          AlertHelpers.showAlert(
+                              context, "Warning", "You have already paid");
+                          return;
+                        }
+                        if (x.status == "wait") {
+                          AlertHelpers.showAlert(context, "Warning",
+                              "Only active rents can be paid.");
+                          return;
+                        }
+                        await makePayment(x);
+                      },
+                      icon: Icon(
+                        Icons.add_circle_sharp,
+                        color: Colors.deepOrangeAccent,
+                      ))
+                ],
+              ),
+            ))
+        .cast<Widget>()
+        .toList();
+    return list;
+  }
+
+  //start of logic for Stripe payment
+  Future<void> makePayment(Rent? rent) async {
+    try {
+      String stripeSecretKey = dotenv.env['STRIPE_SECRET_KEY'] ?? '';
+      String customerId = await createStripeCustomer(
+          c?.user?.email, c?.user?.name, c?.user?.surname);
+      paymentIntentData = await createPaymentIntent(rent!.fullPrice.toString(),
+          'BAM', c?.user?.email, customerId, c?.user?.name, c?.user?.surname);
+      await Stripe.instance
+          .initPaymentSheet(
+            paymentSheetParameters: SetupPaymentSheetParameters(
+              setupIntentClientSecret: stripeSecretKey,
+              paymentIntentClientSecret: paymentIntentData!['client_secret'],
+              customFlow: true,
+              style: ThemeMode.dark,
+              merchantDisplayName: 'test',
+            ),
+          )
+          .then((value) {});
+      displayPaymentSheet(rent);
+    } catch (e) {
+      print("Payment exception: $e");
+    }
+  }
+
+  Future<void> displayPaymentSheet(Rent? rent) async {
+    try {
+      final result = await Stripe.instance.presentPaymentSheet();
+      if (result == null) {
+        return;
+      }
+      final confirmed = await confirmPaymentSheetPayment();
+      if (confirmed) {
+        ScaffoldHelpers.showScaffold(
+            context, "Payment successful via Stripe servise.");
+        await rentProvider.updatePaymant(rent?.id);
+        var filter = {
+          "ClientId": c?.id,
+          "StatusNot": "finished",
+        };
+        rentProvider.get(filter: filter);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RentScreen(),
+          ),
+        );
+      } else {
+        print('Payment failed.');
+        ScaffoldHelpers.showScaffold(context, "Payment is unsuccessful.");
+      }
+    } on StripeException catch (e) {
+      print('Exception/DISPLAYPAYMENTSHEET==> $e');
+      showDialog(
+        context: context,
+        builder: (_) => const AlertDialog(
+          content: Text("Cancelled "),
+        ),
+      );
+    } catch (e) {
+      print('$e');
+    }
   }
 }

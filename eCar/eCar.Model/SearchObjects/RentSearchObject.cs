@@ -9,11 +9,10 @@ namespace eCar.Model.SearchObjects
     public class RentSearchObject:BaseSearchObject
     {
         public string? Status { get; set; }
+        public string? StatusNot { get; set; }
         public int? VehicleId { get; set; }
-        public int? NumberOfDaysLETE { get; set; }
-        public int? NumberOfDaysGETE { get; set; }
-        public decimal? FullPriceGTE { get; set; }
-        public decimal? FullPriceLTE { get; set; }
+        public int? ClientId { get; set; }
+
         public DateTime? RentingDate { get; set; }
         public DateTime? EndingDate { get; set; }
 

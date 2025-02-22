@@ -1,6 +1,7 @@
 ﻿using eCar.Model.Requests;
 using eCar.Services.Database;
 using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,22 @@ namespace eCar.Services.StateMachine.RentStateMachine
             Context.SaveChanges();
 
             return Mapper.Map<Model.Model.Rent>(entity);
+        }
+        public override Model.Model.Rent UpdatePayment(int id)
+        {
+            var set = Context.Set<Database.Rent>().AsQueryable();
+            var entity = set.Include(x => x.Client).ThenInclude(x => x.User).Include(x=>x.Vehicle).FirstOrDefault(x => x.Id == id);
+            if (entity == null)
+                throw new Exception("Non-existed model");
+
+            entity.Paid = true;
+
+            Context.Rents.Update(entity);
+            Context.SaveChanges();
+
+            var result = Mapper.Map<Model.Model.Rent>(entity);
+
+            return result;
         }
         public override Model.Model.Rent UpdateFinish(int id)
         {

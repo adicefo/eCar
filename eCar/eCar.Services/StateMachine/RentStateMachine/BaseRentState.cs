@@ -40,6 +40,10 @@ namespace eCar.Services.StateMachine.RentStateMachine
         {
             throw new UserException("Action not allowed");
         }
+        public virtual Model.Model.Rent UpdatePayment(int id)
+        {
+            throw new UserException("Action not allowed");
+        }
         //state finished
         public virtual Model.Model.Rent UpdateFinish(int id)
         {

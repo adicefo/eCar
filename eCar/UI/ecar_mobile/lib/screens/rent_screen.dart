@@ -116,6 +116,7 @@ class _RentScreenState extends State<RentScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => RentDetailsScreen(
+                      true,
                       object: x,
                     ),
                   ),
@@ -175,7 +176,12 @@ class _RentScreenState extends State<RentScreen> {
         padding: EdgeInsets.only(top: 50.0),
         child: ElevatedButton(
             onPressed: () {
-              AlertHelpers.showAlert(context, "Info", "Still not implemented");
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RentDetailsScreen(false),
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(
                 backgroundColor: const Color.fromARGB(79, 255, 255, 255),

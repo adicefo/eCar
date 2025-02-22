@@ -48,6 +48,12 @@ namespace eCar.Services.Services
             var state = BaseRentState.CreateState(entity.Status);
             return state.UpdateActive(id);
         }
+        public Model.Model.Rent UpdatePayment(int id)
+        {
+            var entity = GetById(id);
+            var state = BaseRentState.CreateState(entity.Status);
+            return state.UpdatePayment(id);
+        }
         public Model.Model.Rent UpdateFinsih(int id)
         {
             var entity= GetById(id);
@@ -79,16 +85,12 @@ namespace eCar.Services.Services
             var filteredQuery = base.AddFilter(search, query);
             if (!string.IsNullOrWhiteSpace(search.Status))
                 filteredQuery = filteredQuery.Where(x => x.Status == search.Status);
+            if (!string.IsNullOrWhiteSpace(search.StatusNot))
+                filteredQuery = filteredQuery.Where(x => x.Status != search.StatusNot);
             if (search.VehicleId!=null)
                 filteredQuery = filteredQuery.Where(x=>x.VehicleId==search.VehicleId);
-            if (search.NumberOfDaysLETE!=null&&search.NumberOfDaysLETE>0)
-                filteredQuery = filteredQuery.Where(x => x.NumberOfDays <= search.NumberOfDaysLETE);
-            if (search.NumberOfDaysGETE!=null)
-                filteredQuery = filteredQuery.Where(x => x.NumberOfDays >= search.NumberOfDaysGETE);
-            if (search.FullPriceLTE != null)
-                filteredQuery = filteredQuery.Where(x => x.FullPrice < search.FullPriceLTE);
-            if(search.FullPriceGTE!=null)
-                filteredQuery=filteredQuery.Where(x=>x.FullPrice>search.FullPriceGTE);
+            if (search.ClientId.HasValue)
+                filteredQuery = filteredQuery.Where(x => x.ClientId == search.ClientId);
             if(search.RentingDate!=null)
                 filteredQuery=filteredQuery.Where(x=>x.RentingDate.Value.Date==search.RentingDate.Value.Date);
             if (search.EndingDate != null)

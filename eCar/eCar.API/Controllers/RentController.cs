@@ -24,7 +24,11 @@ namespace eCar.API.Controllers
         {
             return (_service as IRentService).UpdateActive(id);
         }
-
+        [HttpPut("UpdatePayment/{id}")]
+        public Model.Model.Rent UpdatePayment(int id)
+        {
+            return (_service as IRentService).UpdatePayment(id);
+        }
         [HttpPut("Finish/{id}")]
         public Model.Model.Rent UpdateFinish(int id)
         {
