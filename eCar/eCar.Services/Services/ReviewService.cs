@@ -49,14 +49,15 @@ namespace eCar.Services.Services
         }
         public override void BeforeInsert(ReviewInsertRequest request, Review entity)
         {
-            var route = Context.Routes.Find(request.RouteId);
-            if (route == null)
-                throw new UserException("Trying to review unexisted Route");
-            if (route.ClientId != entity.ReviewsId || route.DriverID != entity.ReviewedId)
-                throw new UserException("Wrong user or driver used");
+            //prevent to review driver that did not serve you
+            var route = Context.Routes.Where(x=>x.Client.Id==request.ReviewsId&&x.Driver.Id==request.ReviewedId).FirstOrDefault();
+           if(route==null)
+            {
+                throw new UserException("Trying to review unexisted route");
+            }
+            entity.RouteId = route.Id;
 
-
-            base.BeforeInsert(request, entity);
+             base.BeforeInsert(request, entity);
         }
     }
 }

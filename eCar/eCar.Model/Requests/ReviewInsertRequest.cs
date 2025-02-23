@@ -18,7 +18,6 @@ namespace eCar.Model.Requests
 
         public int ReviewedId { get; set; }
 
-        public int RouteId { get; set; }
 
     }
 }
