@@ -5,14 +5,14 @@ import 'package:ecar_mobile/models/Route/route.dart' as Model;
 import 'package:ecar_mobile/providers/route_provider.dart';
 import 'package:ecar_mobile/screens/drives_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
-import 'package:ecar_mobile/utils/button_helper.dart';
-import 'package:ecar_mobile/utils/example_switch.dart';
-import 'package:ecar_mobile/utils/remaining_time_distance.dart';
+import 'package:ecar_mobile/utils/NavigationUtils/button_helper.dart';
+import 'package:ecar_mobile/utils/NavigationUtils/example_switch.dart';
+import 'package:ecar_mobile/utils/NavigationUtils/remaining_time_distance.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:ecar_mobile/utils/navigation_page_widget.dart';
+import 'package:ecar_mobile/utils/NavigationUtils/navigation_page_widget.dart';
 import 'package:provider/provider.dart';
 
 class DrivesNavigationScreen extends ExamplePage {

@@ -3,6 +3,7 @@ import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/drives_screen.dart';
 import 'package:ecar_mobile/screens/rent_screen.dart';
 import 'package:ecar_mobile/screens/request_screen.dart';
+import 'package:ecar_mobile/screens/review_screen.dart';
 import 'package:ecar_mobile/screens/route_order_screen.dart';
 import 'package:ecar_mobile/screens/vehicle_assigment_screen.dart';
 import 'package:ecar_mobile/screens/notification_screen.dart';
@@ -136,6 +137,14 @@ class _MasterScreenState extends State<MasterScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) => RentScreen(),
+              ),
+            );
+            break;
+          case 3:
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ReviewScreen(),
               ),
             );
             break;

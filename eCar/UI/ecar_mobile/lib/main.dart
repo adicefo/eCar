@@ -5,6 +5,7 @@ import 'package:ecar_mobile/providers/driver_provider.dart';
 import 'package:ecar_mobile/providers/notification_provider.dart';
 import 'package:ecar_mobile/providers/rent_provider.dart';
 import 'package:ecar_mobile/providers/request_provider.dart';
+import 'package:ecar_mobile/providers/review_provider.dart';
 import 'package:ecar_mobile/providers/route_provider.dart';
 import 'package:ecar_mobile/providers/statistics_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
@@ -50,6 +51,7 @@ Future<void> main() async {
     ChangeNotifierProvider(create: (_) => RouteProvider()),
     ChangeNotifierProvider(create: (_) => RequestProvider()),
     ChangeNotifierProvider(create: (_) => RentProvider()),
+    ChangeNotifierProvider(create: (_) => ReviewProvider()),
   ], child: const MyApp()));
 }
 
