@@ -1,4 +1,10 @@
+import 'package:ecar_mobile/models/Driver/driver.dart';
+import 'package:ecar_mobile/models/Statistics/statistics.dart';
 import 'package:ecar_mobile/models/User/user.dart';
+import 'package:ecar_mobile/models/search_result.dart';
+import 'package:ecar_mobile/providers/auth_provider.dart';
+import 'package:ecar_mobile/providers/driver_provider.dart';
+import 'package:ecar_mobile/providers/statistics_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/drives_screen.dart';
 import 'package:ecar_mobile/screens/rent_screen.dart';
@@ -8,6 +14,7 @@ import 'package:ecar_mobile/screens/route_order_screen.dart';
 import 'package:ecar_mobile/screens/vehicle_assigment_screen.dart';
 import 'package:ecar_mobile/screens/notification_screen.dart';
 import 'package:ecar_mobile/screens/profile_screen.dart';
+import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -23,16 +30,28 @@ class MasterScreen extends StatefulWidget {
 
 class _MasterScreenState extends State<MasterScreen> {
   User? user = null;
+  SearchResult<Driver>? driver;
+
+  Statistics? statistics = null;
+
   bool isLoading = true;
   int _currentPageIndex = 0;
   bool? isClient;
   final _storage = FlutterSecureStorage();
+
+  late AuthProvider authProvider;
   late UserProvider userProvider;
+  late DriverProvider driverProvider;
+  late StatisticsProvider statisticsProvider;
+
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+    authProvider = context.read<AuthProvider>();
+    driverProvider = context.read<DriverProvider>();
+    statisticsProvider = context.read<StatisticsProvider>();
     userProvider = context.read<UserProvider>();
+    super.initState();
     _initForm();
   }
 
@@ -44,8 +63,31 @@ class _MasterScreenState extends State<MasterScreen> {
     } else {
       isClient = false;
     }
+
+    if (role == "driver" && widget.title == "Profile") {
+      _setStatisticsLogic();
+    }
+
     print("Client is: ${isClient.toString()}");
     print("Result: ${user?.userName}");
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  Future _setStatisticsLogic() async {
+    var filter = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
+    driver = await driverProvider.get(filter: filter);
+
+    var d = driver?.result.first;
+
+    var filterStat = {
+      "DriverId": d?.id,
+      "BeginningOfWork": DateTime.now().toIso8601String()
+    };
+    var stat = await statisticsProvider.get(filter: filterStat);
+
+    statistics = stat?.result.firstWhere((x) => x.endOfWork == null);
     setState(() {
       isLoading = false;
     });
@@ -66,6 +108,7 @@ class _MasterScreenState extends State<MasterScreen> {
 
   Widget _buildScafforld() {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         //automaticallyImplyLeading: false,
         title: Text(
@@ -73,25 +116,36 @@ class _MasterScreenState extends State<MasterScreen> {
           style: TextStyle(
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        actions: isClient!
-            ? []
-            : <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.car_repair_sharp),
-                  color: Colors.black,
-                  padding: EdgeInsets.only(right: 90.0),
-                  tooltip: "Pick up car",
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            VehicleAssigmentScreen(user: user),
-                      ),
-                    );
-                  },
-                )
-              ],
+        actions: <Widget>[
+          if (isClient! == false && widget.title != "Profile")
+            IconButton(
+              icon: const Icon(Icons.car_repair_sharp),
+              color: Colors.black,
+              padding: EdgeInsets.only(right: 90.0),
+              tooltip: "Pick up car",
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VehicleAssigmentScreen(user: user),
+                  ),
+                );
+              },
+            ),
+          if (widget.title == "Profile")
+            IconButton(
+                icon: const Icon(Icons.login_outlined),
+                color: Colors.black,
+                padding: EdgeInsets.only(right: 75.0),
+                tooltip: "Logout",
+                onPressed: () async {
+                  if (statistics != null) {
+                    statistics =
+                        await statisticsProvider.updateFinish(statistics?.id);
+                  }
+                  authProvider.logout(context);
+                })
+        ],
         centerTitle: true,
         backgroundColor: Colors.transparent,
       ),
