@@ -8,11 +8,14 @@ import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/utils/PointDTO/point_dto.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
-import 'package:ecar_mobile/utils/isLoading_helper.dart';
+import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
+import 'package:ecar_mobile/utils/getAddresLatLng_helpers.dart';
+import 'package:ecar_mobile/utils/isLoading_helpers.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'package:provider/provider.dart';
 
 class RequestScreen extends StatefulWidget {
@@ -70,7 +73,7 @@ class _RequestScreenState extends State<RequestScreen> {
                   height: MediaQuery.of(context).size.height * 0.8,
                   child: Column(
                     children: [
-                      _buildHeader(),
+                      buildHeader("Your requests!\n   ${user?.userName}"),
                       Container(
                         height: 500,
                         child: GridView(
@@ -86,31 +89,6 @@ class _RequestScreenState extends State<RequestScreen> {
                     ],
                   )),
             ));
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Column(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Your requests!",
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-              )),
-          SizedBox(
-            height: 0,
-          ),
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                "${user?.userName}",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              )),
-        ],
-      ),
-    );
   }
 
   List<Widget> _buildGridView() {
@@ -141,8 +119,11 @@ class _RequestScreenState extends State<RequestScreen> {
                             textAlign: TextAlign.center,
                           ),
                           FutureBuilder<String>(
-                            future:
-                                _getAddressFromLatLng(x?.route?.sourcePoint),
+                            future: getAddressFromLatLng(LatLng(
+                                latitude:
+                                    x?.route?.sourcePoint?.latitude ?? 0.0,
+                                longitude:
+                                    x?.route?.sourcePoint?.longitude ?? 0.0)),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -161,8 +142,12 @@ class _RequestScreenState extends State<RequestScreen> {
                             },
                           ),
                           FutureBuilder<String>(
-                            future: _getAddressFromLatLng(
-                                x?.route?.destinationPoint),
+                            future: getAddressFromLatLng(LatLng(
+                                latitude:
+                                    x?.route?.destinationPoint?.latitude ?? 0.0,
+                                longitude:
+                                    x?.route?.destinationPoint?.longitude ??
+                                        0.0)),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -249,19 +234,6 @@ class _RequestScreenState extends State<RequestScreen> {
         .cast<Widget>()
         .toList();
     return list;
-  }
-
-  Future<String> _getAddressFromLatLng(Pointdto? pos) async {
-    try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(pos!.latitude!, pos!.longitude!);
-      Placemark place = placemarks[0];
-
-      return "${place.street}, ${place.locality}";
-    } catch (e) {
-      print("Error getting address: $e");
-      return "Unknown location";
-    }
   }
 
   Future<void> _fetchRequest() async {

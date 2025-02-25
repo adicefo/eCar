@@ -9,9 +9,12 @@ import 'package:ecar_mobile/screens/drives_navigation_screen.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/utils/PointDTO/point_dto.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
-import 'package:ecar_mobile/utils/isLoading_helper.dart';
+import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
+import 'package:ecar_mobile/utils/getAddresLatLng_helpers.dart';
+import 'package:ecar_mobile/utils/isLoading_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'package:provider/provider.dart';
 
 class DrivesScreen extends StatefulWidget {
@@ -89,7 +92,7 @@ class _DrivesScreenState extends State<DrivesScreen> {
         SizedBox(
           height: 10,
         ),
-        _buildHeader(),
+        buildHeader("Current drives"),
         SizedBox(
           height: 10,
         ),
@@ -103,22 +106,6 @@ class _DrivesScreenState extends State<DrivesScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Column(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Current drives ${d?.user?.userName}",
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-              )),
-        ],
-      ),
     );
   }
 
@@ -144,7 +131,9 @@ class _DrivesScreenState extends State<DrivesScreen> {
                   textAlign: TextAlign.center,
                 ),
                 FutureBuilder<String>(
-                  future: _getAddressFromLatLng(x?.sourcePoint),
+                  future: getAddressFromLatLng(LatLng(
+                      latitude: x?.sourcePoint?.latitude ?? 0.0,
+                      longitude: x?.sourcePoint?.longitude ?? 0.0)),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Text("Start point: Loading...");
@@ -161,7 +150,9 @@ class _DrivesScreenState extends State<DrivesScreen> {
                   },
                 ),
                 FutureBuilder<String>(
-                  future: _getAddressFromLatLng(x?.destinationPoint),
+                  future: getAddressFromLatLng(LatLng(
+                      latitude: x?.destinationPoint?.latitude ?? 0.0,
+                      longitude: x?.destinationPoint?.longitude ?? 0.0)),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Text("End point: Loading...");
@@ -199,18 +190,5 @@ class _DrivesScreenState extends State<DrivesScreen> {
         .cast<Widget>()
         .toList();
     return list;
-  }
-
-  Future<String> _getAddressFromLatLng(Pointdto? pos) async {
-    try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(pos!.latitude!, pos!.longitude!);
-      Placemark place = placemarks[0];
-
-      return "${place.street}, ${place.locality}";
-    } catch (e) {
-      print("Error getting address: $e");
-      return "Unknown location";
-    }
   }
 }

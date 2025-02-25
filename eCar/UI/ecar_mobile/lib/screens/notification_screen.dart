@@ -9,7 +9,8 @@ import 'package:ecar_mobile/providers/statistics_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
-import 'package:ecar_mobile/utils/isLoading_helper.dart';
+import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
+import 'package:ecar_mobile/utils/isLoading_helpers.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:ecar_mobile/utils/string_helpers.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +113,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 height: MediaQuery.of(context).size.height * 0.8,
                 child: Column(
                   children: [
-                    _buildHeader(),
+                    buildHeader("Welcome!\n${user?.userName}"),
                     Container(
                       height: 500,
                       child: GridView(
@@ -130,31 +131,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ),
             ),
           );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Column(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Welcome!",
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-              )),
-          SizedBox(
-            height: 0,
-          ),
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                "${user?.userName}",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              )),
-        ],
-      ),
-    );
   }
 
   List<Widget> _buildGridView() {

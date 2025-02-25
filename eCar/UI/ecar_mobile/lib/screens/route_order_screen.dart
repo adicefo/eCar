@@ -4,7 +4,8 @@ import 'package:ecar_mobile/providers/driverVehicle_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/screens/route_order_details_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
-import 'package:ecar_mobile/utils/isLoading_helper.dart';
+import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
+import 'package:ecar_mobile/utils/isLoading_helpers.dart';
 import 'package:ecar_mobile/utils/string_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -51,7 +52,7 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
                 height: MediaQuery.of(context).size.height * 0.8,
                 child: Column(
                   children: [
-                    _buildHeader(),
+                    buildHeader("Choose your\n    vehicle!"),
                     SizedBox(
                       height: 20,
                     ),
@@ -73,22 +74,6 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
               ),
             ),
           );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Column(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Choose your\n    vehicle!",
-                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-              )),
-        ],
-      ),
-    );
   }
 
   List<Widget> _buildGridView() {

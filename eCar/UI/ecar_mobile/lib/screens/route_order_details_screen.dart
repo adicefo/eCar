@@ -12,7 +12,9 @@ import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/screens/route_order_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
-import 'package:ecar_mobile/utils/isLoading_helper.dart';
+import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
+import 'package:ecar_mobile/utils/getAddresLatLng_helpers.dart';
+import 'package:ecar_mobile/utils/isLoading_helpers.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:ecar_mobile/utils/stripe_helpers.dart';
 import 'package:flutter/material.dart';
@@ -153,7 +155,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                   ),
                 ))),
         SizedBox(
-          height: 50,
+          height: 30,
         ),
         Row(
           children: [
@@ -235,7 +237,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
             height: MediaQuery.of(context).size.height * 0.8,
             child: Column(
               children: [
-                _buildHeader(),
+                buildHeader("My orders"),
                 SizedBox(
                   height: 30,
                 ),
@@ -273,22 +275,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                 )
               ],
             )));
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Column(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                "My orders",
-                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-              )),
-        ],
-      ),
-    );
   }
 
   List<Widget> _buildOrderGrid() {
@@ -342,7 +328,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
   void addMarker(LatLng pos) async {
     if (sourcePoint == null) {
       sourcePoint = pos;
-      _sourceAddress = await _getAddressFromLatLng(pos);
+      _sourceAddress = await getAddressFromLatLng(pos);
 
       _sourceMark = Marker(
         markerId: "sourceMark",
@@ -356,7 +342,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
       _controller.addMarkers([_sourceMark!.options]);
     } else if (destinationPoint == null) {
       destinationPoint = pos;
-      _destinationAddress = await _getAddressFromLatLng(pos);
+      _destinationAddress = await getAddressFromLatLng(pos);
 
       _destinationMark = Marker(
         markerId: "destinationMark",
@@ -373,7 +359,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
 
       sourcePoint = pos;
       destinationPoint = null;
-      _sourceAddress = await _getAddressFromLatLng(pos);
+      _sourceAddress = await getAddressFromLatLng(pos);
       _destinationAddress = null;
 
       _sourceMark = Marker(
@@ -390,20 +376,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
 
     // Refresh UI
     setState(() {});
-  }
-
-//fromLatLng displays address
-  Future<String> _getAddressFromLatLng(LatLng pos) async {
-    try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(pos.latitude, pos.longitude);
-      Placemark place = placemarks[0];
-
-      return "${place.street}, ${place.locality}";
-    } catch (e) {
-      print("Error getting address: $e");
-      return "Unknown location";
-    }
   }
 
 //request to my api

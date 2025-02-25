@@ -91,7 +91,9 @@ namespace eCar.Services.Services
                 filteredQuery = filteredQuery.Where(x=>x.VehicleId==search.VehicleId);
             if (search.ClientId.HasValue)
                 filteredQuery = filteredQuery.Where(x => x.ClientId == search.ClientId);
-            if(search.RentingDate!=null)
+            if (search.UserId.HasValue)
+                filteredQuery = filteredQuery.Where(x => x.Client.UserId == search.UserId);
+            if (search.RentingDate!=null)
                 filteredQuery=filteredQuery.Where(x=>x.RentingDate.Value.Date==search.RentingDate.Value.Date);
             if (search.EndingDate != null)
                 filteredQuery = filteredQuery.Where(x => x.EndingDate.Value.Date== search.EndingDate.Value.Date);

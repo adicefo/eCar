@@ -12,7 +12,8 @@ import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/screens/review_details_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
-import 'package:ecar_mobile/utils/isLoading_helper.dart';
+import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
+import 'package:ecar_mobile/utils/isLoading_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
@@ -68,7 +69,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
         height: MediaQuery.of(context).size.height * 0.8,
         child: Column(
           children: [
-            _buildHeader(),
+            buildHeader("Reviews"),
             SizedBox(
               height: 30,
             ),
@@ -87,22 +88,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
             _buildButton(),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Column(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Reviews",
-                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-              )),
-        ],
       ),
     );
   }
@@ -179,9 +164,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
                         _showCustomModal(x);
                       },
                       child: Text(
-                        "Click for description",
+                        "Description",
                         style: TextStyle(
-                          color: Colors.blue,
+                          color: Colors.black,
                           decoration: TextDecoration.underline,
                         ),
                       ),

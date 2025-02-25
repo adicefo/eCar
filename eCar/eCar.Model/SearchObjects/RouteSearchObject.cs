@@ -12,6 +12,7 @@ namespace eCar.Model.SearchObjects
         public string? StatusNot { get; set; }
         public int? ClientId { get; set; }
         public int? DriverId { get; set; }
+        public int? UserId { get; set; }
    
 
     }

@@ -88,6 +88,10 @@ namespace eCar.Services.Services
                 filteredQuery = filteredQuery.Where(x => x.ClientId == search.ClientId);
             if (search.DriverId.HasValue)
                 filteredQuery = filteredQuery.Where(x => x.DriverID == search.DriverId);
+            if(search.UserId.HasValue)
+                filteredQuery = filteredQuery.Where(x => x.Driver.UserID == search.UserId||
+                x.Client.UserId==search.UserId);
+
             return filteredQuery;
         }
         public override IQueryable<Database.Route> AddInclude(RouteSearchObject search, IQueryable<Database.Route> query)

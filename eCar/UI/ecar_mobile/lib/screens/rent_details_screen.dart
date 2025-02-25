@@ -11,7 +11,8 @@ import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
 import 'package:ecar_mobile/screens/rent_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
-import 'package:ecar_mobile/utils/isLoading_helper.dart';
+import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
+import 'package:ecar_mobile/utils/isLoading_helpers.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:ecar_mobile/utils/stripe_helpers.dart';
 import 'package:flutter/material.dart';
@@ -112,7 +113,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   Widget _buildScreen() {
     return Column(
       children: [
-        _buildHeader(),
+        buildHeader("Choose your rent\n         period"),
         _buildButtonPick(),
         SizedBox(
           height: 70,
@@ -141,22 +142,6 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
       await Future.delayed(const Duration(seconds: 1));
       ScaffoldHelpers.showScaffold(context, "Request has been sent");
     }
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Column(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                "Choose your rent\n         period",
-                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-              )),
-        ],
-      ),
-    );
   }
 
   Widget _buildButtonPick() {
@@ -324,7 +309,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
             height: MediaQuery.of(context).size.height * 0.8,
             child: Column(
               children: [
-                _buildHeaderRents(),
+                buildHeader("My rents"),
                 SizedBox(
                   height: 30,
                 ),
@@ -362,22 +347,6 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 )
               ],
             )));
-  }
-
-  Widget _buildHeaderRents() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Column(
-        children: [
-          Align(
-              alignment: Alignment.center,
-              child: Text(
-                "My rents",
-                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
-              )),
-        ],
-      ),
-    );
   }
 
   List<Widget> _buildOrderGrid() {
