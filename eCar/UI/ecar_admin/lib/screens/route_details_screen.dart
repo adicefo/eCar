@@ -6,8 +6,11 @@ import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/driver_provider.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/screens/routes_screen.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+
 import 'package:provider/provider.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart' as help;
 
@@ -247,7 +250,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -264,7 +267,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
         children: [
           if (widget.route == null) ...[
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 _formKey.currentState?.saveAndValidate();
                 final formData = _formKey.currentState?.value;
                 final requestPayload = {
@@ -281,7 +284,20 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   "clientId": formData!['clientId'],
                   "driverID": formData!['driverID'],
                 };
-                routeProvider.insert(requestPayload);
+
+                try {
+                  routeProvider.insert(requestPayload);
+
+                  ScaffoldHelpers.showScaffold(context, "Route added");
+                  await Future.delayed(const Duration(seconds: 3));
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => RouteListScreen(),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                }
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellowAccent,
@@ -299,8 +315,21 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
                 _formKey.currentState?.saveAndValidate();
                 if (confirmEdit == true) {
-                  routeProvider.update(
-                      widget.route?.id, _formKey.currentState?.value);
+                  try {
+                    routeProvider.update(
+                        widget.route?.id, _formKey.currentState?.value);
+
+                    ScaffoldHelpers.showScaffold(
+                        context, "Route updated to active");
+                    await Future.delayed(const Duration(seconds: 3));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => RouteListScreen(),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                  }
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -317,7 +346,20 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 bool? confirmEdit =
                     await help.AlertHelpers.editConfirmation(context);
                 if (confirmEdit == true) {
-                  routeProvider.updateFinish(widget.route?.id);
+                  try {
+                    routeProvider.updateFinish(widget.route?.id);
+
+                    ScaffoldHelpers.showScaffold(
+                        context, "Route updated to finish");
+                    await Future.delayed(const Duration(seconds: 3));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => RouteListScreen(),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                  }
                 }
               },
               style: ElevatedButton.styleFrom(

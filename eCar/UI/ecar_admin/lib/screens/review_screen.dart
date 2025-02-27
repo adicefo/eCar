@@ -124,10 +124,6 @@ class _ReviewScreenState extends State<ReviewScreen> {
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold))),
                 DataColumn(
-                    label: Text("Route id",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                DataColumn(
                     label: Text("Edit",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold))),
@@ -163,11 +159,10 @@ class _ReviewScreenState extends State<ReviewScreen> {
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),
-                              DataCell(Text("${e.description}",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text("${e.routeId.toString()}",
+                              DataCell(Text(
+                                  e.description!.length > 50
+                                      ? "${e.description.toString().substring(0, 50)}"
+                                      : "${e.description}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),

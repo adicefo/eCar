@@ -197,7 +197,7 @@ class _RentScreenState extends State<RentScreen> {
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),
-                              DataCell(Text(e.fullPrice.toString(),
+                              DataCell(Text("${e.fullPrice.toString()} KM",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),

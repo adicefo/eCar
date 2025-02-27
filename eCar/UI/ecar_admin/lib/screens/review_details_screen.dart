@@ -1,6 +1,8 @@
 import 'package:ecar_admin/models/Review/review.dart';
 import 'package:ecar_admin/providers/review_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/screens/review_screen.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
@@ -109,7 +111,19 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
               var request = Map.from(_formKey.currentState!.value);
               confirmEdit = await help.AlertHelpers.editConfirmation(context);
               if (confirmEdit == true) {
-                provider.update(widget.review?.id, request);
+                try {
+                  provider.update(widget.review?.id, request);
+
+                  ScaffoldHelpers.showScaffold(context, "Review updated");
+                  await Future.delayed(const Duration(seconds: 3));
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => ReviewScreen(),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                }
               }
             },
             style: ElevatedButton.styleFrom(

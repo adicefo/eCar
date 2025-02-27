@@ -1,6 +1,7 @@
 import 'package:ecar_admin/models/Rent/rent.dart';
 import 'package:ecar_admin/providers/rent_provider.dart';
 import 'package:ecar_admin/screens/rent_screen.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ecar_admin/utils/string_helpers.dart' as help;
@@ -198,18 +199,22 @@ class _RentRequestScreenState extends State<RentRequestScreen> {
             onPressed: () async {
               confirmEdit = await AlertHelpers.editConfirmation(context);
               if (confirmEdit == true) {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    duration: Duration(seconds: 2),
-                    backgroundColor: Colors.redAccent,
-                    content: Text(
-                      'Request has been denied',
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    )));
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => RentScreen()));
-                provider.delete(widget.rent?.id);
+                try {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.redAccent,
+                      content: Text(
+                        'Request has been denied',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      )));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => RentScreen()));
+                  provider.delete(widget.rent?.id);
+                } catch (e) {
+                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                }
               }
             },
             style: ElevatedButton.styleFrom(
@@ -226,19 +231,23 @@ class _RentRequestScreenState extends State<RentRequestScreen> {
             onPressed: () async {
               confirmEdit = await AlertHelpers.editConfirmation(context);
               if (confirmEdit == true) {
-                provider.updateActive(widget.rent?.id);
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                    duration: Duration(seconds: 2),
-                    backgroundColor: Colors.lightGreen,
-                    content: Text(
-                      'Request has been accepted',
-                      textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    )));
-                await Future.delayed(const Duration(seconds: 2));
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => RentScreen()));
+                try {
+                  provider.updateActive(widget.rent?.id);
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Colors.lightGreen,
+                      content: Text(
+                        'Request has been accepted',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      )));
+                  await Future.delayed(const Duration(seconds: 2));
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => RentScreen()));
+                } catch (e) {
+                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                }
               }
             },
             style: ElevatedButton.styleFrom(

@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:ecar_admin/providers/notification_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/screens/notification_screen.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:ecar_admin/models/Notification/notification.dart' as Model;
@@ -339,11 +341,34 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
               var request = Map.from(_formKey.currentState!.value);
               request['image'] = _base64Image;
               if (widget.notification == null) {
-                provider.insert(request);
+                try {
+                  provider.insert(request);
+                  ScaffoldHelpers.showScaffold(context, "Notification added");
+                  await Future.delayed(const Duration(seconds: 3));
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => NotificationScreen(),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                }
               } else if (widget.notification != null) {
                 confirmEdit = await help.AlertHelpers.editConfirmation(context);
                 if (confirmEdit == true) {
-                  provider.update(widget.notification?.id, request);
+                  try {
+                    provider.update(widget.notification?.id, request);
+                    ScaffoldHelpers.showScaffold(
+                        context, "Notification updated");
+                    await Future.delayed(const Duration(seconds: 3));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => NotificationScreen(),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                  }
                 }
               }
             },

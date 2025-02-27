@@ -161,17 +161,17 @@ class _DriversListScreenState extends State<DriversListScreen> {
                               color: Colors.black,
                               fontWeight: FontWeight.bold))),
                   DataColumn(
-                      label: Text("Telephone number",
+                      label: Text("Telephone num",
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold))),
                   DataColumn(
-                      label: Text("Number of hours amount",
+                      label: Text("Number hours",
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold))),
                   DataColumn(
-                      label: Text("Number of clients amount",
+                      label: Text("Number clients",
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold))),

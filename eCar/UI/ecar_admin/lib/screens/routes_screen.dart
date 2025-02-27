@@ -132,11 +132,6 @@ class _RouteListScreenState extends State<RouteListScreen> {
                 columnSpacing: 25,
                 columns: [
                   DataColumn(
-                      label: Text("ID",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
                       label: Text("Client name",
                           style: TextStyle(
                               color: Colors.black,
@@ -196,10 +191,6 @@ class _RouteListScreenState extends State<RouteListScreen> {
                                   ~WidgetState.disabled: Colors.grey,
                                 }),
                                 cells: [
-                                  DataCell(Text(e.id.toString(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
                                   DataCell(Text(e.client?.user?.name ?? " ",
                                       style: TextStyle(
                                           color: Colors.black,

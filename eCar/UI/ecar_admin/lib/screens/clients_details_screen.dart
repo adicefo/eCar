@@ -1,9 +1,12 @@
 import 'package:ecar_admin/models/Client/client.dart';
 import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/user_provider.dart';
+import 'package:ecar_admin/screens/clients_screen.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart' as help;
 
@@ -30,11 +33,9 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
       "name": widget.client?.user?.name,
       "surname": widget.client?.user?.surname,
       "telephoneNumber": widget.client?.user?.telephoneNumber,
-      "userName": widget.client?.user?.userName,
+      "email": widget.client?.user?.email,
       "password": "",
       "passwordConfirm": "",
-      "gender": widget.client?.user?.gender,
-      "isActive": widget.client?.user?.isActive
     };
     super.initState();
   }
@@ -49,6 +50,10 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
   }
 
   Widget _buildForm() {
+    RegExp phoneExp = new RegExp(r"^06\d-\d{3}-\d{3,4}$");
+    RegExp emailExp = new RegExp(
+        "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?\$");
+    RegExp nameSurname = new RegExp(r"[A-Z][a-z]{2,}");
     return FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
@@ -76,6 +81,15 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "name",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Field is required"),
+                        FormBuilderValidators.minLength(3,
+                            errorText:
+                                "Name must contain at least 3 charaters"),
+                        FormBuilderValidators.match(nameSurname,
+                            errorText: "Name must start with an uppercase"),
+                      ]),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -96,6 +110,15 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "surname",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Field is required"),
+                        FormBuilderValidators.minLength(3,
+                            errorText:
+                                "Name must contain at least 3 charaters"),
+                        FormBuilderValidators.match(nameSurname,
+                            errorText: "Name must start with an uppercase"),
+                      ]),
                     ),
                   ),
                 ],
@@ -123,6 +146,22 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "userName",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Field is required"),
+                        FormBuilderValidators.minLength(5,
+                            errorText:
+                                "Username must contain at least 5 charaters"),
+                        FormBuilderValidators.username(
+                            checkNullOrEmpty: true,
+                            allowDash: false,
+                            allowDots: false,
+                            allowUnderscore: false,
+                            allowNumbers: true,
+                            allowSpecialChar: true,
+                            errorText:
+                                "- _ . are not allowed. Correct example: userUser123")
+                      ]),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -143,6 +182,13 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "email",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Field is required"),
+                        FormBuilderValidators.match(emailExp,
+                            errorText:
+                                "Email format is:name(name.surname)@something.com")
+                      ]),
                     ),
                   ),
                 ],
@@ -171,6 +217,11 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "password",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Field is required"),
+                        FormBuilderValidators.minLength(6),
+                      ]),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -192,6 +243,11 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "passwordConfirm",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Field is required"),
+                        FormBuilderValidators.minLength(6),
+                      ]),
                     ),
                   ),
                 ],
@@ -219,6 +275,10 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "telephoneNumber",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.match(phoneExp,
+                            errorText: "Number format: 06x-xxx-xxx(x)")
+                      ]),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -274,6 +334,15 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "name",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Field is required"),
+                        FormBuilderValidators.minLength(3,
+                            errorText:
+                                "Name must contain at least 3 charaters"),
+                        FormBuilderValidators.match(nameSurname,
+                            errorText: "Name must start with an uppercase"),
+                      ]),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -294,6 +363,15 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "surname",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Field is required"),
+                        FormBuilderValidators.minLength(3,
+                            errorText:
+                                "Name must contain at least 3 charaters"),
+                        FormBuilderValidators.match(nameSurname,
+                            errorText: "Name must start with an uppercase"),
+                      ]),
                     ),
                   ),
                 ],
@@ -321,13 +399,17 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "telephoneNumber",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.match(phoneExp,
+                            errorText: "Number format: 06x-xxx-xxx(x)")
+                      ]),
                     ),
                   ),
                   SizedBox(width: 10),
                   Expanded(
                     child: FormBuilderTextField(
                       decoration: InputDecoration(
-                        labelText: "Username",
+                        labelText: "Email",
                         filled: true,
                         fillColor: Colors.grey[200],
                         enabledBorder: OutlineInputBorder(
@@ -340,7 +422,14 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                       style: TextStyle(
                         color: Colors.black,
                       ),
-                      name: "userName",
+                      name: "email",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Field is required"),
+                        FormBuilderValidators.match(emailExp,
+                            errorText:
+                                "Email format is:name(name.surname)@something.com")
+                      ]),
                     ),
                   ),
                 ],
@@ -369,6 +458,11 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "password",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Field is required"),
+                        FormBuilderValidators.minLength(6),
+                      ]),
                     ),
                   ),
                   SizedBox(width: 10),
@@ -390,6 +484,11 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         color: Colors.black,
                       ),
                       name: "passwordConfirm",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Field is required"),
+                        FormBuilderValidators.minLength(6),
+                      ]),
                     ),
                   ),
                 ],
@@ -397,55 +496,6 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
               SizedBox(
                 width: 80,
                 height: 10,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: FormBuilderTextField(
-                      decoration: InputDecoration(
-                        labelText: "Gender",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                      ),
-                      name: "gender",
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                      child: FormBuilderCheckbox(
-                    name: "isActive",
-                    title: Text(
-                      "Is user active",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 15),
-                    ),
-                    initialValue: widget.client?.user?.isActive,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                    checkColor: Colors.black,
-                    activeColor: Colors.yellowAccent,
-                    controlAffinity: ListTileControlAffinity.trailing,
-                  )),
-                ],
               ),
             ]
           ],
@@ -463,14 +513,52 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
         children: [
           ElevatedButton(
             onPressed: () async {
-              _formKey.currentState?.saveAndValidate();
-              var request = Map.from(_formKey.currentState!.value);
-              if (widget.client == null) {
-                clientProvider.insert(request);
-              } else if (widget.client != null) {
-                confirmEdit = await help.AlertHelpers.editConfirmation(context);
-                if (confirmEdit == true) {
-                  userProvider.update(widget.client?.userId, request);
+              if (_formKey.currentState?.validate() ?? false) {
+                _formKey.currentState?.save();
+                var password = _formKey.currentState?.value['password'];
+                var confirmPassword =
+                    _formKey.currentState?.value['passwordConfirm'];
+                if (password != confirmPassword) {
+                  help.AlertHelpers.showAlert(context, "Invalid form",
+                      "Form is not valid. Please fix the values");
+                  return;
+                }
+                var request = Map.from(_formKey.currentState!.value);
+                if (widget.client == null) {
+                  try {
+                    clientProvider.insert(request);
+
+                    ScaffoldHelpers.showScaffold(context, "Client added");
+                    await Future.delayed(const Duration(seconds: 3));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => ClientListScreen(),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                  }
+                } else if (widget.client != null) {
+                  confirmEdit =
+                      await help.AlertHelpers.editConfirmation(context);
+                  if (confirmEdit == true) {
+                    try {
+                      userProvider.update(widget.client?.userId, request);
+
+                      ScaffoldHelpers.showScaffold(context, "Client updated");
+                      await Future.delayed(const Duration(seconds: 3));
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => ClientListScreen(),
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                    }
+                  }
+                } else {
+                  help.AlertHelpers.showAlert(context, "Invalid form",
+                      "Form is not valid. Please fix the values");
                 }
               }
             },

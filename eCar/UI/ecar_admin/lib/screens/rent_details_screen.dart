@@ -6,6 +6,8 @@ import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/rent_provider.dart';
 import 'package:ecar_admin/providers/vehicle_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/screens/rent_screen.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -65,6 +67,9 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
             isLoading
                 ? Container(child: Text("Still not implemented"))
                 : _buildForm(),
+            SizedBox(
+              height: 20,
+            ),
             _save()
           ],
         ));
@@ -77,6 +82,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
       child: Column(
         children: [
           if (widget.rent == null) ...[
+            SizedBox(height: 15),
             FormBuilderDateTimePicker(
               name: 'rentingDate',
               decoration: InputDecoration(
@@ -168,6 +174,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
             ),
             const SizedBox(height: 20),
           ] else if (widget.rent != null) ...[
+            SizedBox(height: 15),
             FormBuilderDateTimePicker(
               name: 'endingDate',
               decoration: InputDecoration(
@@ -185,7 +192,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               validator: FormBuilderValidators.required(),
             ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
             FormBuilderDropdown(
               name: 'vehicleId',
@@ -227,41 +234,92 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton(
-            onPressed: () async {
-              _formKey.currentState?.saveAndValidate();
-              final formData = _formKey.currentState?.value;
+          if (widget?.rent?.status != "active")
+            ElevatedButton(
+              onPressed: () async {
+                _formKey.currentState?.saveAndValidate();
+                final formData = _formKey.currentState?.value;
 
-              if (widget.rent == null) {
-                final requestPayload = {
-                  "rentingDate":
-                      (formData!['rentingDate'] as DateTime).toIso8601String(),
-                  "endingDate":
-                      (formData!['endingDate'] as DateTime).toIso8601String(),
-                  "clientId": formData!['clientId'],
-                  "vehicleId": formData!['vehicleId']
-                };
-                rentProvider.insert(requestPayload);
-              } else if (widget.rent != null) {
-                final requestPayload = {
-                  "endingDate":
-                      (formData!['endingDate'] as DateTime).toIso8601String(),
-                  "vehicleId": formData!['vehicleId']
-                };
-                var confirmEdit =
+                if (widget.rent == null) {
+                  final requestPayload = {
+                    "rentingDate": (formData!['rentingDate'] as DateTime)
+                        .toIso8601String(),
+                    "endingDate":
+                        (formData!['endingDate'] as DateTime).toIso8601String(),
+                    "clientId": formData!['clientId'],
+                    "vehicleId": formData!['vehicleId']
+                  };
+                  try {
+                    rentProvider.insert(requestPayload);
+                    ScaffoldHelpers.showScaffold(context, "Rent added");
+                    await Future.delayed(const Duration(seconds: 3));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => RentScreen(),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                  }
+                } else if (widget.rent != null) {
+                  final requestPayload = {
+                    "endingDate":
+                        (formData!['endingDate'] as DateTime).toIso8601String(),
+                    "vehicleId": formData!['vehicleId']
+                  };
+                  var confirmEdit =
+                      await help.AlertHelpers.editConfirmation(context);
+                  if (confirmEdit == true) {
+                    try {
+                      rentProvider.update(widget.rent?.id, requestPayload);
+                      ScaffoldHelpers.showScaffold(context, "Rent updated");
+                      await Future.delayed(const Duration(seconds: 3));
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => RentScreen(),
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                    }
+                  }
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                minimumSize: Size(300, 50),
+              ),
+              child: const Text("Save"),
+            ),
+          if (widget?.rent?.status == "active")
+            ElevatedButton(
+              onPressed: () async {
+                bool? confirmEdit =
                     await help.AlertHelpers.editConfirmation(context);
                 if (confirmEdit == true) {
-                  rentProvider.update(widget.rent?.id, requestPayload);
+                  try {
+                    rentProvider.updateFinish(widget.rent?.id);
+                    ScaffoldHelpers.showScaffold(
+                        context, "Rent updated to finish");
+                    await Future.delayed(const Duration(seconds: 3));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => RentScreen(),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                  }
                 }
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellowAccent,
-              foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.black,
+                minimumSize: Size(300, 50),
+              ),
+              child: const Text("Finish"),
             ),
-            child: const Text("Save"),
-          ),
         ],
       ),
     );

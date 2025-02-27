@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:ecar_admin/screens/vehicle_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart' as help;
 import 'package:ecar_admin/models/Vehicle/vehicle.dart';
 import 'package:ecar_admin/providers/vehicle_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -211,11 +213,35 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
               request['image'] = _base64Image;
 
               if (widget.vehicle == null) {
-                provider.insert(request);
+                try {
+                  provider.insert(request);
+
+                  ScaffoldHelpers.showScaffold(context, "Vehicle added");
+                  await Future.delayed(const Duration(seconds: 3));
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => VehicleScreen(),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                }
               } else if (widget.vehicle != null) {
                 confirmEdit = await help.AlertHelpers.editConfirmation(context);
                 if (confirmEdit == true) {
-                  provider.update(widget.vehicle?.id, request);
+                  try {
+                    provider.update(widget.vehicle?.id, request);
+
+                    ScaffoldHelpers.showScaffold(context, "Vehicle updated");
+                    await Future.delayed(const Duration(seconds: 3));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => VehicleScreen(),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                  }
                 }
               }
             },
