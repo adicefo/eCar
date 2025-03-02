@@ -7,6 +7,7 @@ import 'package:ecar_admin/screens/clients_screen.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/screens/notification_screen.dart';
 import 'package:ecar_admin/screens/rent_screen.dart';
+import 'package:ecar_admin/screens/reports_screen.dart';
 import 'package:ecar_admin/screens/review_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:ecar_admin/screens/vehicle_screen.dart';
@@ -61,6 +62,21 @@ class _MasterScreenState extends State<MasterScreen> {
         centerTitle: true,
         backgroundColor: Colors.yellowAccent,
         actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => ReportsScreen()));
+            },
+            child: Text("Report"),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
+              minimumSize: Size(50, 50),
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
           IconButton(
             icon: const Icon(Icons.monetization_on),
             padding: EdgeInsets.only(right: 90.0),

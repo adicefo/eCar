@@ -16,6 +16,12 @@ namespace eCar.API.Controllers
         {
 
         }
+        [AllowAnonymous]
+        [HttpGet("GetForReport")]
+        public IActionResult GetForReport([FromQuery]RouteReportRequestScreen request)
+        {
+            return (_service as IRouteService).GetForReport(request);
+        }
         [HttpPut("UpdatePayment/{id}")]
         public Model.Model.Route UpdatePayment(int id)
         {

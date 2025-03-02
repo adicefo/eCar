@@ -16,8 +16,8 @@ class RouteListScreen extends StatefulWidget {
 }
 
 class _RouteListScreenState extends State<RouteListScreen> {
-  int _currentPage = 0; // Track the current page
-  int _totalPages = 1; // Total pages (fetched from API)
+  int _currentPage = 0; //track the current page
+  int _totalPages = 1; //total pages (fetched from API)
   int _pageSize = 8;
   late RouteProvider provider;
   String? _selectedStatus;

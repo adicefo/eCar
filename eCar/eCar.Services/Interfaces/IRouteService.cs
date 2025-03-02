@@ -1,6 +1,7 @@
 ﻿using eCar.Model.Model;
 using eCar.Model.Requests;
 using eCar.Model.SearchObjects;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace eCar.Services.Interfaces
     {
        Model.Model.Route UpdateFinsih(int id);
        Model.Model.Route UpdatePayment(int id);
+
+        IActionResult GetForReport(RouteReportRequestScreen request);
         List<Enums.Action> AllowedActions(int id);
     }
 }

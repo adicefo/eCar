@@ -20,6 +20,7 @@ using eCar.Services.StateMachine.RouteStateMachine;
 using Microsoft.Extensions.Logging;
 using EFCore = Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace eCar.Services.Services
 
@@ -77,6 +78,18 @@ namespace eCar.Services.Services
                 return state.AllowedActions(entity);
             }
         }
+
+        public IActionResult GetForReport(RouteReportRequestScreen request)
+        {
+            var routes = Context.Routes.Where(x => x.Status == "finished" &&x.EndDate!=null&& x.EndDate.Value.Month == request.Month
+            && x.EndDate.Value.Year == request.Year);
+            var amount = routes.Sum(x => x.FullPrice);
+            if (amount == 0)
+                return new OkObjectResult(new { fullAmount = 0.0 });
+            return new OkObjectResult(new { fullAmount = amount });
+
+
+        }
         public override IQueryable<Database.Route> AddFilter(RouteSearchObject search, IQueryable<Database.Route> query)
         {
             var filteredQuery=base.AddFilter(search, query);
@@ -129,7 +142,7 @@ namespace eCar.Services.Services
             base.BeforeUpdate(request, entity);
         }
 
-       
+        
     };
 
     
