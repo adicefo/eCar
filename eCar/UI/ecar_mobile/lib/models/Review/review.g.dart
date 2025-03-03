@@ -12,6 +12,9 @@ Review _$ReviewFromJson(Map<String, dynamic> json) => Review(
       description: json['description'] as String?,
       reviewsId: (json['reviewsId'] as num?)?.toInt(),
       reviewedId: (json['reviewedId'] as num?)?.toInt(),
+      addedDate: json['addedDate'] == null
+          ? null
+          : DateTime.parse(json['addedDate'] as String),
       routeId: (json['routeId'] as num?)?.toInt(),
       reviewed: json['reviewed'] == null
           ? null
@@ -30,6 +33,7 @@ Map<String, dynamic> _$ReviewToJson(Review instance) => <String, dynamic>{
       'description': instance.description,
       'reviewsId': instance.reviewsId,
       'reviewedId': instance.reviewedId,
+      'addedDate': instance.addedDate?.toIso8601String(),
       'routeId': instance.routeId,
       'reviewed': instance.reviewed,
       'reviews': instance.reviews,

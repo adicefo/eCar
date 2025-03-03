@@ -15,6 +15,12 @@ namespace eCar.API.Controllers
         public ReviewController(IRevieweService service):base(service)
         {
         }
+        [AllowAnonymous]
+        [HttpGet("GetForReport")]
+        public IActionResult GetForReport([FromQuery] ReviewReportRequest request)
+        {
+            return (_service as IRevieweService).GetForReport(request);
+        }
 
         [Authorize(Roles ="Client")]
         public override Review Insert(ReviewInsertRequest request)

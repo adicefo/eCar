@@ -16,7 +16,7 @@ namespace eCar.Services.Interfaces
        Model.Model.Route UpdateFinsih(int id);
        Model.Model.Route UpdatePayment(int id);
 
-        IActionResult GetForReport(RouteReportRequestScreen request);
+        IActionResult GetForReport(RouteReportRequest request);
         List<Enums.Action> AllowedActions(int id);
     }
 }

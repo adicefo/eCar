@@ -3,10 +3,12 @@ import 'dart:typed_data';
 
 import 'package:ecar_admin/models/Client/client.dart';
 import 'package:ecar_admin/models/Driver/driver.dart';
+import 'package:ecar_admin/models/Review/review.dart';
 import 'package:ecar_admin/models/Route/route.dart' as Model;
 import 'package:ecar_admin/models/search_result.dart';
 import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/driver_provider.dart';
+import 'package:ecar_admin/providers/review_provider.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
@@ -33,29 +35,40 @@ class _ReportsScreenState extends State<ReportsScreen> {
   int selectedIndex = 0;
 
   String? _selectedDriverOption;
-  String? _selectedMonth = null;
-  String? _selectedYear = null;
+  String? _selectedMonthRoute = null;
+  String? _selectedYearRoute = null;
+  String? _selectedMonthReview = null;
+  String? _selectedYearReview = null;
 
   bool _drawForDriver = false;
   bool _drawForRoute = false;
+  bool _drawForReview = false;
+  bool _representHighLowReview = false;
 
   double? _routeTotalAmount;
   double _total2024 = 0.0;
   double _total2025 = 0.0;
 
+  Map<String, dynamic>? _reviewReportObj = null;
+
   SearchResult<Driver>? drivers;
   SearchResult<Client>? clients;
   SearchResult<Model.Route>? routes;
+  SearchResult<Review>? reviews;
 
   late DriverProvider driverProvider;
   late ClientProvider clientProvider;
   late RouteProvider routeProvider;
+  late ReviewProvider reviewProvider;
+
   bool isLoading = true;
   @override
   void initState() {
     driverProvider = context.read<DriverProvider>();
     clientProvider = context.read<ClientProvider>();
     routeProvider = context.read<RouteProvider>();
+    reviewProvider = context.read<ReviewProvider>();
+
     super.initState();
     _initForm();
     fetchYearlyData(2024).then((value) {
@@ -76,6 +89,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     drivers = await driverProvider.get();
     clients = await clientProvider.get();
     routes = await routeProvider.get();
+    reviews = await reviewProvider.get();
     setState(() {
       isLoading = false;
     });
@@ -176,7 +190,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
         SizedBox(
           height: 20,
         ),
-        _buildDropdownMenuBtnDriver(),
+        SizedBox(
+          width: 500,
+          child: _buildDropdownMenuBtnDriver(),
+        ),
         const SizedBox(
           height: 20,
         ),
@@ -190,46 +207,43 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   Widget _buildDropdownMenuBtnDriver() {
-    return Padding(
-      padding: EdgeInsets.only(left: 400),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 250,
-            child: DropdownButtonFormField<String>(
-              isDense: true,
-              focusColor: const Color.fromARGB(255, 255, 255, 255),
-              decoration: const InputDecoration(
-                  labelText: "Filter by", labelStyle: TextStyle(fontSize: 20)),
-              value: _selectedDriverOption,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedDriverOption = newValue;
-                });
-              },
-              items: const [
-                DropdownMenuItem(value: "hours", child: Text("Hours")),
-                DropdownMenuItem(value: "clients", child: Text("Clients")),
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 30,
-          ),
-          ElevatedButton(
-            onPressed: () {
+    return Row(
+      children: [
+        SizedBox(
+          width: 250,
+          child: DropdownButtonFormField<String>(
+            isDense: true,
+            focusColor: const Color.fromARGB(255, 255, 255, 255),
+            decoration: const InputDecoration(
+                labelText: "Filter by", labelStyle: TextStyle(fontSize: 20)),
+            value: _selectedDriverOption,
+            onChanged: (String? newValue) {
               setState(() {
-                _drawForDriver = true;
+                _selectedDriverOption = newValue;
               });
             },
-            child: Text("Filter"),
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellowAccent,
-                foregroundColor: Colors.black,
-                minimumSize: Size(150, 50)),
-          )
-        ],
-      ),
+            items: const [
+              DropdownMenuItem(value: "hours", child: Text("Hours")),
+              DropdownMenuItem(value: "clients", child: Text("Clients")),
+            ],
+          ),
+        ),
+        const SizedBox(
+          width: 30,
+        ),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              _drawForDriver = true;
+            });
+          },
+          child: Text("Filter"),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              minimumSize: Size(150, 50)),
+        )
+      ],
     );
   }
 
@@ -331,7 +345,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
         SizedBox(
           height: 20,
         ),
-        _buildDropdownMenuRoute(),
+        SizedBox(
+          width: 750,
+          child: _buildDropdownMenuRoute(),
+        ),
         SizedBox(
           height: 20,
         ),
@@ -346,91 +363,88 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   Widget _buildDropdownMenuRoute() {
-    return Padding(
-      padding: EdgeInsets.only(left: 250),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 250,
-            child: DropdownButtonFormField<String>(
-              isDense: true,
-              focusColor: const Color.fromARGB(255, 255, 255, 255),
-              decoration: const InputDecoration(
-                  labelText: "Month", labelStyle: TextStyle(fontSize: 20)),
-              value: _selectedMonth,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedMonth = newValue;
-                });
-              },
-              items: const [
-                DropdownMenuItem(value: "jan", child: Text("January")),
-                DropdownMenuItem(value: "feb", child: Text("February")),
-                DropdownMenuItem(value: "mar", child: Text("March")),
-                DropdownMenuItem(value: "apr", child: Text("April")),
-                DropdownMenuItem(value: "may", child: Text("May")),
-                DropdownMenuItem(value: "jun", child: Text("June")),
-                DropdownMenuItem(value: "jul", child: Text("July")),
-                DropdownMenuItem(value: "aug", child: Text("August")),
-                DropdownMenuItem(value: "sep", child: Text("September")),
-                DropdownMenuItem(value: "oct", child: Text("October")),
-                DropdownMenuItem(value: "nov", child: Text("November")),
-                DropdownMenuItem(value: "dec", child: Text("December")),
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 30,
-          ),
-          SizedBox(
-            width: 250,
-            child: DropdownButtonFormField<String>(
-              isDense: true,
-              focusColor: const Color.fromARGB(255, 255, 255, 255),
-              decoration: const InputDecoration(
-                  labelText: "Year", labelStyle: TextStyle(fontSize: 20)),
-              value: _selectedYear,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedYear = newValue;
-                });
-              },
-              items: const [
-                DropdownMenuItem(value: "2024", child: Text("2024")),
-                DropdownMenuItem(value: "2025", child: Text("2025")),
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 20,
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              if (_selectedMonth == null || _selectedYear == null) {
-                AlertHelpers.showAlert(
-                    context, "Info", "Please select month and year");
-                return;
-              }
-              var filter = {
-                "Month": _getMonthFromDropdown(),
-                "Year": int.parse(_selectedYear!)
-              };
-
-              try {
-                _routeTotalAmount = await routeProvider.getForReport(filter);
-                setState(() {});
-              } catch (e) {
-                ScaffoldHelpers.showScaffold(context, "${e.toString()}");
-              }
+    return Row(
+      children: [
+        SizedBox(
+          width: 250,
+          child: DropdownButtonFormField<String>(
+            isDense: true,
+            focusColor: const Color.fromARGB(255, 255, 255, 255),
+            decoration: const InputDecoration(
+                labelText: "Month", labelStyle: TextStyle(fontSize: 20)),
+            value: _selectedMonthRoute,
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedMonthRoute = newValue;
+              });
             },
-            child: Text("Filter"),
-            style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellowAccent,
-                foregroundColor: Colors.black,
-                minimumSize: Size(150, 50)),
-          )
-        ],
-      ),
+            items: const [
+              DropdownMenuItem(value: "jan", child: Text("January")),
+              DropdownMenuItem(value: "feb", child: Text("February")),
+              DropdownMenuItem(value: "mar", child: Text("March")),
+              DropdownMenuItem(value: "apr", child: Text("April")),
+              DropdownMenuItem(value: "may", child: Text("May")),
+              DropdownMenuItem(value: "jun", child: Text("June")),
+              DropdownMenuItem(value: "jul", child: Text("July")),
+              DropdownMenuItem(value: "aug", child: Text("August")),
+              DropdownMenuItem(value: "sep", child: Text("September")),
+              DropdownMenuItem(value: "oct", child: Text("October")),
+              DropdownMenuItem(value: "nov", child: Text("November")),
+              DropdownMenuItem(value: "dec", child: Text("December")),
+            ],
+          ),
+        ),
+        const SizedBox(
+          width: 30,
+        ),
+        SizedBox(
+          width: 250,
+          child: DropdownButtonFormField<String>(
+            isDense: true,
+            focusColor: const Color.fromARGB(255, 255, 255, 255),
+            decoration: const InputDecoration(
+                labelText: "Year", labelStyle: TextStyle(fontSize: 20)),
+            value: _selectedYearRoute,
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedYearRoute = newValue;
+              });
+            },
+            items: const [
+              DropdownMenuItem(value: "2024", child: Text("2024")),
+              DropdownMenuItem(value: "2025", child: Text("2025")),
+            ],
+          ),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            if (_selectedMonthRoute == null || _selectedYearRoute == null) {
+              AlertHelpers.showAlert(
+                  context, "Info", "Please select month and year");
+              return;
+            }
+            var filter = {
+              "Month": _getMonthFromDropdown(_selectedMonthRoute!),
+              "Year": int.parse(_selectedYearRoute!)
+            };
+
+            try {
+              _routeTotalAmount = await routeProvider.getForReport(filter);
+              setState(() {});
+            } catch (e) {
+              ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+            }
+          },
+          child: Text("Filter"),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              minimumSize: Size(150, 50)),
+        )
+      ],
     );
   }
 
@@ -452,8 +466,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   Widget _buildTableRoute() {
-    Map<int, double> data = _selectedYear == "2025" ? data2025 : data2024;
-    double total = _selectedYear == "2025" ? _total2025 : _total2024;
+    Map<int, double> data = _selectedYearRoute == "2025" ? data2025 : data2024;
+    double total = _selectedYearRoute == "2025" ? _total2025 : _total2024;
 
     return DataTable(
       columnSpacing: 10,
@@ -470,7 +484,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
         DataColumn(label: Text("October")),
         DataColumn(label: Text("November")),
         DataColumn(label: Text("December")),
-        DataColumn(label: Text("Total")), // ✅ Total Column
+        DataColumn(label: Text("Total")),
       ],
       rows: [
         DataRow(
@@ -494,7 +508,131 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   Widget _buildReviewsContent() {
-    return const Center(child: Text("Reviews Report Content"));
+    return Center(
+        child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildTextBoxCount("review"),
+        SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: 750,
+          child: _buildDropdownMenuReview(),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        if (_drawForReview)
+          _buildContainer("There is no data for selected month and year", null),
+        if (_representHighLowReview)
+          _buildContainer(
+              "Highest average mark has: ${_reviewReportObj!["maxDriver"]["driverName"]["name"]} ${_reviewReportObj!["maxDriver"]["driverName"]["surname"]}: ${_reviewReportObj!["maxDriver"]["avgMark"]}",
+              null),
+        SizedBox(
+          height: 20,
+        ),
+        if (_representHighLowReview)
+          _buildContainer(
+              "Lowes average mark has: ${_reviewReportObj!["minDriver"]["driverName"]["name"]} ${_reviewReportObj!["minDriver"]["driverName"]["surname"]}: ${_reviewReportObj!["minDriver"]["avgMark"]}",
+              null),
+        if (_representHighLowReview) _drawExportPdfBtn("review")
+      ],
+    ));
+  }
+
+  Widget _buildDropdownMenuReview() {
+    return Row(
+      children: [
+        SizedBox(
+          width: 250,
+          child: DropdownButtonFormField<String>(
+            isDense: true,
+            focusColor: const Color.fromARGB(255, 255, 255, 255),
+            decoration: const InputDecoration(
+                labelText: "Month", labelStyle: TextStyle(fontSize: 20)),
+            value: _selectedMonthReview,
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedMonthReview = newValue;
+              });
+            },
+            items: const [
+              DropdownMenuItem(value: "jan", child: Text("January")),
+              DropdownMenuItem(value: "feb", child: Text("February")),
+              DropdownMenuItem(value: "mar", child: Text("March")),
+              DropdownMenuItem(value: "apr", child: Text("April")),
+              DropdownMenuItem(value: "may", child: Text("May")),
+              DropdownMenuItem(value: "jun", child: Text("June")),
+              DropdownMenuItem(value: "jul", child: Text("July")),
+              DropdownMenuItem(value: "aug", child: Text("August")),
+              DropdownMenuItem(value: "sep", child: Text("September")),
+              DropdownMenuItem(value: "oct", child: Text("October")),
+              DropdownMenuItem(value: "nov", child: Text("November")),
+              DropdownMenuItem(value: "dec", child: Text("December")),
+            ],
+          ),
+        ),
+        const SizedBox(
+          width: 30,
+        ),
+        SizedBox(
+          width: 250,
+          child: DropdownButtonFormField<String>(
+            isDense: true,
+            focusColor: const Color.fromARGB(255, 255, 255, 255),
+            decoration: const InputDecoration(
+                labelText: "Year", labelStyle: TextStyle(fontSize: 20)),
+            value: _selectedYearReview,
+            onChanged: (String? newValue) {
+              setState(() {
+                _selectedYearReview = newValue;
+              });
+            },
+            items: const [
+              DropdownMenuItem(value: "2024", child: Text("2024")),
+              DropdownMenuItem(value: "2025", child: Text("2025")),
+            ],
+          ),
+        ),
+        const SizedBox(
+          width: 20,
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            if (_selectedMonthReview == null || _selectedYearReview == null) {
+              AlertHelpers.showAlert(
+                  context, "Info", "Please select month and year");
+              return;
+            }
+            var filter = {
+              "Month": _getMonthFromDropdown(_selectedMonthReview!),
+              "Year": int.parse(_selectedYearReview!)
+            };
+
+            try {
+              _reviewReportObj = await reviewProvider.getForReport(filter);
+              if (_reviewReportObj!["maxDriver"] == "null") {
+                _drawForReview = true;
+                _representHighLowReview = false;
+              }
+              if (_reviewReportObj!["maxDriver"] != "null") {
+                _representHighLowReview = true;
+                _drawForReview = false;
+              }
+              setState(() {});
+            } catch (e) {
+              ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+            }
+          },
+          child: Text("Filter"),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              minimumSize: Size(150, 50)),
+        )
+      ],
+    );
   }
 
   Widget _buildContainer(String hint, int? number) {
@@ -502,7 +640,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(20)),
       height: 50,
-      width: 300,
+      width: 400,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: number != null
@@ -518,6 +656,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
         _buildContainer("Total number of drivers:", drivers?.count),
       if (entity == "route")
         _buildContainer("Total number of routes:", routes?.count),
+      if (entity == "review")
+        _buildContainer("Total number of reviews:", reviews?.count),
       const SizedBox(width: 20),
     ]);
   }
@@ -543,7 +683,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       return pw.Table.fromTextArray(
         headers: ['Month', 'Total Amount (KM)'],
         data: [
-          ...data.entries
+          ...data.entries //... separates each elemnt of the list in one row
               .map(
                   (e) => ["${e.key}/$year", "${e.value.toStringAsFixed(2)} KM"])
               .toList(),
@@ -563,12 +703,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     File('assets/images/55283.png').readAsBytesSync())),
                 height: 50),
             pw.Text(
-              'eCar Report for ${entity}',
+              'eCar Report for ${entity.toUpperCase()}',
               style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold),
             ),
             pw.SizedBox(height: 10),
             pw.Text(
-                'In the following document you can see some key information about ${entity} based business '),
+                'In the following document you can see some key information about ${entity.toUpperCase()} based business '),
             pw.SizedBox(height: 10),
             if (entity == "driver")
               pw.Column(
@@ -600,6 +740,39 @@ class _ReportsScreenState extends State<ReportsScreen> {
                       fontSize: 18, fontWeight: pw.FontWeight.bold)),
               buildPdfTable(data2024, 2024),
             ],
+            if (entity == "review") ...[
+              pw.Column(
+                crossAxisAlignment: pw.CrossAxisAlignment.start,
+                children: [
+                  pw.Text(
+                      'Number of reviews in the database: ${reviews!.count}'),
+                  pw.SizedBox(
+                    height: 20,
+                  ),
+                  pw.Text(
+                      'Number of drivers in the database: ${drivers!.count}'),
+                  pw.SizedBox(
+                    height: 20,
+                  ),
+                  pw.Text(
+                      'Number of clients in the database: ${clients!.count}'),
+                  pw.SizedBox(height: 40),
+                ],
+              ),
+              pw.Text("Driver reviwes report",
+                  style: pw.TextStyle(
+                      fontSize: 24, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 20),
+              pw.Text(
+                "For the month of ${_getMonthForReport(_selectedMonthReview!)} year ${_selectedYearReview} here are the extrems for drivers reviews:",
+              ),
+              pw.SizedBox(height: 20),
+              pw.Text(
+                  "Highest average mark has  ${_reviewReportObj!["maxDriver"]["driverName"]["name"]} ${_reviewReportObj!["maxDriver"]["driverName"]["surname"]} with value of: ${_reviewReportObj!["maxDriver"]["avgMark"]}"),
+              pw.SizedBox(height: 20),
+              pw.Text(
+                  "Lowest average mark has  ${_reviewReportObj!["minDriver"]["driverName"]["name"]} ${_reviewReportObj!["minDriver"]["driverName"]["surname"]} with value of: ${_reviewReportObj!["minDriver"]["avgMark"]}"),
+            ]
           ],
         ),
       ),
@@ -624,7 +797,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
       dialogTitle: 'Save PDF Report',
       initialDirectory: "/",
       allowedExtensions: ['pdf'],
-      fileName: 'ecar_report.pdf',
+      fileName: entity == "driver"
+          ? "ecar_report_driver.pdf"
+          : entity == "route"
+              ? "ecar_report_route.pdf"
+              : entity == "review"
+                  ? "ecar_report_review.pdf"
+                  : "ecar_report_default.pdf",
     );
 
     if (result != null) {
@@ -633,7 +812,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     }
   }
 
-  int _getMonthFromDropdown() {
+  int _getMonthFromDropdown(String _selectedMonth) {
     switch (_selectedMonth) {
       case "jan":
         return 1;
@@ -659,9 +838,39 @@ class _ReportsScreenState extends State<ReportsScreen> {
         return 11;
       case "dec":
         return 12;
-
       default:
         return 1;
+    }
+  }
+
+  String _getMonthForReport(String _selectedMonth) {
+    switch (_selectedMonth) {
+      case "jan":
+        return "January";
+      case "feb":
+        return "February";
+      case "mar":
+        return "March";
+      case "apr":
+        return "April";
+      case "may":
+        return "May";
+      case "jun":
+        return "June";
+      case "jul":
+        return "July";
+      case "aug":
+        return "August";
+      case "sep":
+        return "September";
+      case "oct":
+        return "October";
+      case "nov":
+        return "November";
+      case "dec":
+        return "December";
+      default:
+        return "January";
     }
   }
 }

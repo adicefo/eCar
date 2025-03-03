@@ -79,7 +79,7 @@ namespace eCar.Services.Services
             }
         }
 
-        public IActionResult GetForReport(RouteReportRequestScreen request)
+        public IActionResult GetForReport(RouteReportRequest request)
         {
             var routes = Context.Routes.Where(x => x.Status == "finished" &&x.EndDate!=null&& x.EndDate.Value.Month == request.Month
             && x.EndDate.Value.Year == request.Year);

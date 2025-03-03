@@ -192,7 +192,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
               borderRadius: BorderRadius.circular(16),
             ),
             width: MediaQuery.of(context).size.width * 0.75,
-            height: 275,
+            height: 350,
             padding: EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,6 +221,18 @@ class _ReviewScreenState extends State<ReviewScreen> {
                     ),
                   ),
                 )),
+                Positioned(
+                  bottom: 20,
+                  left: 0,
+                  child: Text(
+                    "${object!.addedDate.toString().substring(0, 10)}",
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.red,
+                        letterSpacing: 1.1,
+                        decoration: TextDecoration.underline),
+                  ),
+                ),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: ElevatedButton(

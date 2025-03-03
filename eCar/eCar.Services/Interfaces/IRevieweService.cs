@@ -1,6 +1,7 @@
 ﻿using eCar.Model.Requests;
 using eCar.Model.SearchObjects;
 using eCar.Services.Services;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,6 @@ namespace eCar.Services.Interfaces
     public interface IRevieweService:ICRUDService<Model.Model.Review,
         ReviewSearchObject,ReviewInsertRequest,ReviewUpdateRequest>
     {
-
+        IActionResult GetForReport(ReviewReportRequest request);
     }
 }

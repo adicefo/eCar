@@ -18,7 +18,7 @@ namespace eCar.API.Controllers
         }
         [AllowAnonymous]
         [HttpGet("GetForReport")]
-        public IActionResult GetForReport([FromQuery]RouteReportRequestScreen request)
+        public IActionResult GetForReport([FromQuery]RouteReportRequest request)
         {
             return (_service as IRouteService).GetForReport(request);
         }

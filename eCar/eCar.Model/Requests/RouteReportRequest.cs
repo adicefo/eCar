@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace eCar.Model.Requests
 {
-    public class RouteReportRequestScreen
+    public class RouteReportRequest
     {
         public int Month { get; set; }
         public int Year { get; set; }

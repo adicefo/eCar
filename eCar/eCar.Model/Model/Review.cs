@@ -17,7 +17,7 @@ namespace eCar.Model.Model
         public int ReviewsId { get; set; }
 
         public int ReviewedId { get; set; }
-
+        public DateTime? AddedDate { get; set; }
         public int RouteId { get; set; }
 
         public virtual Driver Reviewed { get; set; } = null!;

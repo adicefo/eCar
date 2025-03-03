@@ -14,6 +14,7 @@ public partial class Review
     public int ReviewsId { get; set; }
 
     public int ReviewedId { get; set; }
+    public DateTime? AddedDate { get; set; }
 
     public int RouteId { get; set; }
 

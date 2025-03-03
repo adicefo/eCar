@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using eCar.Model.Helper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace eCar.Services.Services
 {
@@ -29,6 +30,34 @@ namespace eCar.Services.Services
             if (entity == null)
                 throw new Exception("Non-existed entity");
             return Mapper.Map<Model.Model.Review>(entity);
+
+        }
+        public IActionResult GetForReport(ReviewReportRequest request)
+        {
+            //get all reviews in that period
+            var reviews = Context.Reviews.Where(x => x.AddedDate != null &&
+            x.AddedDate.Value.Year == request.Year &&
+            x.AddedDate.Value.Month == request.Month);
+            
+            if(!reviews.Any())
+            {
+               return new OkObjectResult(new { maxDriver = "null",minDriver="null" });
+            }
+
+            //taker driver and his average mark
+            var driverReviews = reviews
+                        .GroupBy(x => new { x.Reviewed.User.Name,x.Reviewed.User.Surname})
+                        .Select(group => new
+                        {
+                           DriverName = group.Key,
+                           AvgMark = Math.Round((decimal)group.Average(x => x.Value),2)
+                        }).ToList();
+
+            //take max and min driver by mark
+            var maxAvgDriver = driverReviews.MaxBy(x => x.AvgMark);
+            var minAvgDriver = driverReviews.MinBy(x => x.AvgMark);
+
+            return new OkObjectResult(new { maxDriver = maxAvgDriver, minDriver = minAvgDriver });
 
         }
         public override IQueryable<Review> AddFilter(ReviewSearchObject search, IQueryable<Review> query)
@@ -57,7 +86,11 @@ namespace eCar.Services.Services
             }
             entity.RouteId = route.Id;
 
+            entity.AddedDate = DateTime.Now;
+
              base.BeforeInsert(request, entity);
         }
+
+       
     }
 }

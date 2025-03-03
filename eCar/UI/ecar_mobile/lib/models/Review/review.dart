@@ -12,6 +12,7 @@ class Review {
   String? description;
   int? reviewsId;
   int? reviewedId;
+  DateTime? addedDate;
   int? routeId;
   Driver? reviewed;
   Client? reviews;
@@ -23,6 +24,7 @@ class Review {
       this.description,
       this.reviewsId,
       this.reviewedId,
+      this.addedDate,
       this.routeId,
       this.reviewed,
       this.reviews,
