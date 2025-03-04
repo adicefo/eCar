@@ -26,4 +26,24 @@ class RentProvider extends BaseProvider<Rent> {
       throw Exception("Unknown error in PUT request");
     }
   }
+
+  Future<List<Rent>> recommend(int? vehicleId) async {
+    var url = "${getBaseUrl()}Rent/Recommend/$vehicleId";
+    var uri = Uri.parse(url);
+    var headers = await createHeaders();
+
+    var response = await http!.get(uri, headers: headers);
+    List<Rent> list = [];
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      for (var item in data) {
+        list.add(Rent.fromJson(item));
+      }
+      return list;
+    } else if (response.statusCode == 204) {
+      return [];
+    } else {
+      throw Exception("Unknown error in GET request");
+    }
+  }
 }

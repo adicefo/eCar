@@ -133,18 +133,21 @@ class _MasterScreenState extends State<MasterScreen> {
               },
             ),
           if (widget.title == "Profile")
-            IconButton(
-                icon: const Icon(Icons.login_outlined),
-                color: Colors.black,
-                padding: EdgeInsets.only(right: 75.0),
-                tooltip: "Logout",
-                onPressed: () async {
-                  if (statistics != null) {
-                    statistics =
-                        await statisticsProvider.updateFinish(statistics?.id);
-                  }
-                  authProvider.logout(context);
-                })
+            Padding(
+              padding: EdgeInsets.only(right: 50),
+              child: ElevatedButton(
+                  onPressed: () async {
+                    if (statistics != null) {
+                      statistics =
+                          await statisticsProvider.updateFinish(statistics?.id);
+                    }
+                    authProvider.logout(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white),
+                  child: Text("Logout")),
+            ),
         ],
         centerTitle: true,
         backgroundColor: Colors.transparent,

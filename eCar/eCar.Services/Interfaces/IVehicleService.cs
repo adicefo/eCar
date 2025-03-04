@@ -13,6 +13,6 @@ namespace eCar.Services.Interfaces
         VehicleSearchObject,VehicleInsertRequest,VehicleUpdateRequest>
     { 
         public PagedResult<Model.Model.Vehicle> GetAvailableForDriver();
-
+        
     }
 }

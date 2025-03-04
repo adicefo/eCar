@@ -55,6 +55,7 @@ namespace eCar.Services.Services
 
             //take max and min driver by mark
             var maxAvgDriver = driverReviews.MaxBy(x => x.AvgMark);
+
             var minAvgDriver = driverReviews.MinBy(x => x.AvgMark);
 
             return new OkObjectResult(new { maxDriver = maxAvgDriver, minDriver = minAvgDriver });

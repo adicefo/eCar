@@ -4,6 +4,7 @@ using eCar.Model.SearchObject;
 using eCar.Model.SearchObjects;
 using eCar.Services.Interfaces;
 using eCar.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,14 @@ namespace eCar.API.Controllers
         {
             return (_service as IRentService).UpdatePayment(id);
         }
+        [AllowAnonymous]
+        [HttpGet("Recommend/{vehicleId}")]
+        public List<Model.Model.Rent> Recommend(int vehicleId)
+        {
+            return (_service as IRentService).Recommend(vehicleId);
+        }
+
+      
         [HttpPut("Finish/{id}")]
         public Model.Model.Rent UpdateFinish(int id)
         {

@@ -9,6 +9,7 @@ import 'package:ecar_mobile/providers/client_provider.dart';
 import 'package:ecar_mobile/providers/rent_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
+import 'package:ecar_mobile/screens/recommendation_screen.dart';
 import 'package:ecar_mobile/screens/rent_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
@@ -45,6 +46,8 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
 
   SearchResult<Client>? client;
   Client? c;
+
+  List<Rent>? _recommenderObj = null;
 
   late UserProvider userProvider;
   late ClientProvider clientProvider;
@@ -116,9 +119,13 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
         buildHeader("Choose your rent\n         period"),
         _buildButtonPick(),
         SizedBox(
-          height: 70,
+          height: 30,
         ),
         _buildContent(),
+        SizedBox(
+          height: 10,
+        ),
+        _buildRecommenderContent(),
       ],
     );
   }
@@ -138,9 +145,19 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
         "vehicleId": widget?.object?.id,
         "clientId": c?.id
       };
-      await rentProvider.insert(request);
-      await Future.delayed(const Duration(seconds: 1));
-      ScaffoldHelpers.showScaffold(context, "Request has been sent");
+      try {
+        await rentProvider.insert(request);
+        await Future.delayed(const Duration(seconds: 1));
+        ScaffoldHelpers.showScaffold(context, "Request has been sent");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RentDetailsScreen(false),
+          ),
+        );
+      } catch (e) {
+        ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+      }
     }
   }
 
@@ -150,7 +167,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
       child: IconButton(
         onPressed: _selectDateRange,
         icon: Icon(Icons.date_range),
-        iconSize: 100,
+        iconSize: 50,
         color: Colors.amber,
       ),
     );
@@ -166,7 +183,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               child: Text(
                 "Start date:",
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
@@ -176,7 +193,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 child: Text(
                   "${_startDate.toString().substring(0, 10)}",
                   style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       fontWeight: FontWeight.normal,
                       color: Colors.black),
                 )),
@@ -192,7 +209,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               child: Text(
                 "End date:",
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
@@ -202,7 +219,33 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 child: Text(
                   "${_endDate.toString().substring(0, 10)}",
                   style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black),
+                )),
+          ],
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 10.0),
+              child: Text(
+                "Duration:",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+            ),
+            Padding(
+                padding: EdgeInsets.only(left: 10.0),
+                child: Text(
+                  "${_duration} days",
+                  style: TextStyle(
+                      fontSize: 20,
                       fontWeight: FontWeight.normal,
                       color: Colors.black),
                 )),
@@ -218,7 +261,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               child: Text(
                 "Car name: ",
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
@@ -228,7 +271,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 child: Text(
                   "${widget?.object?.name}",
                   style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       fontWeight: FontWeight.normal,
                       color: Colors.black),
                 )),
@@ -244,7 +287,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               child: Text(
                 "Consumption: ",
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
@@ -254,7 +297,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 child: Text(
                   "${widget?.object?.averageConsumption} l/100km",
                   style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       fontWeight: FontWeight.normal,
                       color: Colors.black),
                 )),
@@ -270,7 +313,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               child: Text(
                 "Price: ",
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
@@ -280,7 +323,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 child: Text(
                   "${_fullPrice.toString()} KM",
                   style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       fontWeight: FontWeight.normal,
                       color: Colors.black),
                 )),
@@ -289,16 +332,81 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
         SizedBox(
           height: 35,
         ),
-        ElevatedButton(
-          onPressed: () {
-            _sendRentRequest();
-          },
-          child: Text("Send"),
-          style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(76, 255, 255, 255),
-              foregroundColor: Colors.black,
-              minimumSize: Size(200, 50)),
+        SizedBox(
+          width: 350,
+          child: Row(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RentScreen(),
+                    ),
+                  );
+                },
+                child: Text("Go back"),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(76, 255, 255, 255),
+                    foregroundColor: Colors.black,
+                    minimumSize: Size(150, 50)),
+              ),
+              SizedBox(
+                width: 50,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  _sendRentRequest();
+                },
+                child: Text("Send"),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(76, 255, 255, 255),
+                    foregroundColor: Colors.black,
+                    minimumSize: Size(150, 50)),
+              )
+            ],
+          ),
         )
+      ],
+    );
+  }
+
+  Widget _buildRecommenderContent() {
+    return Column(
+      children: [
+        Text(
+          "Others are also looking...See recomendation",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        ElevatedButton(
+            onPressed: () async {
+              try {
+                _recommenderObj =
+                    await rentProvider.recommend(widget?.object?.id);
+                print("Lenght of list: ${_recommenderObj!.length}");
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RecommendationScreen(
+                      recommendationList: _recommenderObj,
+                    ),
+                  ),
+                );
+              } catch (e) {
+                ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepOrange,
+              minimumSize: Size(50, 50),
+            ),
+            child: Text(
+              "Recommendation",
+              style: TextStyle(color: Colors.white),
+            ))
       ],
     );
   }

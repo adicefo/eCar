@@ -17,6 +17,7 @@ namespace eCar.Services.Interfaces
         Model.Model.Rent UpdatePayment(int id);
 
         Model.Model.Rent UpdateFinsih(int id);
+        List<Model.Model.Rent> Recommend(int vehicleId);
 
         IActionResult CheckAvailability(int id,RentAvailabilityRequest request);
         List<Enums.Action> AllowedActions(int id);
