@@ -5,6 +5,7 @@ import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/rent_details_screen.dart';
 import 'package:ecar_admin/screens/rent_request_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -265,12 +266,20 @@ class _RentScreenState extends State<RentScreen> {
                                     bool? confirmDelete =
                                         await AlertHelpers.deleteConfirmation(
                                             context);
+
                                     if (confirmDelete == true) {
-                                      provider.delete(e.id);
-                                      await Future.delayed(
-                                          const Duration(seconds: 1));
-                                      result = await provider.get();
-                                      setState(() {});
+                                      try {
+                                        provider.delete(e.id);
+                                        await Future.delayed(
+                                            const Duration(seconds: 1));
+                                        ScaffoldHelpers.showScaffold(context,
+                                            "Item successfully deleted");
+                                        result = await provider.get();
+                                        setState(() {});
+                                      } catch (e) {
+                                        ScaffoldHelpers.showScaffold(
+                                            context, "${e.toString()}");
+                                      }
                                     }
                                   },
                                   style: ButtonStyle(

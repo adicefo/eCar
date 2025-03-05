@@ -4,6 +4,7 @@ import 'package:ecar_admin/providers/statistics_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/statistics_detail_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -232,15 +233,20 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                                   .deleteStatisticsConfirmation(
                                                       context);
                                           if (confirmStatistics == true) {
-                                            statisticsProvider.delete(e.id);
-                                            await Future.delayed(
-                                                const Duration(seconds: 1));
-                                            data = await statisticsProvider.get(
-                                                filter: {
-                                                  'Page': _currentPage,
-                                                  'PageSize': _pageSize
-                                                });
-                                            setState(() {});
+                                            try {
+                                              statisticsProvider.delete(e.id);
+                                              await Future.delayed(
+                                                  const Duration(seconds: 1));
+                                              data = await statisticsProvider
+                                                  .get(filter: {
+                                                'Page': _currentPage,
+                                                'PageSize': _pageSize
+                                              });
+                                              setState(() {});
+                                            } catch (e) {
+                                              ScaffoldHelpers.showScaffold(
+                                                  context, "${e.toString()}");
+                                            }
                                           }
                                         }
                                       },

@@ -4,6 +4,7 @@ import 'package:ecar_admin/providers/vehicle_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/vehicle_details_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ecar_admin/utils/string_helpers.dart' as help;
@@ -250,11 +251,21 @@ class _VehicleScreenState extends State<VehicleScreen> {
                                         await AlertHelpers.deleteConfirmation(
                                             context);
                                     if (confirmDelete == true) {
-                                      provider.delete(e.id);
-                                      await Future.delayed(
-                                          const Duration(seconds: 1));
-                                      result = await provider.get();
-                                      setState(() {});
+                                      try {
+                                        provider.delete(e.id);
+                                        await Future.delayed(
+                                            const Duration(seconds: 1));
+                                        ScaffoldHelpers.showScaffold(context,
+                                            "Item successfully deleted");
+                                        result = await provider.get(filter: {
+                                          'Page': _currentPage,
+                                          'PageSize': _pageSize
+                                        });
+                                        setState(() {});
+                                      } catch (e) {
+                                        ScaffoldHelpers.showScaffold(
+                                            context, "${e.toString()}");
+                                      }
                                     }
                                   },
                                   style: ButtonStyle(
