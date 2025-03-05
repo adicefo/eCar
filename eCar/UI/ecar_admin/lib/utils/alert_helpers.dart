@@ -45,6 +45,33 @@ class AlertHelpers {
     );
   }
 
+  static Future<bool?> deleteStatisticsConfirmation(context) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("WARNING"),
+          content: Text(
+              "Deleting statistics row can cause a problem in driver mobile logic. Do you still want to delete item"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text("Cancel", style: TextStyle(color: Colors.grey)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text("Delete", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   static Future<bool?> editConfirmation(BuildContext context) async {
     return showDialog<bool>(
       context: context,
