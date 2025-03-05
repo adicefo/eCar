@@ -10,6 +10,7 @@ import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/driver_provider.dart';
 import 'package:ecar_admin/providers/review_provider.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
+import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:file_picker/file_picker.dart';
@@ -110,12 +111,30 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           "Reports",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.yellowAccent,
+        actions: <Widget>[
+          SizedBox(
+            width: 300,
+            child: IconButton(
+              tooltip: "Go back",
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DriversListScreen(),
+                  ),
+                );
+              },
+            ),
+          )
+        ],
       ),
       body: isLoading
           ? Center(

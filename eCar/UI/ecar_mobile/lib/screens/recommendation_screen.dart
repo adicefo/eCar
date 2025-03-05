@@ -23,8 +23,8 @@ class RecommendationScreen extends StatelessWidget {
         child: Column(
       children: [
         Padding(
-            padding: EdgeInsets.only(left: 50),
-            child: buildHeader("Recommended     vehicels...")),
+            padding: EdgeInsets.only(left: 40),
+            child: Center(child: buildHeader("Recommended\n    vehicels..."))),
         if (recommendationList!.isEmpty)
           Padding(
             padding: EdgeInsets.only(top: 50),

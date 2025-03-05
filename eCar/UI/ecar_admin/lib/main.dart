@@ -1,13 +1,16 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:ecar_admin/providers/admin_provider.dart';
 import 'package:ecar_admin/providers/auth_provider.dart';
 import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/companyPrice_provider.dart';
+import 'package:ecar_admin/providers/driverVehicle_provider.dart';
 import 'package:ecar_admin/providers/driver_provider.dart';
 import 'package:ecar_admin/providers/notification_provider.dart';
 import 'package:ecar_admin/providers/rent_provider.dart';
 import 'package:ecar_admin/providers/review_provider.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
+import 'package:ecar_admin/providers/statistics_provider.dart';
 import 'package:ecar_admin/providers/user_provider.dart';
 import 'package:ecar_admin/providers/vehicle_provider.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
@@ -32,6 +35,9 @@ void main() {
       ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ChangeNotifierProvider(create: (_) => RentProvider()),
       ChangeNotifierProvider(create: (_) => CompanyPriceProvider()),
+      ChangeNotifierProvider(create: (_) => AdminProvider()),
+      ChangeNotifierProvider(create: (_) => StatisticsProvider()),
+      ChangeNotifierProvider(create: (_) => DriverVehicleProvider()),
     ],
     child: const MyApp(),
   ));

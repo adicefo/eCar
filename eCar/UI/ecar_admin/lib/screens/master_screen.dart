@@ -3,13 +3,17 @@ import 'package:ecar_admin/models/CompanyPrice/companyPrice.dart';
 import 'package:ecar_admin/providers/auth_provider.dart';
 import 'package:ecar_admin/providers/companyPrice_provider.dart';
 import 'package:ecar_admin/providers/user_provider.dart';
+import 'package:ecar_admin/screens/admin_screen.dart';
 import 'package:ecar_admin/screens/clients_screen.dart';
+import 'package:ecar_admin/screens/company_prices_screen.dart';
+import 'package:ecar_admin/screens/driverVehicle_screen.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/screens/notification_screen.dart';
 import 'package:ecar_admin/screens/rent_screen.dart';
 import 'package:ecar_admin/screens/reports_screen.dart';
 import 'package:ecar_admin/screens/review_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
+import 'package:ecar_admin/screens/statistics_screen.dart';
 import 'package:ecar_admin/screens/vehicle_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:flutter/cupertino.dart';
@@ -113,6 +117,48 @@ class _MasterScreenState extends State<MasterScreen> {
                         : Text("${user?.userName}"))
               ],
             )),
+            MouseRegion(
+              onEnter: (event) {
+                showMenu(
+                  context: context,
+                  color: Colors.yellowAccent,
+                  position: RelativeRect.fromLTRB(265, 185, 350, 0),
+                  items: [
+                    PopupMenuItem(
+                      child: Text("Admin"),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => AdminScreen()),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: Text("Statistics"),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => StatisticsScreen()),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: Text("Company Prices"),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => CompanyPricesScreen()),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: Text("Driver Vehicles"),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => DriverVehicleScreen()),
+                      ),
+                    ),
+                  ],
+                );
+              },
+              child: ListTile(
+                title: Text("Additional"),
+                trailing: Icon(Icons.arrow_right),
+              ),
+            ),
             ListTile(
               title: Text("Drivers"),
               onTap: () {
@@ -197,11 +243,10 @@ class _MasterScreenState extends State<MasterScreen> {
       backgroundColor: Colors.yellowAccent,
       builder: (BuildContext context) {
         return Padding(
-          padding: MediaQuery.of(context)
-              .systemGestureInsets, // For proper keyboard handling
+          padding: MediaQuery.of(context).systemGestureInsets,
           child: Container(
             padding: EdgeInsets.all(16.0),
-            height: 1000, // Set a specific height
+            height: 1000,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
