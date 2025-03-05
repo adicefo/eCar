@@ -72,6 +72,33 @@ class AlertHelpers {
     );
   }
 
+  static Future<bool?> deletePricesConfirmation(context) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("WARNING"),
+          content: Text(
+              "By deleting that you will DELETE FROM DATABASE ALL ROUTES with that price. Still want to delete item?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text("Cancel", style: TextStyle(color: Colors.grey)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text("Delete", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   static Future<bool?> editConfirmation(BuildContext context) async {
     return showDialog<bool>(
       context: context,
