@@ -117,48 +117,6 @@ class _MasterScreenState extends State<MasterScreen> {
                         : Text("${user?.userName}"))
               ],
             )),
-            MouseRegion(
-              onEnter: (event) {
-                showMenu(
-                  context: context,
-                  color: Colors.yellowAccent,
-                  position: RelativeRect.fromLTRB(265, 185, 350, 0),
-                  items: [
-                    PopupMenuItem(
-                      child: Text("Admin"),
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => AdminScreen()),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Statistics"),
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => StatisticsScreen()),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Company Prices"),
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => CompanyPricesScreen()),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Driver Vehicles"),
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => DriverVehicleScreen()),
-                      ),
-                    ),
-                  ],
-                );
-              },
-              child: ListTile(
-                title: Text("Additional"),
-                trailing: Icon(Icons.arrow_right),
-              ),
-            ),
             ListTile(
               title: Text("Drivers"),
               onTap: () {
@@ -214,6 +172,48 @@ class _MasterScreenState extends State<MasterScreen> {
                     MaterialPageRoute(builder: (context) => RentScreen()));
               },
               hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
+            ),
+            MouseRegion(
+              onEnter: (event) {
+                showMenu(
+                  context: context,
+                  color: Colors.yellowAccent,
+                  position: RelativeRect.fromLTRB(265, 350, 350, 0),
+                  items: [
+                    PopupMenuItem(
+                      child: Text("Admin"),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => AdminScreen()),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: Text("Statistics"),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => StatisticsScreen()),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: Text("Company Prices"),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => CompanyPricesScreen()),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: Text("Driver Vehicles"),
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => DriverVehicleScreen()),
+                      ),
+                    ),
+                  ],
+                );
+              },
+              child: ListTile(
+                title: Text("Additional"),
+                trailing: Icon(Icons.arrow_right),
+              ),
             ),
             ListTile(
               title: Text("Log out"),

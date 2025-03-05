@@ -21,7 +21,7 @@ namespace eCar.API.Controllers
         { 
 
         }
-        [Authorize(Roles="Driver")]
+        [Authorize(Roles="Driver,Admin")]
         [HttpGet("GetAvailableForDriver")]
         public PagedResult<Model.Model.Vehicle> GetAvailableForDriver()
         {
