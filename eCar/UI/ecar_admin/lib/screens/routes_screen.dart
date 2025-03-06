@@ -366,18 +366,22 @@ class _RouteListScreenState extends State<RouteListScreen> {
   }
 
   Future<void> _fetchData() async {
-    var filter = {
-      'Status': _selectedStatus,
-      'Page': _currentPage,
-      'PageSize': _pageSize,
-    };
+    try {
+      var filter = {
+        'Status': _selectedStatus,
+        'Page': _currentPage,
+        'PageSize': _pageSize,
+      };
 
-    result = await provider.get(filter: filter);
-    setState(() {
-      print("Count ${result!.count!}");
-      _totalPages = (result!.count! / _pageSize).ceil();
-      print(_totalPages);
-    });
+      result = await provider.get(filter: filter);
+      setState(() {
+        print("Count ${result!.count!}");
+        _totalPages = (result!.count! / _pageSize).ceil();
+        print(_totalPages);
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   void _goToNextPage() async {

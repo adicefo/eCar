@@ -43,13 +43,17 @@ class _DriverVehicleDetailsScreenState
   }
 
   Future<void> _initForm() async {
-    drivers = await driverProvider.get();
+    try {
+      drivers = await driverProvider.get();
 
-    vehicles = await vehicleProvider.getAvailableForDriver();
+      vehicles = await vehicleProvider.getAvailableForDriver();
 
-    setState(() {
-      isLoading = false;
-    });
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override

@@ -3,6 +3,7 @@ import 'package:ecar_admin/models/search_result.dart';
 import 'package:ecar_admin/providers/admin_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,11 +28,15 @@ class _AdminScreenState extends State<AdminScreen> {
   }
 
   Future<void> _initForm() async {
-    data = await adminProvider.get();
+    try {
+      data = await adminProvider.get();
 
-    setState(() {
-      isLoading = false;
-    });
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+    }
   }
 
   @override

@@ -41,10 +41,14 @@ class _StatisticsDetailScreenState extends State<StatisticsDetailScreen> {
   }
 
   Future<void> _initForm() async {
-    drivers = await driverProvider.get();
-    setState(() {
-      isLoading = false;
-    });
+    try {
+      drivers = await driverProvider.get();
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override

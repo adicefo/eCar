@@ -33,15 +33,19 @@ class _RentScreenState extends State<RentScreen> {
   }
 
   Future<void> _fetchData() async {
-    var filter = {
-      'Status': _selectedStatus,
-      'Page': _currentPage,
-      'PageSize': _pageSize
-    };
-    result = await provider.get(filter: filter);
-    setState(() {
-      _totalPages = (result!.count! / _pageSize).ceil();
-    });
+    try {
+      var filter = {
+        'Status': _selectedStatus,
+        'Page': _currentPage,
+        'PageSize': _pageSize
+      };
+      result = await provider.get(filter: filter);
+      setState(() {
+        _totalPages = (result!.count! / _pageSize).ceil();
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override

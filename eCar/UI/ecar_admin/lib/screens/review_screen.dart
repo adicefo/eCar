@@ -29,12 +29,16 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
   Future<void> _fetchData() async {
-    var filter = {'ReviewedName': _nameController.text ?? null};
-    result = await provider.get(filter: filter);
+    try {
+      var filter = {'ReviewedName': _nameController.text ?? null};
+      result = await provider.get(filter: filter);
 
-    setState(() {});
+      setState(() {});
 
-    print(result);
+      print(result);
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override

@@ -16,6 +16,7 @@ import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:ecar_admin/screens/statistics_screen.dart';
 import 'package:ecar_admin/screens/vehicle_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ecar_admin/models/User/user.dart' as Model;
@@ -49,12 +50,16 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
   Future initForm() async {
-    user = await userProvider.getUserFromToken();
-    price = await companyPriceProvider.getCurrentPrice();
-    print("Retrived: ${user?.userName}");
-    setState(() {
-      isLoading = false;
-    });
+    try {
+      user = await userProvider.getUserFromToken();
+      price = await companyPriceProvider.getCurrentPrice();
+      print("Retrived: ${user?.userName}");
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override

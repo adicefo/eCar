@@ -44,13 +44,17 @@ class _RentRequestScreenState extends State<RentRequestScreen> {
   }
 
   Future<void> _fetchAvailabilitiy() async {
-    var request = {
-      "vehicleId": widget.rent?.vehicleId,
-      "rentingDate": (widget.rent?.rentingDate as DateTime).toIso8601String(),
-      "endingDate": (widget.rent?.endingDate as DateTime).toIso8601String()
-    };
-    vehicleAvailability =
-        await provider.checkAvailability(widget.rent?.id, request);
+    try {
+      var request = {
+        "vehicleId": widget.rent?.vehicleId,
+        "rentingDate": (widget.rent?.rentingDate as DateTime).toIso8601String(),
+        "endingDate": (widget.rent?.endingDate as DateTime).toIso8601String()
+      };
+      vehicleAvailability =
+          await provider.checkAvailability(widget.rent?.id, request);
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   void _initControllers() {

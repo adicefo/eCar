@@ -35,14 +35,18 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   }
 
   Future<void> _initForm() async {
-    var filter = {'Page': _currentPage, 'PageSize': _pageSize};
-    data = await statisticsProvider.get(filter: filter);
+    try {
+      var filter = {'Page': _currentPage, 'PageSize': _pageSize};
+      data = await statisticsProvider.get(filter: filter);
 
-    setState(() {
-      isLoading = false;
-      print("Count: ${data?.count}");
-      _totalPages = (data!.count! / _pageSize).ceil();
-    });
+      setState(() {
+        isLoading = false;
+        print("Count: ${data?.count}");
+        _totalPages = (data!.count! / _pageSize).ceil();
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override

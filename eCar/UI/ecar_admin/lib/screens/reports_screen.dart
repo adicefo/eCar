@@ -87,24 +87,33 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   Future<void> _initForm() async {
-    drivers = await driverProvider.get();
-    clients = await clientProvider.get();
-    routes = await routeProvider.get();
-    reviews = await reviewProvider.get();
-    setState(() {
-      isLoading = false;
-    });
+    try {
+      drivers = await driverProvider.get();
+      clients = await clientProvider.get();
+      routes = await routeProvider.get();
+      reviews = await reviewProvider.get();
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   Future<Map<int, double>> fetchYearlyData(int year) async {
-    Map<int, double> data = {};
-    for (int month = 1; month <= 12; month++) {
-      var filter = {"Month": month, "Year": year};
-      double amount = await routeProvider.getForReport(filter);
-      data[month] = amount;
-      year == 2024 ? _total2024 += amount : _total2025 += amount;
+    try {
+      Map<int, double> data = {};
+      for (int month = 1; month <= 12; month++) {
+        var filter = {"Month": month, "Year": year};
+        double amount = await routeProvider.getForReport(filter);
+        data[month] = amount;
+        year == 2024 ? _total2024 += amount : _total2025 += amount;
+      }
+      return data;
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
     }
-    return data;
+    return {};
   }
 
   @override

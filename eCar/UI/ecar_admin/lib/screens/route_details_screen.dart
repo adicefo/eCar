@@ -62,11 +62,15 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   Future initForm() async {
-    clientResult = await clientProvider.get();
-    driverResult = await driverProvider.get();
-    setState(() {
-      isLoading = false;
-    });
+    try {
+      clientResult = await clientProvider.get();
+      driverResult = await driverProvider.get();
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override

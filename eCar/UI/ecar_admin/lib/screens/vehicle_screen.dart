@@ -38,16 +38,20 @@ class _VehicleScreenState extends State<VehicleScreen> {
   }
 
   Future<void> _fetchData() async {
-    var filter = {
-      'IsAvailable': selectedValue,
-      'Page': _currentPage,
-      'PageSize': _pageSize
-    };
-    result = await provider.get(filter: filter);
-    setState(() {
-      print("Count: ${result?.count}");
-      _totalPages = (result!.count! / _pageSize).ceil();
-    });
+    try {
+      var filter = {
+        'IsAvailable': selectedValue,
+        'Page': _currentPage,
+        'PageSize': _pageSize
+      };
+      result = await provider.get(filter: filter);
+      setState(() {
+        print("Count: ${result?.count}");
+        _totalPages = (result!.count! / _pageSize).ceil();
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override

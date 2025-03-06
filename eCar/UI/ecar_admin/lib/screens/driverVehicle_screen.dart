@@ -34,13 +34,17 @@ class _DriverVehicleScreenState extends State<DriverVehicleScreen> {
   }
 
   Future<void> _initForm() async {
-    var filter = {'Page': _currentPage, 'PageSize': _pageSize};
-    data = await driverVehicleProvider.get(filter: filter);
-    setState(() {
-      isLoading = false;
-      print("Count: ${data?.count}");
-      _totalPages = (data!.count! / _pageSize).ceil();
-    });
+    try {
+      var filter = {'Page': _currentPage, 'PageSize': _pageSize};
+      data = await driverVehicleProvider.get(filter: filter);
+      setState(() {
+        isLoading = false;
+        print("Count: ${data?.count}");
+        _totalPages = (data!.count! / _pageSize).ceil();
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override

@@ -35,17 +35,21 @@ class _CompanyPricesScreenState extends State<CompanyPricesScreen> {
   }
 
   Future<void> _initForm() async {
-    var filter = {'Page': _currentPage, 'PageSize': _pageSize};
+    try {
+      var filter = {'Page': _currentPage, 'PageSize': _pageSize};
 
-    data = await companyPriceProvider.get(filter: filter);
+      data = await companyPriceProvider.get(filter: filter);
 
-    price = await companyPriceProvider.getCurrentPrice();
+      price = await companyPriceProvider.getCurrentPrice();
 
-    setState(() {
-      isLoading = false;
-      print("Count: ${data?.count}");
-      _totalPages = (data!.count! / _pageSize).ceil();
-    });
+      setState(() {
+        isLoading = false;
+        print("Count: ${data?.count}");
+        _totalPages = (data!.count! / _pageSize).ceil();
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override

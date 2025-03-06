@@ -37,15 +37,19 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   Future<void> _fetchData() async {
-    var filter = {
-      'HeadingGTE': _headingController.text ?? null,
-      'IsForClient': selectedValue
-    };
-    result = await provider.get(filter: filter);
+    try {
+      var filter = {
+        'HeadingGTE': _headingController.text ?? null,
+        'IsForClient': selectedValue
+      };
+      result = await provider.get(filter: filter);
 
-    setState(() {});
+      setState(() {});
 
-    print(result);
+      print(result);
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override
@@ -271,7 +275,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                         await AlertHelpers.deleteConfirmation(
                                             context);
                                     if (confirmDelete == true) {
-                                     try {
+                                      try {
                                         provider.delete(e.id);
                                         await Future.delayed(
                                             const Duration(seconds: 1));
