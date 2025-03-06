@@ -107,6 +107,24 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
         children: [
           ElevatedButton(
             onPressed: () async {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => ReviewScreen(),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              minimumSize: Size(300, 50),
+            ),
+            child: const Text("Go back"),
+          ),
+          SizedBox(
+            width: 30,
+          ),
+          ElevatedButton(
+            onPressed: () async {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
               confirmEdit = await help.AlertHelpers.editConfirmation(context);

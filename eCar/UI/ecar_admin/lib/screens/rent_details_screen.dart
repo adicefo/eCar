@@ -234,6 +234,24 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => RentScreen(),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              minimumSize: Size(300, 50),
+            ),
+            child: const Text("Go back"),
+          ),
+          SizedBox(
+            width: 30,
+          ),
           if (widget?.rent?.status != "active")
             ElevatedButton(
               onPressed: () async {

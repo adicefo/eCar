@@ -197,6 +197,24 @@ class _RentRequestScreenState extends State<RentRequestScreen> {
         children: [
           ElevatedButton(
             onPressed: () async {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => RentScreen(),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              minimumSize: Size(150, 50),
+            ),
+            child: const Text("Go back"),
+          ),
+          SizedBox(
+            width: 100,
+          ),
+          ElevatedButton(
+            onPressed: () async {
               confirmEdit = await AlertHelpers.editConfirmation(context);
               if (confirmEdit == true) {
                 try {
@@ -225,7 +243,7 @@ class _RentRequestScreenState extends State<RentRequestScreen> {
             child: const Text("Reject"),
           ),
           SizedBox(
-            width: 120,
+            width: 30,
           ),
           ElevatedButton(
             onPressed: () async {

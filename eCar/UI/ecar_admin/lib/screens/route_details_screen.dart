@@ -265,6 +265,24 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => RouteListScreen(),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              minimumSize: Size(300, 50),
+            ),
+            child: const Text("Go back"),
+          ),
+          SizedBox(
+            width: 30,
+          ),
           if (widget.route == null) ...[
             ElevatedButton(
               onPressed: () async {
@@ -335,7 +353,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
                 foregroundColor: Colors.black,
-                minimumSize: Size(150, 50),
+                minimumSize: Size(300, 50),
               ),
               child: const Text("Active"),
             ),

@@ -511,6 +511,24 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
         children: [
           ElevatedButton(
             onPressed: () async {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => DriversListScreen(),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              minimumSize: Size(300, 50),
+            ),
+            child: const Text("Go back"),
+          ),
+          SizedBox(
+            width: 30,
+          ),
+          ElevatedButton(
+            onPressed: () async {
               if (_formKey.currentState?.validate() ?? false) {
                 _formKey.currentState?.save();
 

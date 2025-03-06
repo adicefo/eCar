@@ -208,6 +208,24 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
         children: [
           ElevatedButton(
             onPressed: () async {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => VehicleScreen(),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              minimumSize: Size(300, 50),
+            ),
+            child: const Text("Go back"),
+          ),
+          SizedBox(
+            width: 30,
+          ),
+          ElevatedButton(
+            onPressed: () async {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
               request['image'] = _base64Image;

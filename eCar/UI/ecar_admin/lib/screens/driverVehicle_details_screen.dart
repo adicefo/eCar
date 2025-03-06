@@ -149,6 +149,24 @@ class _DriverVehicleDetailsScreenState
         children: [
           ElevatedButton(
             onPressed: () async {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => DriverVehicleScreen(),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              minimumSize: Size(300, 50),
+            ),
+            child: const Text("Go back"),
+          ),
+          SizedBox(
+            width: 100,
+          ),
+          ElevatedButton(
+            onPressed: () async {
               if (_selectedDriver == null || _selectedVehicle == null) {
                 AlertHelpers.showAlert(
                     context, "Warning", "Please choose driver and vehicle!");
