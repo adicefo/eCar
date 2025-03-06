@@ -265,7 +265,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
                               errorText: "Field is required"),
-                          FormBuilderValidators.minLength(6),
                         ]),
                       ),
                       SizedBox(
@@ -291,7 +290,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
                               errorText: "Field is required"),
-                          FormBuilderValidators.minLength(6),
                         ]),
                       ),
                       SizedBox(

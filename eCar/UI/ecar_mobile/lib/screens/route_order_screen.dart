@@ -20,6 +20,7 @@ class RouteOrderScreen extends StatefulWidget {
 class _RouteOrderScreenState extends State<RouteOrderScreen> {
   late DriverVehicleProvider driverVehicleProvider;
 
+  List<DriverVehicle>? list = null;
   SearchResult<DriverVehicle>? driverVehicles = null;
   bool isLoading = true;
 
@@ -35,6 +36,8 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
     var filter = {"DatePickUp": DateTime.now().toIso8601String()};
     driverVehicles = await driverVehicleProvider.get(filter: filter);
 
+    list = driverVehicles?.result.where((x) => x.dateDropOff == null).toList();
+
     setState(() {
       print("Number of driverVehicle items: ${driverVehicles?.count}");
       isLoading = false;
@@ -48,36 +51,33 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
         : MasterScreen(
             "Order",
             SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: Column(
-                  children: [
-                    buildHeader("Choose your\n    vehicle!"),
-                    SizedBox(
-                      height: 20,
+              child: Column(
+                children: [
+                  buildHeader("Choose your\n    vehicle!"),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    height: 400,
+                    width: 400,
+                    child: GridView(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 3 / 1),
+                      scrollDirection: Axis.vertical,
+                      children: _buildGridView(),
                     ),
-                    Container(
-                      height: 400,
-                      width: 400,
-                      child: GridView(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 1,
-                            crossAxisSpacing: 10,
-                            childAspectRatio: 3 / 1),
-                        scrollDirection: Axis.vertical,
-                        children: _buildGridView(),
-                      ),
-                    ),
-                    _buildButton()
-                  ],
-                ),
+                  ),
+                  _buildButton()
+                ],
               ),
             ),
           );
   }
 
   List<Widget> _buildGridView() {
-    if (driverVehicles?.result.length == 0) {
+    if (list == null) {
       return [
         Center(
             child: Text(
@@ -87,7 +87,7 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
         ))
       ];
     }
-    List<Widget> list = driverVehicles!.result
+    List<Widget> listWidget = list!
         .map((x) => GestureDetector(
               onTap: () {
                 Navigator.pushReplacement(
@@ -146,7 +146,7 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
             ))
         .cast<Widget>()
         .toList();
-    return list;
+    return listWidget;
   }
 
   Widget _buildButton() {

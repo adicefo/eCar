@@ -65,29 +65,26 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   Widget _buildScreen() {
     return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.8,
-        child: Column(
-          children: [
-            buildHeader("Reviews"),
-            SizedBox(
-              height: 30,
+      child: Column(
+        children: [
+          buildHeader("Reviews"),
+          SizedBox(
+            height: 30,
+          ),
+          Container(
+            height: 500,
+            child: GridView(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 0.75),
+              scrollDirection: Axis.vertical,
+              children: _buildOrderGrid(),
             ),
-            Container(
-              height: 500,
-              child: GridView(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.75),
-                scrollDirection: Axis.vertical,
-                children: _buildOrderGrid(),
-              ),
-            ),
-            _buildButton(),
-          ],
-        ),
+          ),
+          _buildButton(),
+        ],
       ),
     );
   }
@@ -252,7 +249,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   Widget _buildButton() {
     return Center(
       child: Padding(
-        padding: EdgeInsets.only(top: 50.0),
+        padding: EdgeInsets.only(top: 30.0),
         child: ElevatedButton(
             onPressed: () {
               Navigator.pushReplacement(

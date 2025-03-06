@@ -63,29 +63,26 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
 
   Widget _buildScreen() {
     return SingleChildScrollView(
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.8,
-        child: Column(
-          children: [
-            buildHeader("Archive"),
-            Container(
-              height: 500,
-              child: GridView(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    crossAxisSpacing: 10,
-                    childAspectRatio: 2.5),
-                scrollDirection: Axis.vertical,
-                children: _buildGridView(),
-              ),
+      child: Column(
+        children: [
+          buildHeader("Archive"),
+          Container(
+            height: 500,
+            child: GridView(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1,
+                  crossAxisSpacing: 10,
+                  childAspectRatio: 2.5),
+              scrollDirection: Axis.vertical,
+              children: _buildGridView(),
             ),
-            SizedBox(
-              height: 70,
-            ),
-            if (widget?.role == "client") _buildFooter(),
-            if (widget?.role == "driver") _buildBackBtn()
-          ],
-        ),
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          if (widget?.role == "client") _buildFooter(),
+          if (widget?.role == "driver") _buildBackBtn()
+        ],
       ),
     );
   }

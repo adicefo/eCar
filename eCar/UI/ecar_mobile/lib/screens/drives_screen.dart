@@ -64,8 +64,9 @@ class _DrivesScreenState extends State<DrivesScreen> {
         ? getisLoadingHelper()
         : MasterScreen(
             "Drives",
-            _buildScreen(),
-          );
+            SingleChildScrollView(
+              child: _buildScreen(),
+            ));
   }
 
   Widget _buildScreen() {

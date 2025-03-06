@@ -10,22 +10,22 @@ namespace eCar.Model.Requests
     public class ClientUpsertRequest
     {
         [Required]
-        [MinLength(3)]
+       
         public string Name { get; set; }
         [Required]
-        [MinLength(3)]
+       
         public string Surname { get; set; }
         [Required]
-        [MinLength(5)]
+       
         public string UserName { get; set; }
         [Required]
         [EmailAddress]
         public string Email { get; set; }
         [Required]
-        [MinLength(6)]
+        
         public string Password { get; set; }
         [Required]
-        [MinLength(6)]
+        
         public string PasswordConfirm { get; set; }
 
         public string? TelephoneNumber { get; set; }

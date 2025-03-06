@@ -226,7 +226,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
       try {
         await reviewProvider.insert(request);
         ScaffoldHelpers.showScaffold(context, "Your drive has been reviewed");
-        await Future.delayed(const Duration(seconds: 3));
+        await Future.delayed(const Duration(seconds: 2));
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

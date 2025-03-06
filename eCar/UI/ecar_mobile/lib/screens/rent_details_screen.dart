@@ -114,7 +114,10 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
     return isLoading
         ? getisLoadingHelper()
         : MasterScreen(
-            "Rent", widget.isOrder! ? _buildScreen() : _buildListRents());
+            "Rent",
+            widget.isOrder!
+                ? SingleChildScrollView(child: _buildScreen())
+                : _buildListRents());
   }
 
   Widget _buildScreen() {
@@ -378,9 +381,11 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   Widget _buildRecommenderContent() {
     return Column(
       children: [
-        Text(
-          "Others are also looking...See recomendation",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        Center(
+          child: Text(
+            "Others are also looking...See recomendation",
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
         SizedBox(
           height: 10,

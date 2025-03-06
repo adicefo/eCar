@@ -119,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         _buildContent(),
         SizedBox(
-          height: 20,
+          height: 40,
         ),
         _buildButtons(),
       ],
@@ -135,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: EdgeInsets.only(right: 300.0),
               child: Text(
                 "Name: ",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
             TextField(
@@ -149,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fillColor: Colors.grey[200],
               ),
               style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
@@ -160,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: EdgeInsets.only(right: 300.0),
               child: Text(
                 "Surname: ",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
             TextField(
@@ -174,7 +174,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fillColor: Colors.grey[200],
               ),
               style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
@@ -186,7 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Text(
                 "Telephone number: ",
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
@@ -202,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fillColor: Colors.grey[200],
               ),
               style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
@@ -214,7 +214,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Text(
                 "Email: ",
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
@@ -230,7 +230,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fillColor: Colors.grey[200],
               ),
               style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),

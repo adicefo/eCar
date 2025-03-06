@@ -109,25 +109,22 @@ class _NotificationScreenState extends State<NotificationScreen> {
         : MasterScreen(
             "Home",
             SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: Column(
-                  children: [
-                    buildHeader("Welcome!\n${user?.userName}"),
-                    Container(
-                      height: 500,
-                      child: GridView(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 1,
-                            crossAxisSpacing: 10,
-                            childAspectRatio: 3 / 1),
-                        scrollDirection: Axis.vertical,
-                        children: _buildGridView(),
-                      ),
+              child: Column(
+                children: [
+                  buildHeader("Welcome!\n${user?.userName}"),
+                  Container(
+                    height: 400,
+                    child: GridView(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 3 / 1),
+                      scrollDirection: Axis.vertical,
+                      children: _buildGridView(),
                     ),
-                    _buildStatistics(),
-                  ],
-                ),
+                  ),
+                  _buildStatistics(),
+                ],
               ),
             ),
           );
@@ -144,8 +141,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 _showCustomModal(x);
               },
               child: Container(
-                height: 300,
-                width: 300,
+                height: 400,
+                width: 400,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: Colors.black, strokeAlign: 1),
@@ -172,7 +169,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     Text(
                       x.heading ?? "",
                       style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   ],

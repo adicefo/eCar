@@ -133,7 +133,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                   provider.update(widget.review?.id, request);
 
                   ScaffoldHelpers.showScaffold(context, "Review updated");
-                  await Future.delayed(const Duration(seconds: 3));
+                  await Future.delayed(const Duration(seconds: 2));
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => ReviewScreen(),

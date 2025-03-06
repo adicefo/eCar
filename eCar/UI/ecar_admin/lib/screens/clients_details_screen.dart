@@ -220,7 +220,6 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                             errorText: "Field is required"),
-                        FormBuilderValidators.minLength(6),
                       ]),
                     ),
                   ),
@@ -246,7 +245,6 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                             errorText: "Field is required"),
-                        FormBuilderValidators.minLength(6),
                       ]),
                     ),
                   ),
@@ -461,7 +459,6 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                             errorText: "Field is required"),
-                        FormBuilderValidators.minLength(6),
                       ]),
                     ),
                   ),
@@ -487,7 +484,6 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                             errorText: "Field is required"),
-                        FormBuilderValidators.minLength(6),
                       ]),
                     ),
                   ),

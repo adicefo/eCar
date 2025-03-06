@@ -55,29 +55,26 @@ class _RentScreenState extends State<RentScreen> {
         : MasterScreen(
             "Rent",
             SingleChildScrollView(
-              child: Container(
-                height: MediaQuery.of(context).size.height * 0.8,
-                child: Column(
-                  children: [
-                    buildHeader("Choose your\n    vehicle!"),
-                    SizedBox(
-                      height: 20,
+              child: Column(
+                children: [
+                  buildHeader("Choose your\n    vehicle!"),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    height: 450,
+                    width: 400,
+                    child: GridView(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 1,
+                          crossAxisSpacing: 10,
+                          childAspectRatio: 3 / 1),
+                      scrollDirection: Axis.vertical,
+                      children: _buildGridView(),
                     ),
-                    Container(
-                      height: 450,
-                      width: 400,
-                      child: GridView(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 1,
-                            crossAxisSpacing: 10,
-                            childAspectRatio: 3 / 1),
-                        scrollDirection: Axis.vertical,
-                        children: _buildGridView(),
-                      ),
-                    ),
-                    _buildButton()
-                  ],
-                ),
+                  ),
+                  _buildButton()
+                ],
               ),
             ),
           );
@@ -108,8 +105,8 @@ class _RentScreenState extends State<RentScreen> {
                 );
               },
               child: Container(
-                height: 400,
-                width: 400,
+                height: 300,
+                width: 300,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: Colors.black, strokeAlign: 1),

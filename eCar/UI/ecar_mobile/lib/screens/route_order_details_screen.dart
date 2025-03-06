@@ -130,7 +130,10 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
     return isLoading
         ? getisLoadingHelper()
         : MasterScreen(
-            "Order", widget.isOrder! ? _buildScreen() : _buildListOrders());
+            "Order",
+            widget.isOrder!
+                ? SingleChildScrollView(child: _buildScreen())
+                : _buildListOrders());
   }
 
   Widget _buildScreen() {

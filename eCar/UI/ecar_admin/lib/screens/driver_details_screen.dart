@@ -218,7 +218,6 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                             errorText: "Field is required"),
-                        FormBuilderValidators.minLength(6),
                       ]),
                     ),
                   ),
@@ -244,7 +243,6 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                             errorText: "Field is required"),
-                        FormBuilderValidators.minLength(6),
                       ]),
                     ),
                   ),
@@ -459,7 +457,6 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                             errorText: "Field is required"),
-                        FormBuilderValidators.minLength(6),
                       ]),
                     ),
                   ),
@@ -485,7 +482,6 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
                             errorText: "Field is required"),
-                        FormBuilderValidators.minLength(6),
                       ]),
                     ),
                   ),
