@@ -83,6 +83,10 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
     }
     setState(() {
       isLoading = false;
+      if (widget?.isOrder == true) {
+        _duration = _endDate.day - _startDate.day;
+        _fullPrice = _duration * _price!;
+      }
     });
   }
 

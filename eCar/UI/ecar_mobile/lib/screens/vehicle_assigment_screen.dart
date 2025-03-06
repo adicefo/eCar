@@ -163,6 +163,14 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                 children: [
                   ElevatedButton(
                     onPressed: () async {
+                      bool? isAssignedAlready = await driverVehicleProvider
+                          .checkIfAssigned(driverInstance?.id);
+                      if (isAssignedAlready) {
+                        AlertHelpers.showAlert(context, "Error",
+                            "You have already assigned car for today. If you want to assign again go to desktop app for DriverVehicles and delete row for current driver on today's date. Thank you.");
+                        return;
+                      }
+
                       if (_formKey.currentState?.validate() == false) {
                         AlertHelpers.showAlert(context, "Invalid form",
                             "Form is not valid. Please fix the values");
@@ -179,9 +187,14 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                           "driverId": driverInstance?.id,
                           "vehicleId": formData!['vehicleId']
                         };
-                        driverVehicleProvider.insert(request);
-                        AlertHelpers.showAlert(
-                            context, "Info", "Successful assigned vehicle");
+                        try {
+                          driverVehicleProvider.insert(request);
+                          ScaffoldHelpers.showScaffold(
+                              context, "Successful assigned vehicle");
+                        } catch (e) {
+                          ScaffoldHelpers.showScaffold(context,
+                              "You have already assign car for today.");
+                        }
                       }
                     },
                     child: Text("Assign"),
@@ -200,15 +213,22 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                           "driverId": driverInstance?.id,
                           "datePickUp": DateTime.now().toIso8601String(),
                         };
+
+                        /// try {
                         driverVehicleInstance =
                             await driverVehicleProvider.updateFinish(request);
-                        //check if update is valid
-                        if (driverVehicleInstance?.vehicle?.name != null) {
+                        if (driverVehicleInstance == null) {
                           AlertHelpers.showAlert(context, "Info",
-                              "Vehicle successful returned. Go to logout page... ");
-                        } else {
-                          print("Something wrong happened");
+                              "Error. You either not asssigned the car or already assigned it for today");
+                          return;
                         }
+                        ScaffoldHelpers.showScaffold(
+                            context, "Successfully returned vehicle.");
+                        //check if update is valid
+                        // } catch (e) {
+                        //   ScaffoldHelpers.showScaffold(
+                        //     context, "${e.toString()}");
+                        //}
                       }
                     },
                     child: Text("Return"),
@@ -260,15 +280,18 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                       "driverId": driverInstance?.id,
                       "datePickUp": DateTime.now().toIso8601String(),
                     };
-                    driverVehicleInstance =
-                        await driverVehicleProvider.updateFinish(request);
-                    //check if update is valid
-                    if (driverVehicleInstance?.vehicle?.name != null) {
+                    try {
+                      driverVehicleInstance =
+                          await driverVehicleProvider.updateFinish(request);
+
                       AlertHelpers.showAlert(context, "Info",
                           "Vehicle successful returned. Go to logout page... ");
-                    } else {
-                      print("Something wrong happened");
+                    } catch (e) {
+                      ScaffoldHelpers.showScaffold(context,
+                          "Unsuccessful operation. Please first assign your car");
                     }
+
+                    //check if update is valid
                   }
                 },
                 child: Text("Return"),

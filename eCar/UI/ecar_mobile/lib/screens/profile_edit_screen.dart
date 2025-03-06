@@ -216,18 +216,43 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   }
 
   Widget _buildButton() {
-    return ElevatedButton(
-        onPressed: () {
-          _saveAndEdit();
-        },
-        style: ElevatedButton.styleFrom(
-            backgroundColor: const Color.fromARGB(79, 255, 255, 255),
-            foregroundColor: Colors.black,
-            minimumSize: Size(300, 50)),
-        child: Text(
-          "Save",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ));
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProfileScreen(),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(79, 255, 255, 255),
+                foregroundColor: Colors.black,
+                minimumSize: Size(150, 50)),
+            child: Text(
+              "Go back",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )),
+        SizedBox(
+          width: 30,
+        ),
+        ElevatedButton(
+            onPressed: () {
+              _saveAndEdit();
+            },
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(79, 255, 255, 255),
+                foregroundColor: Colors.black,
+                minimumSize: Size(150, 50)),
+            child: Text(
+              "Save",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            )),
+      ],
+    );
   }
 
   void _saveAndEdit() async {

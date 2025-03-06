@@ -815,6 +815,7 @@ class _DrivesNavigationScreenState
             children: <Widget>[
               Column(children: <Widget>[
                 _createRemainingTimeAndDistanceLabels(),
+                if (route == null) _createGoBackBtn(),
                 if (route != null) _createFinishedRouteDetails(),
                 Expanded(
                   child: _navigatorInitializedAtLeastOnce &&
@@ -931,6 +932,27 @@ class _DrivesNavigationScreenState
     );
   }
 
+  Widget _createGoBackBtn() {
+    return SafeArea(
+        minimum: const EdgeInsets.all(8.0),
+        child: Align(
+            alignment: Alignment.topRight,
+            child: Row(
+              children: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DrivesScreen(),
+                        ),
+                      );
+                    },
+                    child: Text("Go back")),
+              ],
+            )));
+  }
+
   Widget _createRemainingTimeAndDistanceLabels() {
     return SafeArea(
         minimum: const EdgeInsets.all(8.0),
@@ -1005,7 +1027,7 @@ class _DrivesNavigationScreenState
                         ),
                       );
                     },
-                    child: Text("Go back")),
+                    child: Text("Finish")),
               ],
             )));
   }

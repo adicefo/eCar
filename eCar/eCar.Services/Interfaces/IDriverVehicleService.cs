@@ -1,5 +1,6 @@
 ﻿using eCar.Model.Requests;
 using eCar.Model.SearchObjects;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +13,7 @@ namespace eCar.Services.Interfaces
         DriverVehicleSearchObject,DriverVehicleInsertRequest,DriverVehicleUpdateRequest>
     {
         Model.Model.DriverVehicle UpdateFinsih(DriverVehicleUpdateFinsihRequest request);
+
+        IActionResult CheckIfAssigned(int driverId);
     }
 }

@@ -20,6 +20,12 @@ namespace eCar.API.Controllers
         { 
 
         }
+        [HttpGet("CheckIfAssigned/{driverId}")]
+        public IActionResult CheckIfAssigned(int driverId)
+        {
+            return (_service as IDriverVehicleService).CheckIfAssigned(driverId);
+        }
+        [AllowAnonymous]
         [HttpPut("UpdateFinish")]
         public Model.Model.DriverVehicle UpdateFinish([FromBody]DriverVehicleUpdateFinsihRequest request)
         {

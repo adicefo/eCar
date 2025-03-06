@@ -137,13 +137,13 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
     return Column(
       children: [
         Container(
-            height: 400,
+            height: 350,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 2),
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.yellowAccent),
             child: SizedBox(
-                height: 400,
+                height: 350,
                 width: double.infinity,
                 child: Center(
                   child: GoogleMapsMapView(
@@ -217,15 +217,38 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
         SizedBox(
           height: 20,
         ),
-        ElevatedButton(
-          onPressed: () {
-            _sendRouteAndRequest();
-          },
-          child: Text("Send"),
-          style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromARGB(76, 255, 255, 255),
-              foregroundColor: Colors.black,
-              minimumSize: Size(200, 50)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RouteOrderScreen(),
+                  ),
+                );
+              },
+              child: Text("Go back"),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(76, 255, 255, 255),
+                  foregroundColor: Colors.black,
+                  minimumSize: Size(150, 50)),
+            ),
+            SizedBox(
+              width: 30,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _sendRouteAndRequest();
+              },
+              child: Text("Send"),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(76, 255, 255, 255),
+                  foregroundColor: Colors.black,
+                  minimumSize: Size(150, 50)),
+            )
+          ],
         )
       ],
     );
@@ -402,11 +425,23 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
         "clientId": c?.id,
         "driverID": widget?.object?.driverId,
       };
-      route = await routeProvider.insert(request);
-      await Future.delayed(const Duration(seconds: 1));
-      var requestReq = {"routeId": route?.id, "driverId": route?.driverID};
-      requestProvider.insert(requestReq);
-      ScaffoldHelpers.showScaffold(context, "Request has been sent");
+      try {
+        route = await routeProvider.insert(request);
+        await Future.delayed(const Duration(seconds: 1));
+        var requestReq = {"routeId": route?.id, "driverId": route?.driverID};
+        requestProvider.insert(requestReq);
+        ScaffoldHelpers.showScaffold(context, "Request has been sent");
+        await Future.delayed(const Duration(seconds: 1));
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RouteOrderScreen(),
+          ),
+        );
+      } catch (e) {
+        ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+      }
     }
   }
 

@@ -110,7 +110,7 @@ class _MasterScreenState extends State<MasterScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        //automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         title: Text(
           widget.title,
           style: TextStyle(

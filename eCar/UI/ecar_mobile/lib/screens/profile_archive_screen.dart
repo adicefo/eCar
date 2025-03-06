@@ -312,9 +312,23 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
 
   Widget _buildFooter() {
     return Padding(
-        padding: EdgeInsets.only(left: 90.0),
+        padding: EdgeInsets.only(left: 30.0),
         child: Row(
           children: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(minimumSize: Size(75, 50)),
+                child: Text("Go back")),
+            SizedBox(
+              width: 30,
+            ),
             InkWell(
               onTap: () {
                 setState(() {
@@ -331,7 +345,7 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
               ),
             ),
             SizedBox(
-              width: 50,
+              width: 30,
             ),
             InkWell(
               onTap: () {
@@ -348,6 +362,9 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
                   fontSize: 28,
                 ),
               ),
+            ),
+            SizedBox(
+              width: 30,
             ),
           ],
         ));

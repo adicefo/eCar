@@ -53,6 +53,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
             ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => LoginPage()));
+                },
+                child: Text("Login screen"),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    minimumSize: Size(10, 30)),
+              ),
+            ),
             Text(
               "Register",
               style: TextStyle(

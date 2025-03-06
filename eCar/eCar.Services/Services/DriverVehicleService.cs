@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using eCar.Model.Helper;
+using Microsoft.AspNetCore.Mvc;
 
 namespace eCar.Services.Services
 {
@@ -26,9 +27,9 @@ namespace eCar.Services.Services
         {
             var set = Context.Set<Database.DriverVehicle>().AsQueryable();
             var entity = set.Include(x => x.Driver).ThenInclude(x => x.User).Include(x=>x.Vehicle).Where(x=>x.DriverId==request.DriverId
-            &&x.DatePickUp.Value.Date==request.DatePickUp.Date).FirstOrDefault();
+            &&x.DatePickUp.Value.Date==request.DatePickUp.Date&&x.DateDropOff==null).FirstOrDefault();
             if (entity == null)
-                throw new UserException("Non-existed model");
+                return null;
 
             entity.DateDropOff = DateTime.Now;
 
@@ -69,24 +70,21 @@ namespace eCar.Services.Services
         }
         public override void BeforeInsert(DriverVehicleInsertRequest request, DriverVehicle entity)
         {
-            if (CheckIfAssigned(request, entity))
-                throw new UserException("Current driver has already assigned his car...");
+            
 
             entity.DatePickUp=DateTime.Now;
             var vehicle = Context.Vehicles.Find(request.VehicleId);
             if(vehicle!=null)
                 vehicle.Available = false;
         }
-        public bool CheckIfAssigned(DriverVehicleInsertRequest request, DriverVehicle entity)
+        public IActionResult CheckIfAssigned(int driverId)
         {
             //check if driver has assigned car for this date
-            var instance=Context.DriverVehicles.Where(x=>x.DriverId==entity.DriverId&&
-            x.DatePickUp.Value.Date==DateTime.Now.Date).Any();
+            var instance = Context.DriverVehicles.Where(x => x.DriverId == driverId &&
+             x.DatePickUp.Value.Date == DateTime.Now.Date).Any();
             if (instance)
-                return true;
-            return false;
+                return new OkObjectResult(new { isAssigned = true });
+            return new OkObjectResult(new { isAssigned = false }); ;
         }
-
-
     }
 }

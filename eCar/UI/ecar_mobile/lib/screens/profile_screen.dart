@@ -119,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         _buildContent(),
         SizedBox(
-          height: 30,
+          height: 20,
         ),
         _buildButtons(),
       ],
@@ -128,7 +128,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildContent() {
     return Padding(
-        padding: EdgeInsets.only(top: 20.0),
+        padding: EdgeInsets.only(top: 10.0),
         child: Column(
           children: [
             Padding(
