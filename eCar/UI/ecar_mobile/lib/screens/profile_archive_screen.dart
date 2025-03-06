@@ -10,6 +10,7 @@ import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
 import 'package:ecar_mobile/utils/getAddresLatLng_helpers.dart';
 import 'package:ecar_mobile/utils/isLoading_helpers.dart';
+import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:ecar_mobile/utils/string_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
@@ -43,15 +44,19 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
   }
 
   void _initForm() async {
-    var filterRoute = {"Status": "finished", "UserId": widget?.user?.id};
-    routes = await routeProvider.get(filter: filterRoute);
-    if (widget?.role == "client") {
-      var filterRent = {"Status": "finished", "UserId": widget?.user?.id};
-      rents = await rentProvider.get(filter: filterRent);
+    try {
+      var filterRoute = {"Status": "finished", "UserId": widget?.user?.id};
+      routes = await routeProvider.get(filter: filterRoute);
+      if (widget?.role == "client") {
+        var filterRent = {"Status": "finished", "UserId": widget?.user?.id};
+        rents = await rentProvider.get(filter: filterRent);
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
     }
-    setState(() {
-      isLoading = false;
-    });
   }
 
   @override

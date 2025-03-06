@@ -14,6 +14,7 @@ import 'package:ecar_mobile/screens/review_details_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
 import 'package:ecar_mobile/utils/isLoading_helpers.dart';
+import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
@@ -48,12 +49,16 @@ class _ReviewScreenState extends State<ReviewScreen> {
   }
 
   Future<void> _initForm() async {
-    var filterReview = {"Page": 0, "PageSize": 6};
-    data = await reviewProvider.get(filter: filterReview);
+    try {
+      var filterReview = {"Page": 0, "PageSize": 6};
+      data = await reviewProvider.get(filter: filterReview);
 
-    setState(() {
-      isLoading = false;
-    });
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+    }
   }
 
   @override

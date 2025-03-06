@@ -51,20 +51,24 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
   }
 
   Future _initForm() async {
-    var filterDriver = {
-      "NameGTE": widget.user?.name,
-      "SurnameGTE": widget.user?.surname,
-    };
-    driver = await driverProvider.get(filter: filterDriver);
+    try {
+      var filterDriver = {
+        "NameGTE": widget.user?.name,
+        "SurnameGTE": widget.user?.surname,
+      };
+      driver = await driverProvider.get(filter: filterDriver);
 
-    driverInstance = driver?.result?.first;
+      driverInstance = driver?.result?.first;
 
-    vehicles = await vehicleProvider.getAvailableForDriver();
+      vehicles = await vehicleProvider.getAvailableForDriver();
 
-    setState(() {
-      print("Successful cars num: ${vehicles?.count}");
-      isLoading = false;
-    });
+      setState(() {
+        print("Successful cars num: ${vehicles?.count}");
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+    }
   }
 
   @override
@@ -213,22 +217,21 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                           "driverId": driverInstance?.id,
                           "datePickUp": DateTime.now().toIso8601String(),
                         };
-
-                        /// try {
-                        driverVehicleInstance =
-                            await driverVehicleProvider.updateFinish(request);
-                        if (driverVehicleInstance == null) {
-                          AlertHelpers.showAlert(context, "Info",
-                              "Error. You either not asssigned the car or already assigned it for today");
-                          return;
+                        try {
+                          driverVehicleInstance =
+                              await driverVehicleProvider.updateFinish(request);
+                          if (driverVehicleInstance == null) {
+                            AlertHelpers.showAlert(context, "Info",
+                                "Error. You either not asssigned the car or already assigned it for today");
+                            return;
+                          }
+                          ScaffoldHelpers.showScaffold(
+                              context, "Successfully returned vehicle.");
+                          //check if update is valid
+                        } catch (e) {
+                          ScaffoldHelpers.showScaffold(
+                              context, "${e.toString()}");
                         }
-                        ScaffoldHelpers.showScaffold(
-                            context, "Successfully returned vehicle.");
-                        //check if update is valid
-                        // } catch (e) {
-                        //   ScaffoldHelpers.showScaffold(
-                        //     context, "${e.toString()}");
-                        //}
                       }
                     },
                     child: Text("Return"),

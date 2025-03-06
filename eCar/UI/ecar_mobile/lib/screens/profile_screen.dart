@@ -58,38 +58,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future _initForm() async {
-    user = await userProvider.getUserFromToken();
-    _role = await _storage.read(key: "role") ?? "";
+    try {
+      user = await userProvider.getUserFromToken();
+      _role = await _storage.read(key: "role") ?? "";
 
-    _nameController.text = "${user?.name}";
-    _surnameController.text = "${user?.surname}";
-    _telephoneNumberController.text = "${user?.telephoneNumber}";
-    _emailController.text = "${user?.email}";
+      _nameController.text = "${user?.name}";
+      _surnameController.text = "${user?.surname}";
+      _telephoneNumberController.text = "${user?.telephoneNumber}";
+      _emailController.text = "${user?.email}";
 
-    if (_role == "driver") {
-      _setStatisticsLogic();
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
     }
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  Future _setStatisticsLogic() async {
-    var filter = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
-    driver = await driverProvider.get(filter: filter);
-
-    var d = driver?.result.first;
-
-    var filterStat = {
-      "DriverId": d?.id,
-      "BeginningOfWork": DateTime.now().toIso8601String()
-    };
-    var stat = await statisticsProvider.get(filter: filterStat);
-
-    statistics = stat?.result.first;
-    setState(() {
-      isLoading = false;
-    });
   }
 
   @override

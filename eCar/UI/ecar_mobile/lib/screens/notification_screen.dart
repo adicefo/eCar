@@ -52,54 +52,61 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   Future _initForm() async {
-    user = await userProvider.getUserFromToken();
-    _role = await _storage.read(key: "role") ?? "";
+    try {
+      user = await userProvider.getUserFromToken();
+      _role = await _storage.read(key: "role") ?? "";
 
-    bool isForClient = false;
+      bool isForClient = false;
 
-    if (_role == "client") {
-      isForClient = true;
-    }
-
-    var filter = {'IsForClient': isForClient};
-    data = await notificationProvider.get(filter: filter);
-
-    setState(() {
-      if (_role == "driver") {
-        _setDriverStatisticsLogic();
+      if (_role == "client") {
+        isForClient = true;
       }
-      isLoading = false;
-      print("Result count : ${data!.count}");
-    });
+
+      var filter = {'IsForClient': isForClient};
+      data = await notificationProvider.get(filter: filter);
+      setState(() {
+        if (_role == "driver") {
+          _setDriverStatisticsLogic();
+        }
+        isLoading = false;
+        print("Result count : ${data?.count}");
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+    }
   }
 
   Future _setDriverStatisticsLogic() async {
-    var filter = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
-    driver = await driverProvider.get(filter: filter);
-    //taking only one from SearchResult
-    var d = driver?.result.first;
-
-    if (widget.isFromLogin == true) {
-      var request = {"driverId": d?.id};
-      //user is logged in
-      statistics = await statisticsProvider.insert(request);
-      ScaffoldHelpers.showScaffold(context, "Working day started");
-    } else {
-      var filter = {
-        "DriverId": d?.id,
-        "BeginningOfWork": DateTime.now().toIso8601String()
-      };
-      var s = await statisticsProvider.get(filter: filter);
+    try {
+      var filter = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
+      driver = await driverProvider.get(filter: filter);
       //taking only one from SearchResult
-      var stat = s?.result.first;
+      var d = driver?.result.first;
 
-      //update every time acessing page
-      var request = {};
-      statistics = await statisticsProvider.update(stat?.id, request);
+      if (widget.isFromLogin == true) {
+        var request = {"driverId": d?.id};
+        //user is logged in
+        statistics = await statisticsProvider.insert(request);
+        ScaffoldHelpers.showScaffold(context, "Working day started");
+      } else {
+        var filter = {
+          "DriverId": d?.id,
+          "BeginningOfWork": DateTime.now().toIso8601String()
+        };
+        var s = await statisticsProvider.get(filter: filter);
+        //taking only one from SearchResult
+        var stat = s?.result.first;
+
+        //update every time acessing page
+        var request = {};
+        statistics = await statisticsProvider.update(stat?.id, request);
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
     }
-    setState(() {
-      isLoading = false;
-    });
   }
 
   @override

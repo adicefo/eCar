@@ -82,47 +82,56 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
   }
 
   Future<void> _initForm() async {
-    user = await userProvider.getUserFromToken();
-    var filter = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
-    client = await clientProvider.get(filter: filter);
-    //taking only one from SearchResult
-    c = client?.result.first;
+    try {
+      user = await userProvider.getUserFromToken();
+      var filter = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
+      client = await clientProvider.get(filter: filter);
+      //taking only one from SearchResult
+      c = client?.result.first;
 
-    if (widget?.isOrder == false) {
-      var filter = {
-        "ClientId": c?.id,
-        "StatusNot": "finished",
-      };
-      routes = await routeProvider.get(filter: filter);
+      if (widget?.isOrder == false) {
+        var filter = {
+          "ClientId": c?.id,
+          "StatusNot": "finished",
+        };
+        routes = await routeProvider.get(filter: filter);
+      }
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
     }
-    setState(() {
-      isLoading = false;
-    });
   }
 
   Future<void> _getUserLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      print("Location service not enabled");
-      return;
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) {
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        ScaffoldHelpers.showScaffold(context,
+            "Location service is not enabled. Please enable it in settings.");
         return;
       }
-    }
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+      }
 
-    Position position = await Geolocator.getCurrentPosition();
-    setState(() {
-      sourcePoint =
-          LatLng(latitude: position.latitude, longitude: position.longitude);
-    });
+      if (permission == LocationPermission.deniedForever) {
+        ScaffoldHelpers.showScaffold(context,
+            "Location permission is permanently denied. Please enable it in app settings.");
+        return;
+      }
+
+      Position position = await Geolocator.getCurrentPosition();
+      setState(() {
+        sourcePoint =
+            LatLng(latitude: position.latitude, longitude: position.longitude);
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(
+          context, "Error retrieving location: ${e.toString()}");
+    }
   }
 
   @override

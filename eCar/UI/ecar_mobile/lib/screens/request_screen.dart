@@ -48,18 +48,22 @@ class _RequestScreenState extends State<RequestScreen> {
   }
 
   Future<void> _initForm() async {
-    user = await userProvider.getUserFromToken();
-    var filterDriver = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
-    driverResult = await driverProvider.get(filter: filterDriver);
-    //taking only one from SearchResult
-    var d = driverResult?.result.first;
+    try {
+      user = await userProvider.getUserFromToken();
+      var filterDriver = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
+      driverResult = await driverProvider.get(filter: filterDriver);
+      //taking only one from SearchResult
+      var d = driverResult?.result.first;
 
-    var filterRequest = {"DriverId": d?.id};
-    data = await requestProvider.get(filter: filterRequest);
+      var filterRequest = {"DriverId": d?.id};
+      data = await requestProvider.get(filter: filterRequest);
 
-    setState(() {
-      isLoading = false;
-    });
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+    }
   }
 
   @override
@@ -187,16 +191,21 @@ class _RequestScreenState extends State<RequestScreen> {
                     children: [
                       ElevatedButton(
                         onPressed: () async {
-                          var request = {"isAccepted": false};
-                          await requestProvider.update(x.id, request);
-                          ScaffoldHelpers.showScaffold(
-                              context, "Request rejected");
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RequestScreen(),
-                            ),
-                          );
+                          try {
+                            var request = {"isAccepted": false};
+                            await requestProvider.update(x.id, request);
+                            ScaffoldHelpers.showScaffold(
+                                context, "Request rejected");
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RequestScreen(),
+                              ),
+                            );
+                          } catch (e) {
+                            ScaffoldHelpers.showScaffold(
+                                context, "${e.toString()}");
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.redAccent,
@@ -207,17 +216,22 @@ class _RequestScreenState extends State<RequestScreen> {
                       ),
                       ElevatedButton(
                         onPressed: () async {
-                          var request = {"isAccepted": true};
-                          await requestProvider.update(x.id, request);
-                          ScaffoldHelpers.showScaffold(
-                              context, "Request accepted");
-                          _fetchRequest();
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => RequestScreen(),
-                            ),
-                          );
+                          try {
+                            var request = {"isAccepted": true};
+                            await requestProvider.update(x.id, request);
+                            ScaffoldHelpers.showScaffold(
+                                context, "Request accepted");
+                            _fetchRequest();
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RequestScreen(),
+                              ),
+                            );
+                          } catch (e) {
+                            ScaffoldHelpers.showScaffold(
+                                context, "${e.toString()}");
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
@@ -237,7 +251,11 @@ class _RequestScreenState extends State<RequestScreen> {
   }
 
   Future<void> _fetchRequest() async {
-    var filterRequest = {"DriverId": d?.id};
-    data = await requestProvider.get(filter: filterRequest);
+    try {
+      var filterRequest = {"DriverId": d?.id};
+      data = await requestProvider.get(filter: filterRequest);
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+    }
   }
 }

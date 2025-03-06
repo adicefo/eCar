@@ -15,6 +15,7 @@ import 'package:ecar_mobile/screens/vehicle_assigment_screen.dart';
 import 'package:ecar_mobile/screens/notification_screen.dart';
 import 'package:ecar_mobile/screens/profile_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
+import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -39,6 +40,7 @@ class _MasterScreenState extends State<MasterScreen> {
   bool? isClient;
   final _storage = FlutterSecureStorage();
 
+  String? role = "";
   late AuthProvider authProvider;
   late UserProvider userProvider;
   late DriverProvider driverProvider;
@@ -56,41 +58,48 @@ class _MasterScreenState extends State<MasterScreen> {
   }
 
   Future _initForm() async {
-    user = await userProvider.getUserFromToken();
-    var role = await _storage.read(key: "role") ?? "";
-    if (role == "client") {
-      isClient = true;
-    } else {
-      isClient = false;
-    }
+    try {
+      user = await userProvider.getUserFromToken();
+      role = await _storage.read(key: "role") ?? "";
+      if (role == "client") {
+        isClient = true;
+      } else {
+        isClient = false;
+      }
+      if (role == "driver" && widget.title == "Profile") {
+        _setStatisticsLogic();
+      }
 
-    if (role == "driver" && widget.title == "Profile") {
-      _setStatisticsLogic();
+      print("Client is: ${isClient.toString()}");
+      print("Result: ${user?.userName}");
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
     }
-
-    print("Client is: ${isClient.toString()}");
-    print("Result: ${user?.userName}");
-    setState(() {
-      isLoading = false;
-    });
   }
 
   Future _setStatisticsLogic() async {
-    var filter = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
-    driver = await driverProvider.get(filter: filter);
+    try {
+      var filter = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
+      driver = await driverProvider.get(filter: filter);
 
-    var d = driver?.result.first;
+      var d = driver?.result.first;
 
-    var filterStat = {
-      "DriverId": d?.id,
-      "BeginningOfWork": DateTime.now().toIso8601String()
-    };
-    var stat = await statisticsProvider.get(filter: filterStat);
+      var filterStat = {
+        "DriverId": d?.id,
+        "BeginningOfWork": DateTime.now().toIso8601String()
+      };
+      var stat = await statisticsProvider.get(filter: filterStat);
 
-    statistics = stat?.result.firstWhere((x) => x.endOfWork == null);
-    setState(() {
-      isLoading = false;
-    });
+      statistics = stat?.result.firstWhere((x) => x.endOfWork == null);
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+    }
   }
 
   @override
@@ -138,8 +147,13 @@ class _MasterScreenState extends State<MasterScreen> {
               child: ElevatedButton(
                   onPressed: () async {
                     if (statistics != null) {
-                      statistics =
-                          await statisticsProvider.updateFinish(statistics?.id);
+                      try {
+                        statistics = await statisticsProvider
+                            .updateFinish(statistics?.id);
+                      } catch (e) {
+                        ScaffoldHelpers.showScaffold(
+                            context, "${e.toString()}");
+                      }
                     }
                     authProvider.logout(context);
                   },

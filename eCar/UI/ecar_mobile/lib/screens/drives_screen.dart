@@ -12,6 +12,7 @@ import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
 import 'package:ecar_mobile/utils/getAddresLatLng_helpers.dart';
 import 'package:ecar_mobile/utils/isLoading_helpers.dart';
+import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
@@ -45,17 +46,21 @@ class _DrivesScreenState extends State<DrivesScreen> {
   }
 
   Future<void> _initForm() async {
-    user = await userProvider.getUserFromToken();
-    var filterDriver = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
-    driver = await driverProvider.get(filter: filterDriver);
+    try {
+      user = await userProvider.getUserFromToken();
+      var filterDriver = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
+      driver = await driverProvider.get(filter: filterDriver);
 
-    d = driver?.result?.first;
+      d = driver?.result?.first;
 
-    var filterRoute = {"Status": "active", "DriverId": d?.id};
-    data = await routeProvider.get(filter: filterRoute);
-    setState(() {
-      isLoading = false;
-    });
+      var filterRoute = {"Status": "active", "DriverId": d?.id};
+      data = await routeProvider.get(filter: filterRoute);
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+    }
   }
 
   @override

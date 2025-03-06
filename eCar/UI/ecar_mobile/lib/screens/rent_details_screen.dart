@@ -70,24 +70,28 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   }
 
   Future<void> _initForm() async {
-    user = await userProvider.getUserFromToken();
+    try {
+      user = await userProvider.getUserFromToken();
 
-    var filterClient = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
-    client = await clientProvider.get(filter: filterClient);
+      var filterClient = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
+      client = await clientProvider.get(filter: filterClient);
 
-    c = client?.result.first;
+      c = client?.result.first;
 
-    if (widget.isOrder == false) {
-      var filter = {"ClientId": c?.id, "StatusNot": "finished"};
-      data = await rentProvider.get(filter: filter);
-    }
-    setState(() {
-      isLoading = false;
-      if (widget?.isOrder == true) {
-        _duration = _endDate.day - _startDate.day;
-        _fullPrice = _duration * _price!;
+      if (widget.isOrder == false) {
+        var filter = {"ClientId": c?.id, "StatusNot": "finished"};
+        data = await rentProvider.get(filter: filter);
       }
-    });
+      setState(() {
+        isLoading = false;
+        if (widget?.isOrder == true) {
+          _duration = _endDate.day - _startDate.day;
+          _fullPrice = _duration * _price!;
+        }
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+    }
   }
 
   void _selectDateRange() async {

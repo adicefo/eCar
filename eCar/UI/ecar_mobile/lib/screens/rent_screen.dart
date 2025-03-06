@@ -10,6 +10,7 @@ import 'package:ecar_mobile/screens/rent_details_screen.dart';
 import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
 import 'package:ecar_mobile/utils/isLoading_helpers.dart';
+import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:ecar_mobile/utils/string_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,11 +42,15 @@ class _RentScreenState extends State<RentScreen> {
   }
 
   Future<void> _initForm() async {
-    data = await vehicleProvider.get();
+    try {
+      data = await vehicleProvider.get();
 
-    setState(() {
-      isLoading = false;
-    });
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+    }
   }
 
   @override
