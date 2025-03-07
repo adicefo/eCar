@@ -50,7 +50,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
 
   Future<void> _initForm() async {
     try {
-      var filterReview = {"Page": 0, "PageSize": 6};
+      var filterReview = {"Page": 0, "PageSize": 4};
       data = await reviewProvider.get(filter: filterReview);
 
       setState(() {

@@ -53,7 +53,8 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
   }
 
   Future<void> _initForm() async {
-    user = await userProvider.getUserFromToken();
+try {
+      user = await userProvider.getUserFromToken();
 
     var filterClient = {"NameGTE": user?.name, "SurnameGTE": user?.surname};
     client = await clientProvider.get(filter: filterClient);
@@ -65,6 +66,9 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
     setState(() {
       isLoading = false;
     });
+} catch (e) {
+  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+}
   }
 
   @override

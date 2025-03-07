@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Azure;
+using eCar.Services.Database.Seed;
 using Microsoft.EntityFrameworkCore;
 
 namespace eCar.Services.Database;
@@ -103,6 +105,7 @@ public partial class ECarDbContext : DbContext
         modelBuilder.Entity<CompanyPrice>(entity =>
         {
             entity.Property(e => e.PricePerKilometar).HasColumnType("money");
+            entity.Property(e => e.AddingDate).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<Driver>(entity =>
@@ -134,6 +137,9 @@ public partial class ECarDbContext : DbContext
         {
             entity.ToTable("DriverVehicle");
 
+            entity.Property(e => e.DatePickUp).HasColumnType("datetime");
+            entity.Property(e => e.DateDropOff).HasColumnType("datetime");
+
             entity.HasOne(d => d.Driver).WithMany(p => p.DriverVehicles)
                 .HasForeignKey(d => d.DriverId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -162,6 +168,7 @@ public partial class ECarDbContext : DbContext
 
             entity.Property(e => e.EndingDate).HasColumnType("datetime");
             entity.Property(e => e.FullPrice).HasColumnType("money");
+            entity.Property(e => e.Paid).HasColumnType("bit");
             entity.Property(e => e.RentingDate).HasColumnType("datetime");
             entity.Property(e => e.Status).HasMaxLength(15);
 
@@ -198,6 +205,7 @@ public partial class ECarDbContext : DbContext
             entity.ToTable("Review");
 
             entity.Property(e => e.Description).HasMaxLength(100);
+            entity.Property(e => e.AddedDate).HasColumnType("datetime");
 
             entity.HasOne(d => d.Reviewed).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.ReviewedId)
@@ -223,6 +231,7 @@ public partial class ECarDbContext : DbContext
             entity.Property(e => e.FullPrice).HasColumnType("money");
             entity.Property(e => e.StartDate).HasColumnType("datetime");
             entity.Property(e => e.Status).HasMaxLength(10);
+            entity.Property(e => e.Paid).HasColumnType("bit");
 
             entity.HasOne(d => d.Client).WithMany(p => p.Routes)
                 .HasForeignKey(d => d.ClientId)
@@ -278,6 +287,18 @@ public partial class ECarDbContext : DbContext
             entity.Property(e => e.Name).HasMaxLength(30);
             entity.Property(e => e.Price).HasColumnType("money");
         });
+        modelBuilder.Entity<User>().SeedData();
+        modelBuilder.Entity<Admin>().SeedData();
+        modelBuilder.Entity<Client>().SeedData();
+        modelBuilder.Entity<Driver>().SeedData();
+        modelBuilder.Entity<CompanyPrice>().SeedData();
+        modelBuilder.Entity<Vehicle>().SeedData();
+        modelBuilder.Entity<Route>().SeedData();
+        modelBuilder.Entity<Rent>().SeedData();
+        modelBuilder.Entity<Notification>().SeedData();
+        modelBuilder.Entity<Review>().SeedData();
+
+     
 
         OnModelCreatingPartial(modelBuilder);
     }

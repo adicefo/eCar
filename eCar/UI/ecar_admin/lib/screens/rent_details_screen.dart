@@ -51,11 +51,16 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   }
 
   Future initForm() async {
-    vehicleResult = await vehicleProvider.get();
+   try {
+      vehicleResult = await vehicleProvider.get();
     clientResult = await clientProvider.get();
     setState(() {
       isLoading = false;
     });
+   } catch (e) {
+           ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+
+   }
   }
 
   @override

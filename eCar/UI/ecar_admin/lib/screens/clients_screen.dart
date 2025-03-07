@@ -28,13 +28,17 @@ class _ClientListScreenState extends State<ClientListScreen> {
   }
 
   Future<void> _fetchData() async {
-    var filter = {
-      'NameGTE': _nameEditingController.text ?? "",
-      'SurnameGTE': _surnameEditingController.text ?? ""
-    };
-    result = await provider.get(filter: filter);
-    setState(() {});
-    print(result);
+    try {
+      var filter = {
+        'NameGTE': _nameEditingController.text ?? "",
+        'SurnameGTE': _surnameEditingController.text ?? ""
+      };
+      result = await provider.get(filter: filter);
+      setState(() {});
+      print(result);
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override

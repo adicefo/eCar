@@ -156,7 +156,7 @@ internal class Program
         using (var scope = app.Services.CreateScope())
         {
             var dataContext = scope.ServiceProvider.GetRequiredService<ECarDbContext>();
-            //dataContext.Database.EnsureCreated();
+            dataContext.Database.EnsureCreated();
 
             dataContext.Database.Migrate();
         }
