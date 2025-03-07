@@ -29,7 +29,7 @@ namespace eCar.Services.Database.Seed
                      Description = "Dobro je, malo je kasnio,al sve ok,auto za 10.",
                      AddedDate = DateTime.Now.AddMonths(-2),
                      ReviewedId = 2,
-                     ReviewsId = 2,
+                     ReviewsId = 1,
                      RouteId=8
                  },
                   new Review()
@@ -39,7 +39,7 @@ namespace eCar.Services.Database.Seed
                       Description = "Pohvale za vozača,ljubazan...",
                       AddedDate = DateTime.Now.AddMonths(-1),
                       ReviewedId = 1,
-                      ReviewsId = 3,
+                      ReviewsId = 2,
                       RouteId=7
                   },
                    new Review()
@@ -49,7 +49,7 @@ namespace eCar.Services.Database.Seed
                        Description = "Kasniiiiiii",
                        AddedDate = DateTime.Now.AddMonths(-1),
                        ReviewedId = 2,
-                       ReviewsId = 2,
+                       ReviewsId = 3,
                        RouteId=8
 
                    }
