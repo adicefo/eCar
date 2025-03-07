@@ -71,47 +71,6 @@ namespace eCar.Services.Database.Seed
                     DriverID = 3,
                   
 
-                }, new Route()
-                {
-                    Id = 6,
-                   
-                    
-                    Status = "finished",
-                    CompanyPricesID = 3,
-                    ClientId = 2,
-                    DriverID = 1,
-                    StartDate= DateTime.Now.AddDays(-7),
-                    EndDate=DateTime.Now.AddDays(-7),
-                    Duration=20,
-                   
-
-                }, new Route()
-                {
-                    Id = 7,
-               
-                    
-                    Status = "finished",
-                    CompanyPricesID = 3,
-                    ClientId = 3,
-                    DriverID = 1,
-                    StartDate = DateTime.Now.AddDays(-5),
-                    EndDate = DateTime.Now.AddDays(-5),
-                    Duration = 20,
-                   
-                }, new Route()
-                {
-                    Id = 8,
-                 
-                    
-                    Status = "finished",
-                    CompanyPricesID = 3,
-                    ClientId = 2,
-                    DriverID = 2,
-                    StartDate = DateTime.Now.AddDays(-6),
-                    EndDate = DateTime.Now.AddDays(-6),
-                    Duration = 18,
-              
-
                 });
 
 
