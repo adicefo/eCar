@@ -117,7 +117,13 @@ class _DrivesScreenState extends State<DrivesScreen> {
 
   List<Widget> _buildGridView() {
     if (data?.result?.length == 0) {
-      return [Text("You do not have any drives now...")];
+      return [
+        Center(
+            child: Text(
+          "You do not have any drives now...",
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+        ))
+      ];
     }
     List<Widget> list = data!.result
         .map((x) => Container(

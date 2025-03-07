@@ -17,11 +17,9 @@ namespace eCar.Services.StateMachine.RentStateMachine
 {
     public  class WaitRentState:BaseRentState
     {
-        private IRabbitMQProducer _rabbitMQProducer;
-        public WaitRentState(ECarDbContext context, IMapper mapper, IServiceProvider serviceProvider,IRabbitMQProducer rabbitMQProducer) :
+        public WaitRentState(ECarDbContext context, IMapper mapper, IServiceProvider serviceProvider) :
            base(context, mapper, serviceProvider)
         {
-            _rabbitMQProducer = rabbitMQProducer;
         }
 
         public override Model.Model.Rent Update(int id, RentUpdateRequest request)
@@ -60,16 +58,7 @@ namespace eCar.Services.StateMachine.RentStateMachine
             if (entity == null)
                 throw new Exception("Non-existed model");
             entity.Status = "active";
-            var emailModel = new EmailModel()
-            {
-                Sender = "eCarAplikacija",
-                Recipient = entity?.Client?.User?.Email,
-                Subject = "Rent request reply",
-                Content = $"Dear {entity?.Client.User.Name} {entity?.Client.User.Surname},your rent request" +
-              $"has been accepted.You can pick up your {entity?.Vehicle.Name} car no later than {entity?.RentingDate.Value.Date}.\n" +
-              $"Thank you for your trust.\nYour eCar!"
-            };
-            _rabbitMQProducer.SendMessage(emailModel);
+          
 
             Context.Rents.Update(entity);
             Context.SaveChanges();
@@ -100,19 +89,7 @@ namespace eCar.Services.StateMachine.RentStateMachine
             if (entity == null)
                 throw new Exception("Non-existed model");
 
-            if(entity.Status=="wait")
-            {
-                var emailModel = new EmailModel()
-                {
-                    Sender = "eCarAplikacija",
-                    Recipient = entity?.Client?.User?.Email,
-                    Subject = "Rent request reply",
-                    Content = $"Dear {entity?.Client.User.Name} {entity?.Client.User.Surname},your rent request" +
-            $"has been denied. Unfortunateley car {entity?.Vehicle.Name} is not available at date range from {entity?.RentingDate.Value.Date} to {entity?.EndingDate.Value.Date}\n" +
-            $"Thank you for your trust.\nYour eCar!"
-                };
-                _rabbitMQProducer.SendMessage(emailModel);
-            }
+            
          
 
             set.Remove(entity);

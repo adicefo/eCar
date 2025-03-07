@@ -97,7 +97,13 @@ class _RequestScreenState extends State<RequestScreen> {
 
   List<Widget> _buildGridView() {
     if (data?.result?.length == 0) {
-      return [Text("You do not have any requests now...")];
+      return [
+        Center(
+            child: Text(
+          "You do not have any requests now...",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ))
+      ];
     }
     List<Widget> list = data!.result
         .map((x) => Container(
