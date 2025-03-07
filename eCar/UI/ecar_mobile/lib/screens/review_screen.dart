@@ -83,7 +83,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   crossAxisCount: 2,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
-                  childAspectRatio: 0.75),
+                  childAspectRatio: 0.6),
               scrollDirection: Axis.vertical,
               children: _buildOrderGrid(),
             ),

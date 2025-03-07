@@ -32,7 +32,6 @@ namespace eCar.API.Controllers
        {
            return (_service as IRouteService).UpdateFinsih(id);
        }
-        //[Authorize(Roles ="Manager")]
         [HttpGet("Actions/{id}")]
         public List<Services.Enums.Action> AllowedActions(int id)
         {
