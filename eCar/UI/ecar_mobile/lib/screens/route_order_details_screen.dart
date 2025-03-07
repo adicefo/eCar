@@ -202,7 +202,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
               child: Text(
                 "Source point:\n ${_sourceAddress == null ? "Unknown" : _sourceAddress!}",
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
@@ -219,7 +219,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
               child: Text(
                 "Destination point:\n ${_destinationAddress == null ? "Unknown" : _destinationAddress!}",
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black),
               ),
