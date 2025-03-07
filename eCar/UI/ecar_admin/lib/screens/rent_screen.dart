@@ -139,10 +139,6 @@ class _RentScreenState extends State<RentScreen> {
               columnSpacing: 25,
               columns: [
                 DataColumn(
-                    label: Text("ID",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                DataColumn(
                     label: Text("RentingDate",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold))),
@@ -188,10 +184,6 @@ class _RentScreenState extends State<RentScreen> {
                               ~WidgetState.disabled: Colors.grey,
                             }),
                             cells: [
-                              DataCell(Text(e.id.toString(),
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
                               DataCell(Text(
                                   e.rentingDate.toString().substring(0, 19),
                                   style: TextStyle(

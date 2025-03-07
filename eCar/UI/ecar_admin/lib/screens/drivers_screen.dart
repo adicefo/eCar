@@ -141,11 +141,6 @@ class _DriversListScreenState extends State<DriversListScreen> {
                 columnSpacing: 25,
                 columns: [
                   DataColumn(
-                      label: Text("ID",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
                       label: Text("Name",
                           style: TextStyle(
                               color: Colors.black,
@@ -200,10 +195,6 @@ class _DriversListScreenState extends State<DriversListScreen> {
                                   ~WidgetState.disabled: Colors.grey,
                                 }),
                                 cells: [
-                                  DataCell(Text(e.id.toString(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
                                   DataCell(Text(e.user?.name ?? " ",
                                       style: TextStyle(
                                           color: Colors.black,

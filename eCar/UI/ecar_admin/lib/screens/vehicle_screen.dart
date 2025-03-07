@@ -150,10 +150,6 @@ class _VehicleScreenState extends State<VehicleScreen> {
               columnSpacing: 25,
               columns: [
                 DataColumn(
-                    label: Text("ID",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                DataColumn(
                     label: Text("Available",
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold))),
@@ -191,10 +187,6 @@ class _VehicleScreenState extends State<VehicleScreen> {
                               ~WidgetState.disabled: Colors.grey,
                             }),
                             cells: [
-                              DataCell(Text(e.id.toString(),
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
                               DataCell(Text(e.available.toString(),
                                   style: TextStyle(
                                       color: Colors.black,

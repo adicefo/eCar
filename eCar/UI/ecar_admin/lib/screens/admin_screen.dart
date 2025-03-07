@@ -89,11 +89,6 @@ class _AdminScreenState extends State<AdminScreen> {
                 columnSpacing: 25,
                 columns: [
                   DataColumn(
-                      label: Text("ID",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
                       label: Text("Name",
                           style: TextStyle(
                               color: Colors.black,
@@ -138,10 +133,6 @@ class _AdminScreenState extends State<AdminScreen> {
                                   ~WidgetState.disabled: Colors.grey,
                                 }),
                                 cells: [
-                                  DataCell(Text(e.id.toString(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
                                   DataCell(Text(e.user?.name ?? " ",
                                       style: TextStyle(
                                           color: Colors.black,
