@@ -45,6 +45,7 @@
 ## Docker
 
 **In order to run app go to path of docker-compose.yaml and run `docker-compose up --build `**
+
 **NOTE: Do not run migartion because database is already created with test data inserted!!!**
 
 ## Stripe data
