@@ -20,7 +20,7 @@ namespace eCar.Services.Database.Seed
                     AddedDate = DateTime.Now.AddMonths(-2),
                     ReviewedId=1,
                     ReviewsId=2,
-                    RouteId=6
+                    RouteId=2
                 },
                  new Review()
                  {
@@ -30,7 +30,7 @@ namespace eCar.Services.Database.Seed
                      AddedDate = DateTime.Now.AddMonths(-2),
                      ReviewedId = 2,
                      ReviewsId = 1,
-                     RouteId=8
+                     RouteId=4
                  },
                   new Review()
                   {
@@ -40,7 +40,7 @@ namespace eCar.Services.Database.Seed
                       AddedDate = DateTime.Now.AddMonths(-1),
                       ReviewedId = 1,
                       ReviewsId = 2,
-                      RouteId=7
+                      RouteId=2
                   },
                    new Review()
                    {
@@ -50,7 +50,7 @@ namespace eCar.Services.Database.Seed
                        AddedDate = DateTime.Now.AddMonths(-1),
                        ReviewedId = 2,
                        ReviewsId = 3,
-                       RouteId=8
+                       RouteId=3
 
                    }
                    

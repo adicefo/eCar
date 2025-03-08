@@ -194,7 +194,7 @@ public partial class ECarDbContext : DbContext
 
             entity.HasOne(d => d.Route).WithMany(p => p.Requests)
                 .HasForeignKey(d => d.RouteId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Request_Route");
         });
 
@@ -219,7 +219,7 @@ public partial class ECarDbContext : DbContext
 
             entity.HasOne(d => d.Route).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.RouteId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Recension_Route");
         });
 
@@ -240,7 +240,7 @@ public partial class ECarDbContext : DbContext
 
             entity.HasOne(d => d.CompanyPrices).WithMany(p => p.Routes)
                 .HasForeignKey(d => d.CompanyPricesID)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Route_CompanyPrices");
 
             entity.HasOne(d => d.Driver).WithMany(p => p.Routes)
