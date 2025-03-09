@@ -32,7 +32,7 @@
 
 ## Steps for testing main app functionality
 
-**These are steps to test main app drive funcionallity:**
+**These are steps to test main app drive funcionality:**
 
 - **Login as a driver with mentioned credentials**
 - **Car icon in appbar->Assign car**
@@ -46,7 +46,15 @@
 
 **In order to run app go to path of docker-compose.yaml and run `docker-compose up --build `**
 
-**NOTE: Do not run migartion because database is already created with test data inserted!!!**
+**NOTE: Do not run migration because database is already created with test data inserted!!!**
+
+## Recommender system
+
+**You can find the more information about recommender in `my recommender system.docx ` file**
+
+**NOTE:If you get message `Sorry, there is no recommended vehicles based on previous car.` for all vehicles while testing the app, please add few rent requests for different users while testing.**
+
+**NOTE: Do not run migration because database is already created with test data inserted!!!**
 
 ## Stripe data
 
