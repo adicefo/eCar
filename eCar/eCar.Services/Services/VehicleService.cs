@@ -65,7 +65,7 @@ namespace eCar.Services.Services
         {
             if (request.Name == null)
                 throw new Exception("You have to set Name attribute");
-            if (request.Price < 40 && request.Price > 65)
+            if (request.Price < 40 || request.Price > 65)
                 throw new Exception("Set valid price between 40 and 65");
             base.BeforeInsert(request, entity);
         }
