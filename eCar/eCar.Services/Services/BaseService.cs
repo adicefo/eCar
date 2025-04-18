@@ -54,7 +54,7 @@ namespace eCar.Services.Services
         {
             var entity= Context.Set<TDbEntity>().Find(id);
             if (entity == null)
-                throw new Exception("Non-existed entity");
+                    throw new Exception("Non-existed entity");
             return Mapper.Map<TModel>(entity);
         }
 

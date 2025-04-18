@@ -40,7 +40,7 @@ namespace eCar.Services.Database.Seed
                       AddedDate = DateTime.Now.AddMonths(-1),
                       ReviewedId = 1,
                       ReviewsId = 2,
-                      RouteId=2
+                      RouteId=2     
                   },
                    new Review()
                    {

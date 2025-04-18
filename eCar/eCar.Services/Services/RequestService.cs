@@ -19,7 +19,7 @@ namespace eCar.Services.Services
     public class RequestService:BaseCRUDService<Model.Model.Request,
         RequestSearchObject,Database.Request,RequestInsertRequest,RequestUpdateRequest>,IRequestService
     {
-        private IRabbitMQProducer _rabbitMQProducer;
+            private IRabbitMQProducer _rabbitMQProducer;
         public RequestService(ECarDbContext context,IMapper mapper,IRabbitMQProducer rabbitMQProducer):base(context,mapper)
         {
             _rabbitMQProducer = rabbitMQProducer;
