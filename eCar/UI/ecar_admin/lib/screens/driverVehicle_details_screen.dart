@@ -7,6 +7,7 @@ import 'package:ecar_admin/providers/vehicle_provider.dart';
 import 'package:ecar_admin/screens/driverVehicle_screen.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,152 +60,209 @@ class _DriverVehicleDetailsScreenState
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? Container()
-        : MasterScreen("Driver vehicle details",
-            Column(children: [_buildContent(), _buildSaveBtn()]));
+        ? Center(child: CircularProgressIndicator())
+        : MasterScreen(
+            "Driver vehicle details", Column(children: [_buildContent()]));
   }
 
   Widget _buildContent() {
     return Padding(
       padding: EdgeInsets.all(16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            width: 300, // Adjust width as needed
-            decoration: BoxDecoration(
-              color: Colors.grey[300], // Light grey background
-              borderRadius: BorderRadius.circular(8), // Rounded corners
-              border: Border.all(color: Colors.grey), // Single visible border
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            child: DropdownMenuTheme(
-              data: DropdownMenuThemeData(
-                inputDecorationTheme: InputDecorationTheme(
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                ),
-              ),
-              child: DropdownMenu<Driver>(
-                label: Text("Driver"),
-                enableSearch: true,
-                enableFilter: true,
-                initialSelection: _selectedDriver,
-                onSelected: (value) {
-                  setState(() {
-                    _selectedDriver = value;
-                  });
-                },
-                dropdownMenuEntries: drivers?.result
-                        .map((x) => DropdownMenuEntry(
-                            value: x,
-                            label: "${x.user?.name} ${x.user?.surname}"))
-                        .toList() ??
-                    [],
-              ),
+          // Section title
+          Padding(
+            padding: const EdgeInsets.only(bottom: 24.0),
+            child: Text(
+              "Assign Vehicle to Driver",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(width: 50),
-          Container(
-            width: 300,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey),
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            child: DropdownMenuTheme(
-              data: DropdownMenuThemeData(
-                inputDecorationTheme: InputDecorationTheme(
-                  border: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                ),
-              ),
-              child: DropdownMenu<Vehicle>(
-                label: Text("Vehicle"),
-                enableSearch: true,
-                enableFilter: true,
-                initialSelection: _selectedVehicle,
-                onSelected: (value) {
-                  setState(() {
-                    _selectedVehicle = value;
-                  });
-                },
-                dropdownMenuEntries: vehicles?.result
-                        .map((x) =>
-                            DropdownMenuEntry(value: x, label: "${x.name}"))
-                        .toList() ??
-                    [],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildSaveBtn() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => DriverVehicleScreen(),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellowAccent,
-              foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
-            ),
-            child: const Text("Go back"),
-          ),
-          SizedBox(
-            width: 100,
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              if (_selectedDriver == null || _selectedVehicle == null) {
-                AlertHelpers.showAlert(
-                    context, "Warning", "Please choose driver and vehicle!");
-                return;
-              }
-              var request = {
-                "driverId": _selectedDriver?.id,
-                "vehicleId": _selectedVehicle?.id
-              };
-              bool? editConfirmation =
-                  await AlertHelpers.editConfirmation(context);
-              if (editConfirmation == true) {
-                try {
-                  driverVehicleProvider.insert(request);
-
-                  ScaffoldHelpers.showScaffold(context,
-                      "Car assigned to ${_selectedDriver?.user?.name} ${_selectedDriver?.user?.surname}");
-                  await Future.delayed(const Duration(seconds: 3));
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => DriverVehicleScreen(),
+          // Driver dropdown
+          Card(
+            elevation: 2,
+            margin: EdgeInsets.symmetric(vertical: 8.0),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.person, color: Colors.black54),
+                        SizedBox(width: 8),
+                        Text(
+                          "Select Driver",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                } catch (e) {
-                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
-                }
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellowAccent,
-              foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+                  ),
+                  DropdownMenu<Driver>(
+                    width: MediaQuery.of(context).size.width - 100,
+                    enableSearch: true,
+                    enableFilter: true,
+                    initialSelection: _selectedDriver,
+                    onSelected: (value) {
+                      setState(() {
+                        _selectedDriver = value;
+                      });
+                    },
+                    dropdownMenuEntries: drivers?.result
+                            .map((x) => DropdownMenuEntry(
+                                value: x,
+                                label: "${x.user?.name} ${x.user?.surname}"))
+                            .toList() ??
+                        [],
+                    inputDecorationTheme: InputDecorationTheme(
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                      fillColor: Colors.grey[200],
+                      filled: true,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            child: const Text("Save"),
+          ),
+
+          SizedBox(height: 24),
+
+          // Vehicle dropdown
+          Card(
+            elevation: 2,
+            margin: EdgeInsets.symmetric(vertical: 8.0),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.directions_car, color: Colors.black54),
+                        SizedBox(width: 8),
+                        Text(
+                          "Select Vehicle",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  DropdownMenu<Vehicle>(
+                    width: MediaQuery.of(context).size.width - 100,
+                    enableSearch: true,
+                    enableFilter: true,
+                    initialSelection: _selectedVehicle,
+                    onSelected: (value) {
+                      setState(() {
+                        _selectedVehicle = value;
+                      });
+                    },
+                    dropdownMenuEntries: vehicles?.result
+                            .map((x) =>
+                                DropdownMenuEntry(value: x, label: "${x.name}"))
+                            .toList() ??
+                        [],
+                    inputDecorationTheme: InputDecorationTheme(
+                      border: OutlineInputBorder(),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                      fillColor: Colors.grey[200],
+                      filled: true,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          SizedBox(height: 40),
+
+          // Buttons
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey[300],
+                    foregroundColor: Colors.black,
+                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  child: Text(
+                    "Cancel",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(width: 16),
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    if (_selectedDriver == null || _selectedVehicle == null) {
+                      AlertHelpers.showAlert(context, "Warning",
+                          "Please choose driver and vehicle!");
+                      return;
+                    }
+                    var request = {
+                      "driverId": _selectedDriver?.id,
+                      "vehicleId": _selectedVehicle?.id
+                    };
+                    bool? editConfirmation =
+                        await AlertHelpers.editConfirmation(context);
+                    if (editConfirmation == true) {
+                      try {
+                        driverVehicleProvider.insert(request);
+
+                        ScaffoldHelpers.showScaffold(context,
+                            "Vehicle successfully assigned to ${_selectedDriver?.user?.name} ${_selectedDriver?.user?.surname}");
+                        await Future.delayed(const Duration(seconds: 2));
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => DriverVehicleScreen(),
+                          ),
+                        );
+                      } catch (e) {
+                        ScaffoldHelpers.showScaffold(
+                            context, "${e.toString()}");
+                      }
+                    }
+                  },
+                  icon: Icon(Icons.save),
+                  label: Text(
+                    "Assign Vehicle",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.yellowAccent,
+                    foregroundColor: Colors.black,
+                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:ecar_admin/providers/driverVehicle_provider.dart';
 import 'package:ecar_admin/screens/driverVehicle_details_screen.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,7 +51,7 @@ class _DriverVehicleScreenState extends State<DriverVehicleScreen> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? Container()
+        ? Center(child: CircularProgressIndicator())
         : MasterScreen(
             "Driver vehicle",
             Container(
@@ -64,41 +65,45 @@ class _DriverVehicleScreenState extends State<DriverVehicleScreen> {
   }
 
   Widget _buildAddBtn() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 250,
-          child: Padding(
-            padding: EdgeInsets.only(top: 20.0),
-            child: ElevatedButton(
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(
+            onPressed: () {
+              AlertHelpers.showAlert(context, "Driver Vehicle Explanation",
+                  "Driver Vehicle in 'eCar' app is an entity which includes Driver and Vehicle entities. It is used when Driver start his working day he is obliged to assign some car that he will use for that day. Once he finishes the day he must return the car. ");
+            },
+            icon: Icon(Icons.info),
+            color: Colors.blue,
+            iconSize: 30,
+            tooltip: "Info",
+          ),
+          SizedBox(width: 16),
+          SizedBox(
+            width: 220,
+            child: ElevatedButton.icon(
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (context) => DriverVehicleDetailsScreen()),
                 );
               },
-              child: Text("Add"),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              icon: Icon(Icons.add),
+              label: Text("Assign Vehicle"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        IconButton(
-          onPressed: () {
-            AlertHelpers.showAlert(context, "Driver Vehicle Explanation",
-                "Driver Vehicle in 'eCar' app is an entity which includes Driver and Vehicle entities. It is used when Driver start his working day he is obliged to assign some car that he will use for that day. Once he finishes the day he must return the car. ");
-          },
-          icon: Icon(Icons.info),
-          color: Colors.blue,
-          iconSize: 30,
-          tooltip: "Info",
-        )
-      ],
+        ],
+      ),
     );
   }
 
@@ -106,7 +111,7 @@ class _DriverVehicleScreenState extends State<DriverVehicleScreen> {
     return Expanded(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 50.0),
+          padding: const EdgeInsets.only(top: 20.0),
           child: Align(
             alignment: Alignment.center,
             child: Container(

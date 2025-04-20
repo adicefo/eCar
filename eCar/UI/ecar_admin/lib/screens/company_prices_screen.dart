@@ -3,6 +3,7 @@ import 'package:ecar_admin/models/search_result.dart';
 import 'package:ecar_admin/providers/companyPrice_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +56,7 @@ class _CompanyPricesScreenState extends State<CompanyPricesScreen> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? Container()
+        ? Center(child: CircularProgressIndicator())
         : MasterScreen(
             "Company price",
             Container(
@@ -69,38 +70,42 @@ class _CompanyPricesScreenState extends State<CompanyPricesScreen> {
   }
 
   Widget _buildAddBtn() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 250,
-          child: Padding(
-            padding: EdgeInsets.only(top: 20.0),
-            child: ElevatedButton(
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(
+            onPressed: () {
+              AlertHelpers.showAlert(context, "Company Price Explanation",
+                  "Company price entity is the list of prices per one kilometar of drive for company. It is not editable, if you want to increase or decrease price you must add new row. ");
+            },
+            icon: Icon(Icons.info),
+            color: Colors.blue,
+            iconSize: 30,
+            tooltip: "Info",
+          ),
+          SizedBox(width: 16),
+          SizedBox(
+            width: 220,
+            child: ElevatedButton.icon(
               onPressed: () {
                 _showModal(context);
               },
-              child: Text("Add"),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              icon: Icon(Icons.add),
+              label: Text("Add New Price"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        IconButton(
-          onPressed: () {
-            AlertHelpers.showAlert(context, "Company Price Explanation",
-                "Company price entity is the list of prices per one kilometar of drive for company. It is not editable, if you want to increase or decrease price you must add new row. ");
-          },
-          icon: Icon(Icons.info),
-          color: Colors.blue,
-          iconSize: 30,
-          tooltip: "Info",
-        )
-      ],
+        ],
+      ),
     );
   }
 
@@ -108,7 +113,7 @@ class _CompanyPricesScreenState extends State<CompanyPricesScreen> {
     return Expanded(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 50.0),
+          padding: const EdgeInsets.only(top: 20.0),
           child: Align(
             alignment: Alignment.center,
             child: Container(
@@ -309,105 +314,96 @@ class _CompanyPricesScreenState extends State<CompanyPricesScreen> {
   }
 
   void _showModal(BuildContext context) {
-    final TextEditingController fulfilledController = TextEditingController(
-        text: "${price?.pricePerKilometar.toString()} KM");
-    final TextEditingController userInputController = TextEditingController();
+    TextEditingController _priceController = TextEditingController();
+    bool _isSubmitting = false;
 
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      backgroundColor: Colors.yellowAccent,
       builder: (BuildContext context) {
-        return Padding(
-          padding: MediaQuery.of(context).systemGestureInsets,
-          child: Container(
-            padding: EdgeInsets.all(16.0),
-            height: 1000,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Change price per kilometar',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 20),
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: TextField(
-                      controller: fulfilledController,
-                      decoration: InputDecoration(
-                        labelText: 'Current price',
-                        hintText: 'Current price per kilometar of drive',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black),
-                        ),
-                      ),
-                      style: TextStyle(fontSize: 24),
-                      enabled: true,
-                    )),
-                SizedBox(height: 10),
-                TextField(
-                  controller: userInputController,
-                  decoration: InputDecoration(
-                    labelText: 'New price',
-                    hintText: 'Enter new price for company...',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
-                    ),
-                  ),
-                  style: TextStyle(fontSize: 24),
-                ),
-                Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+        return AlertDialog(
+          title: Text("Add New Price",
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Container(
+                width: 300,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('Cancel'),
+                    Text(
+                      "Current price: ${price?.pricePerKilometar ?? '0.00'} KM per kilometer",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
-                    ElevatedButton(
-                      onPressed: () async {
-                        final result = {
-                          "pricePerKilometar":
-                              double.tryParse(userInputController.text),
-                        };
-                        if (result['pricePerKilometar'] == null) {
-                          AlertHelpers.showAlert(context, "Invalid value",
-                              "Please enter valid numerical value");
-                          return;
-                        }
-                        bool? confirmEdit =
-                            await AlertHelpers.editConfirmation(context);
-                        if (confirmEdit == true) {
-                          try {
-                            companyPriceProvider.insert(result);
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                    duration: Duration(seconds: 2),
-                                    backgroundColor: Colors.lightGreen,
-                                    content: Text(
-                                      'Successful new price has been set',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    )));
-                            Navigator.of(context).pop();
-                            _initForm();
-                          } catch (e) {
-                            ScaffoldHelpers.showScaffold(
-                                context, "${e.toString()}");
-                          }
-                        }
-                      },
-                      child: Text('Submit'),
+                    SizedBox(height: 24),
+                    TextField(
+                      controller: _priceController,
+                      decoration: FormStyleHelpers.textFieldDecoration(
+                        labelText: "New Price Per Kilometer",
+                        prefixIcon: Icon(Icons.money, color: Colors.black54),
+                        hintText: "Enter price in KM",
+                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
+                      keyboardType:
+                          TextInputType.numberWithOptions(decimal: true),
                     ),
                   ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel"),
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.black,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: _isSubmitting
+                  ? null
+                  : () async {
+                      if (_priceController.text.isEmpty) {
+                        ScaffoldHelpers.showScaffold(
+                            context, "Please enter a price");
+                        return;
+                      }
+
+                      setState(() {
+                        _isSubmitting = true;
+                      });
+
+                      try {
+                        var request = {
+                          "pricePerKilometar": _priceController.text
+                        };
+                        await companyPriceProvider.insert(request);
+
+                        ScaffoldHelpers.showScaffold(
+                            context, "Price added successfully");
+                        Navigator.of(context).pop();
+                        _initForm();
+                      } catch (e) {
+                        ScaffoldHelpers.showScaffold(
+                            context, "${e.toString()}");
+                      } finally {
+                        setState(() {
+                          _isSubmitting = false;
+                        });
+                      }
+                    },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+              ),
+              child: Text("Save"),
+            ),
+          ],
         );
       },
     );

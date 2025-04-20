@@ -84,7 +84,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           ),
           SizedBox(width: 16),
           SizedBox(
-            width: 120,
+            width: 220,
             child: ElevatedButton.icon(
               onPressed: () {
                 Navigator.of(context).pushReplacement(
