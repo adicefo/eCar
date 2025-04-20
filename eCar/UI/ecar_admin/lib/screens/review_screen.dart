@@ -45,7 +45,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
-        "Review",
+        "Reviews",
         Column(
           children: [_buildSearch(), _buildResultView()],
         ));

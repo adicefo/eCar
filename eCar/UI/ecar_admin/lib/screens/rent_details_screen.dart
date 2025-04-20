@@ -14,6 +14,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart' as help;
+import 'package:intl/intl.dart';
 
 class RentDetailsScreen extends StatefulWidget {
   Rent? rent;
@@ -90,24 +91,56 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
           children: [
             if (widget.rent == null) ...[
               SizedBox(height: 15),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 8, bottom: 4),
+                child: Text(
+                  "Date Format: MM/DD/YYYY",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
               FormBuilderDateTimePicker(
                 name: 'rentingDate',
-                decoration: FormStyleHelpers.textFieldDecoration(
+                decoration: FormStyleHelpers.dateFieldDecoration(
                   labelText: 'Renting Date',
+                  hintText: 'Select start date (MM/DD/YYYY)',
+                  fillColor: Colors.white,
                 ),
+                format: DateFormat('MM/dd/yyyy'),
                 inputType: InputType.date,
                 validator: FormBuilderValidators.required(),
               ),
               const SizedBox(height: 20),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 8, bottom: 4),
+                child: Text(
+                  "Date Format: MM/DD/YYYY",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
               FormBuilderDateTimePicker(
                 name: 'endingDate',
-                decoration: FormStyleHelpers.textFieldDecoration(
+                decoration: FormStyleHelpers.dateFieldDecoration(
                   labelText: 'Ending Date',
+                  hintText: 'Select end date (MM/DD/YYYY)',
+                  fillColor: Colors.white,
                 ),
+                format: DateFormat('MM/dd/yyyy'),
                 inputType: InputType.date,
                 validator: FormBuilderValidators.required(),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 35),
               FormBuilderDropdown(
                 name: 'clientId',
                 decoration: FormStyleHelpers.dropdownDecoration(
@@ -124,7 +157,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                     [],
                 validator: FormBuilderValidators.required(),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 35),
               FormBuilderDropdown(
                 name: 'vehicleId',
                 decoration: FormStyleHelpers.dropdownDecoration(
@@ -144,11 +177,27 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               const SizedBox(height: 20),
             ] else if (widget.rent != null) ...[
               SizedBox(height: 15),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 8, bottom: 4),
+                child: Text(
+                  "Date Format: MM/DD/YYYY",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
               FormBuilderDateTimePicker(
                 name: 'endingDate',
-                decoration: FormStyleHelpers.textFieldDecoration(
+                decoration: FormStyleHelpers.dateFieldDecoration(
                   labelText: 'Ending Date',
+                  hintText: 'Select end date (MM/DD/YYYY)',
+                  fillColor: Colors.white,
                 ),
+                format: DateFormat('MM/dd/yyyy'),
                 inputType: InputType.date,
                 validator: FormBuilderValidators.required(),
               ),

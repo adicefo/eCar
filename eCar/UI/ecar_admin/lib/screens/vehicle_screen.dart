@@ -58,7 +58,7 @@ class _VehicleScreenState extends State<VehicleScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
-        "Vehicle",
+        "Vehicles",
         Container(
           child: Column(
             children: [_buildSearch(), _buildResultView(), _buildPagination()],

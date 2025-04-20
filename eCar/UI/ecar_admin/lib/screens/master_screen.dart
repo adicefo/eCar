@@ -228,7 +228,7 @@ class _MasterScreenState extends State<MasterScreen> {
                   Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => RentScreen()));
                 },
-                isActive: currentRoute == 'Rents',
+                isActive: currentRoute == 'Rent',
               ),
               Divider(color: Colors.black54, thickness: 1),
               MouseRegion(

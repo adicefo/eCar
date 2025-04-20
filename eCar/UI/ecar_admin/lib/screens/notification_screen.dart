@@ -56,7 +56,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
-        "Notification",
+        "Notifications",
         Container(
           child: Column(
             children: [_buildSearch(), _buildResultView()],
