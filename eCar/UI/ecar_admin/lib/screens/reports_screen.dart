@@ -41,6 +41,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   String? _selectedMonthReview = null;
   String? _selectedYearReview = null;
 
+  bool _drawForDriverFirstTime = false;
   bool _drawForDriver = false;
   bool _drawForRoute = false;
   bool _drawForReview = false;
@@ -233,7 +234,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     return Row(
       children: [
         SizedBox(
-          width: 250,
+          width: !_drawForDriverFirstTime ? 250 : 450,
           child: DropdownButtonFormField<String>(
             isDense: true,
             focusColor: const Color.fromARGB(255, 255, 255, 255),
@@ -243,7 +244,21 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87),
-                floatingLabelBehavior: FloatingLabelBehavior.always),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black45),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black45),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black, width: 2),
+                ),
+                filled: true,
+                fillColor: Colors.white),
             value: _selectedDriverOption,
             onChanged: (String? newValue) {
               setState(() {
@@ -259,18 +274,26 @@ class _ReportsScreenState extends State<ReportsScreen> {
         const SizedBox(
           width: 30,
         ),
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _drawForDriver = true;
-            });
-          },
-          child: Text("Filter"),
-          style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellowAccent,
-              foregroundColor: Colors.black,
-              minimumSize: Size(150, 50)),
-        )
+        if (!_drawForDriverFirstTime)
+          ElevatedButton.icon(
+            onPressed: () {
+              setState(() {
+                _drawForDriver = true;
+                _drawForDriverFirstTime = true;
+              });
+            },
+            icon: Icon(Icons.filter_list),
+            label: Text("Apply Filter",
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                minimumSize: Size(150, 50),
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                )),
+          )
       ],
     );
   }
@@ -404,7 +427,21 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87),
-                floatingLabelBehavior: FloatingLabelBehavior.always),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black45),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black45),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black, width: 2),
+                ),
+                filled: true,
+                fillColor: Colors.white),
             value: _selectedMonthRoute,
             onChanged: (String? newValue) {
               setState(() {
@@ -441,7 +478,21 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87),
-                floatingLabelBehavior: FloatingLabelBehavior.always),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black45),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black45),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black, width: 2),
+                ),
+                filled: true,
+                fillColor: Colors.white),
             value: _selectedYearRoute,
             onChanged: (String? newValue) {
               setState(() {
@@ -457,7 +508,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
         const SizedBox(
           width: 20,
         ),
-        ElevatedButton(
+        ElevatedButton.icon(
           onPressed: () async {
             if (_selectedMonthRoute == null || _selectedYearRoute == null) {
               AlertHelpers.showAlert(
@@ -476,11 +527,17 @@ class _ReportsScreenState extends State<ReportsScreen> {
               ScaffoldHelpers.showScaffold(context, "${e.toString()}");
             }
           },
-          child: Text("Filter"),
+          icon: Icon(Icons.filter_list),
+          label: Text("Apply Filter",
+              style: TextStyle(fontWeight: FontWeight.bold)),
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
-              minimumSize: Size(150, 50)),
+              minimumSize: Size(150, 50),
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              )),
         )
       ],
     );
@@ -489,17 +546,25 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget _buildTableBtnRoute() {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
-      child: ElevatedButton(
+      child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
+            backgroundColor:
+                _drawForRoute ? Colors.orange : Colors.blue.shade600,
+            foregroundColor: Colors.white,
             minimumSize: Size(200, 50),
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
+          icon: Icon(_drawForRoute ? Icons.visibility_off : Icons.table_chart),
           onPressed: () => {
                 setState(() {
-                  _drawForRoute = true;
+                  _drawForRoute = !_drawForRoute;
                 })
               },
-          child: const Text("Show table")),
+          label: Text(_drawForRoute ? "Hide data table" : "Show data table",
+              style: TextStyle(fontWeight: FontWeight.bold))),
     );
   }
 
@@ -507,41 +572,185 @@ class _ReportsScreenState extends State<ReportsScreen> {
     Map<int, double> data = _selectedYearRoute == "2025" ? data2025 : data2024;
     double total = _selectedYearRoute == "2025" ? _total2025 : _total2024;
 
-    return DataTable(
-      columnSpacing: 10,
-      columns: [
-        DataColumn(label: Text("January")),
-        DataColumn(label: Text("February")),
-        DataColumn(label: Text("March")),
-        DataColumn(label: Text("April")),
-        DataColumn(label: Text("May")),
-        DataColumn(label: Text("June")),
-        DataColumn(label: Text("July")),
-        DataColumn(label: Text("August")),
-        DataColumn(label: Text("September")),
-        DataColumn(label: Text("October")),
-        DataColumn(label: Text("November")),
-        DataColumn(label: Text("December")),
-        DataColumn(label: Text("Total")),
-      ],
-      rows: [
-        DataRow(
-          cells: List.generate(
-            12,
-            (index) => DataCell(
-              Text("${data2024[index + 1]?.toStringAsFixed(2) ?? '0'} KM"),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 4,
+              offset: Offset(0, 2),
             ),
-          )..add(DataCell(Text("${_total2024.toStringAsFixed(2)} KM"))),
+          ],
         ),
-        DataRow(
-          cells: List.generate(
-            12,
-            (index) => DataCell(
-              Text("${data2025[index + 1]?.toStringAsFixed(2) ?? '0'} KM"),
-            ),
-          )..add(DataCell(Text("${_total2025.toStringAsFixed(2)} KM"))),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(
+                  "Yearly Distance Data (KM)",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+              DataTable(
+                columnSpacing: 10,
+                headingRowColor:
+                    MaterialStateProperty.all(Colors.grey.shade200),
+                dataRowColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return Colors.grey.withOpacity(0.2);
+                    }
+                    return Colors.transparent;
+                  },
+                ),
+                border: TableBorder.all(
+                  color: Colors.grey.shade300,
+                  width: 1,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                columns: [
+                  DataColumn(
+                    label: Container(
+                      padding: EdgeInsets.all(8),
+                      child: Text(
+                        "Year",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                      label: Text("January",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("February",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("March",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("April",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("May",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("June",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("July",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("August",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("September",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("October",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("November",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("December",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                  DataColumn(
+                      label: Text("Total",
+                          style: TextStyle(fontWeight: FontWeight.bold))),
+                ],
+                rows: [
+                  DataRow(
+                    cells: [
+                      DataCell(
+                        Container(
+                          color: Colors.blue.withOpacity(0.1),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          child: Text(
+                            "2024",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue.shade800,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ...List.generate(
+                        12,
+                        (index) => DataCell(
+                          Text(
+                              "${data2024[index + 1]?.toStringAsFixed(2) ?? '0'} KM"),
+                        ),
+                      ),
+                      DataCell(
+                        Container(
+                          color: Colors.blue.withOpacity(0.1),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          child: Text(
+                            "${_total2024.toStringAsFixed(2)} KM",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  DataRow(
+                    cells: [
+                      DataCell(
+                        Container(
+                          color: Colors.green.withOpacity(0.1),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          child: Text(
+                            "2025",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green.shade800,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ...List.generate(
+                        12,
+                        (index) => DataCell(
+                          Text(
+                              "${data2025[index + 1]?.toStringAsFixed(2) ?? '0'} KM"),
+                        ),
+                      ),
+                      DataCell(
+                        Container(
+                          color: Colors.green.withOpacity(0.1),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          child: Text(
+                            "${_total2025.toStringAsFixed(2)} KM",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-      ],
+      ),
     );
   }
 
@@ -593,7 +802,21 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87),
-                floatingLabelBehavior: FloatingLabelBehavior.always),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black45),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black45),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black, width: 2),
+                ),
+                filled: true,
+                fillColor: Colors.white),
             value: _selectedMonthReview,
             onChanged: (String? newValue) {
               setState(() {
@@ -630,7 +853,21 @@ class _ReportsScreenState extends State<ReportsScreen> {
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.black87),
-                floatingLabelBehavior: FloatingLabelBehavior.always),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black45),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black45),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Colors.black, width: 2),
+                ),
+                filled: true,
+                fillColor: Colors.white),
             value: _selectedYearReview,
             onChanged: (String? newValue) {
               setState(() {
@@ -646,7 +883,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
         const SizedBox(
           width: 20,
         ),
-        ElevatedButton(
+        ElevatedButton.icon(
           onPressed: () async {
             if (_selectedMonthReview == null || _selectedYearReview == null) {
               AlertHelpers.showAlert(
@@ -673,11 +910,17 @@ class _ReportsScreenState extends State<ReportsScreen> {
               ScaffoldHelpers.showScaffold(context, "${e.toString()}");
             }
           },
-          child: Text("Filter"),
+          icon: Icon(Icons.filter_list),
+          label: Text("Apply Filter",
+              style: TextStyle(fontWeight: FontWeight.bold)),
           style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
-              minimumSize: Size(150, 50)),
+              minimumSize: Size(150, 50),
+              elevation: 3,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              )),
         )
       ],
     );
@@ -686,14 +929,30 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget _buildContainer(String hint, int? number) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(20)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 4,
+              offset: Offset(0, 2),
+            ),
+          ]),
       height: 50,
       width: 400,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: number != null
-            ? Text("$hint $number", style: const TextStyle(fontSize: 18))
-            : Text("$hint", style: const TextStyle(fontSize: 18)),
+            ? Text("$hint $number",
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87))
+            : Text("$hint",
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black87)),
       ),
     );
   }
@@ -713,13 +972,20 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget _drawExportPdfBtn(String entity) {
     return Padding(
       padding: const EdgeInsets.only(top: 16.0),
-      child: ElevatedButton(
+      child: ElevatedButton.icon(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.white,
-            minimumSize: Size(200, 50),
+            backgroundColor: Colors.red.shade600,
+            foregroundColor: Colors.white,
+            minimumSize: Size(220, 50),
+            elevation: 3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
+          icon: Icon(Icons.picture_as_pdf),
           onPressed: () => _exportToPdf(entity),
-          child: const Text("Export to PDF")),
+          label: Text("Export to PDF",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))),
     );
   }
 
