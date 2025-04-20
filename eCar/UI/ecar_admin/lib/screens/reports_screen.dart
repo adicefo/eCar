@@ -127,23 +127,18 @@ class _ReportsScreenState extends State<ReportsScreen> {
         ),
         centerTitle: true,
         backgroundColor: Colors.yellowAccent,
-        actions: <Widget>[
-          SizedBox(
-            width: 300,
-            child: IconButton(
-              tooltip: "Go back",
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DriversListScreen(),
-                  ),
-                );
-              },
-            ),
-          )
-        ],
+        leading: IconButton(
+          tooltip: "Go back",
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DriversListScreen(),
+              ),
+            );
+          },
+        ),
       ),
       body: isLoading
           ? Center(
@@ -242,8 +237,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
           child: DropdownButtonFormField<String>(
             isDense: true,
             focusColor: const Color.fromARGB(255, 255, 255, 255),
-            decoration: const InputDecoration(
-                labelText: "Filter by", labelStyle: TextStyle(fontSize: 20)),
+            decoration: InputDecoration(
+                labelText: "Filter by",
+                labelStyle: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87),
+                floatingLabelBehavior: FloatingLabelBehavior.always),
             value: _selectedDriverOption,
             onChanged: (String? newValue) {
               setState(() {
@@ -398,8 +398,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
           child: DropdownButtonFormField<String>(
             isDense: true,
             focusColor: const Color.fromARGB(255, 255, 255, 255),
-            decoration: const InputDecoration(
-                labelText: "Month", labelStyle: TextStyle(fontSize: 20)),
+            decoration: InputDecoration(
+                labelText: "Month",
+                labelStyle: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87),
+                floatingLabelBehavior: FloatingLabelBehavior.always),
             value: _selectedMonthRoute,
             onChanged: (String? newValue) {
               setState(() {
@@ -430,8 +435,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
           child: DropdownButtonFormField<String>(
             isDense: true,
             focusColor: const Color.fromARGB(255, 255, 255, 255),
-            decoration: const InputDecoration(
-                labelText: "Year", labelStyle: TextStyle(fontSize: 20)),
+            decoration: InputDecoration(
+                labelText: "Year",
+                labelStyle: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87),
+                floatingLabelBehavior: FloatingLabelBehavior.always),
             value: _selectedYearRoute,
             onChanged: (String? newValue) {
               setState(() {
@@ -577,8 +587,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
           child: DropdownButtonFormField<String>(
             isDense: true,
             focusColor: const Color.fromARGB(255, 255, 255, 255),
-            decoration: const InputDecoration(
-                labelText: "Month", labelStyle: TextStyle(fontSize: 20)),
+            decoration: InputDecoration(
+                labelText: "Month",
+                labelStyle: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87),
+                floatingLabelBehavior: FloatingLabelBehavior.always),
             value: _selectedMonthReview,
             onChanged: (String? newValue) {
               setState(() {
@@ -609,8 +624,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
           child: DropdownButtonFormField<String>(
             isDense: true,
             focusColor: const Color.fromARGB(255, 255, 255, 255),
-            decoration: const InputDecoration(
-                labelText: "Year", labelStyle: TextStyle(fontSize: 20)),
+            decoration: InputDecoration(
+                labelText: "Year",
+                labelStyle: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87),
+                floatingLabelBehavior: FloatingLabelBehavior.always),
             value: _selectedYearReview,
             onChanged: (String? newValue) {
               setState(() {

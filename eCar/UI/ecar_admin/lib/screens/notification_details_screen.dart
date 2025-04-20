@@ -123,16 +123,8 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                           fontSize: 16),
                     ),
                     initialValue: widget.notification?.isForClient,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                        borderSide:
-                            BorderSide(color: Colors.grey.shade400, width: 1.5),
-                      ),
+                    decoration: FormStyleHelpers.checkboxDecoration(
+                      labelText: "Client Notification",
                     ),
                     checkColor: Colors.black,
                     activeColor: Colors.yellowAccent,
@@ -152,7 +144,7 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -160,6 +152,11 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                 ),
               );
             },
+            icon: Icon(Icons.cancel),
+            label: Text(
+              "Cancel",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
@@ -168,13 +165,9 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: Text(
-              "Cancel",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
           ),
           SizedBox(width: 16),
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: () async {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
@@ -216,6 +209,11 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                 }
               }
             },
+            icon: Icon(Icons.save),
+            label: Text(
+              "Save",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
@@ -223,10 +221,6 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-            ),
-            child: Text(
-              "Save",
-              style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
         ],

@@ -39,6 +39,8 @@ class _MasterScreenState extends State<MasterScreen> {
   late AuthProvider authProvider;
   late CompanyPriceProvider companyPriceProvider;
   bool isLoading = true;
+  String currentRoute = '';
+
   @override
   void initState() {
     // TODO: implement initState
@@ -47,6 +49,9 @@ class _MasterScreenState extends State<MasterScreen> {
     authProvider = context.read<AuthProvider>();
     companyPriceProvider = context.read<CompanyPriceProvider>();
     initForm();
+
+    // Set the current route based on the title
+    currentRoute = widget.title;
   }
 
   Future initForm() async {
@@ -71,16 +76,20 @@ class _MasterScreenState extends State<MasterScreen> {
         centerTitle: true,
         backgroundColor: Colors.yellowAccent,
         actions: <Widget>[
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: () {
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => ReportsScreen()));
             },
-            child: Text("Report"),
+            icon: Icon(Icons.analytics),
+            label: Text("Reports"),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
               foregroundColor: Colors.white,
-              minimumSize: Size(50, 50),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 16),
             ),
           ),
           SizedBox(
@@ -99,142 +108,281 @@ class _MasterScreenState extends State<MasterScreen> {
       backgroundColor: Colors.black,
       drawer: Drawer(
         backgroundColor: Colors.yellowAccent,
-        child: ListView(
-          children: [
-            DrawerHeader(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "@ eCar",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                Center(
-                    child: Image.asset(
-                  "assets/images/65476-200.png",
-                  height: 70,
-                  width: 70,
-                )),
-                Center(
-                    child: isLoading
-                        ? Text("Username")
-                        : Text("${user?.userName}"))
-              ],
-            )),
-            ListTile(
-              title: Text("Drivers"),
-              onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => DriversListScreen()));
-              },
-              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
-            ),
-            ListTile(
-              title: Text("Clients"),
-              onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => ClientListScreen()));
-              },
-              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
-            ),
-            ListTile(
-              title: Text("Routes"),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => RouteListScreen()));
-              },
-              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
-            ),
-            ListTile(
-              title: Text("Vehicles"),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => VehicleScreen()));
-              },
-              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
-            ),
-            ListTile(
-              title: Text("Reviews"),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ReviewScreen()));
-              },
-              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
-            ),
-            ListTile(
-              title: Text("Notifications"),
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => NotificationScreen()));
-              },
-              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
-            ),
-            ListTile(
-              title: Text("Rents"),
-              onTap: () {
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => RentScreen()));
-              },
-              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
-            ),
-            MouseRegion(
-              onEnter: (event) {
-                showMenu(
-                  context: context,
-                  color: Colors.yellowAccent,
-                  position: RelativeRect.fromLTRB(265, 350, 350, 0),
-                  items: [
-                    PopupMenuItem(
-                      child: Text("Admin"),
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => AdminScreen()),
+        child: SafeArea(
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 10.0,
+                        offset: Offset(0, 2),
                       ),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Statistics"),
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => StatisticsScreen()),
+                    ],
+                  ),
+                  padding: EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "@eCar",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.yellowAccent,
+                        ),
                       ),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Company Prices"),
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => CompanyPricesScreen()),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      child: Text("Driver Vehicles"),
-                      onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => DriverVehicleScreen()),
-                      ),
-                    ),
-                  ],
-                );
-              },
-              child: ListTile(
-                title: Text("Additional"),
-                trailing: Icon(Icons.arrow_right),
+                      SizedBox(height: 8),
+                      Center(
+                          child: Container(
+                        padding: EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          color: Colors.yellowAccent,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Image.asset(
+                          "assets/images/65476-200.png",
+                          height: 50,
+                          width: 50,
+                          color: Colors.black,
+                        ),
+                      )),
+                      SizedBox(height: 8),
+                      Center(
+                          child: isLoading
+                              ? Text("Loading user...",
+                                  style: TextStyle(color: Colors.yellowAccent))
+                              : Text(
+                                  "${user?.userName}",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.yellowAccent,
+                                  ),
+                                ))
+                    ],
+                  )),
+              _buildNavItem(
+                title: "Drivers",
+                icon: Icons.drive_eta,
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => DriversListScreen()));
+                },
+                isActive: currentRoute == 'Drivers',
               ),
-            ),
-            ListTile(
-              title: Text("Log out"),
-              onTap: () {
-                authProvider.logout();
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => LoginPage()),
-                  (Route<dynamic> route) => false, // Remove all routes
-                );
-              },
-              hoverColor: Color.fromRGBO(255, 255, 255, 0.87),
-            )
-          ],
+              _buildNavItem(
+                title: "Clients",
+                icon: Icons.people,
+                onTap: () {
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => ClientListScreen()));
+                },
+                isActive: currentRoute == 'Clients',
+              ),
+              _buildNavItem(
+                title: "Routes",
+                icon: Icons.route,
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => RouteListScreen()));
+                },
+                isActive: currentRoute == 'Routes',
+              ),
+              _buildNavItem(
+                title: "Vehicles",
+                icon: Icons.directions_car,
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => VehicleScreen()));
+                },
+                isActive: currentRoute == 'Vehicles',
+              ),
+              _buildNavItem(
+                title: "Reviews",
+                icon: Icons.rate_review,
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => ReviewScreen()));
+                },
+                isActive: currentRoute == 'Reviews',
+              ),
+              _buildNavItem(
+                title: "Notifications",
+                icon: Icons.notifications,
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => NotificationScreen()));
+                },
+                isActive: currentRoute == 'Notifications',
+              ),
+              _buildNavItem(
+                title: "Rents",
+                icon: Icons.shopping_cart,
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => RentScreen()));
+                },
+                isActive: currentRoute == 'Rents',
+              ),
+              Divider(color: Colors.black54, thickness: 1),
+              MouseRegion(
+                onEnter: (event) {
+                  showMenu(
+                    context: context,
+                    color: Colors.yellowAccent,
+                    elevation: 8,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    position: RelativeRect.fromLTRB(265, 350, 350, 0),
+                    items: [
+                      _buildPopupMenuItem(
+                        title: "Admin",
+                        icon: Icons.admin_panel_settings,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => AdminScreen()),
+                        ),
+                      ),
+                      _buildPopupMenuItem(
+                        title: "Statistics",
+                        icon: Icons.bar_chart,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => StatisticsScreen()),
+                        ),
+                      ),
+                      _buildPopupMenuItem(
+                        title: "Company Prices",
+                        icon: Icons.attach_money,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => CompanyPricesScreen()),
+                        ),
+                      ),
+                      _buildPopupMenuItem(
+                        title: "Driver Vehicles",
+                        icon: Icons.directions_car,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) => DriverVehicleScreen()),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: ListTile(
+                    leading: Icon(Icons.more_horiz, color: Colors.black),
+                    title: Text(
+                      "Additional",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                    trailing: Icon(Icons.arrow_right, color: Colors.black),
+                  ),
+                ),
+              ),
+              SizedBox(height: 8),
+              _buildNavItem(
+                title: "Log out",
+                icon: Icons.logout,
+                onTap: () {
+                  authProvider.logout();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => LoginPage()),
+                    (Route<dynamic> route) => false, // Remove all routes
+                  );
+                },
+                isActive: false,
+                isLogout: true,
+              ),
+            ],
+          ),
         ),
       ),
       body: widget.child,
+    );
+  }
+
+  Widget _buildNavItem({
+    required String title,
+    required IconData icon,
+    required VoidCallback onTap,
+    required bool isActive,
+    bool isLogout = false,
+  }) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+      decoration: BoxDecoration(
+        color: isActive
+            ? Colors.black
+            : (isLogout ? Colors.red.withOpacity(0.1) : Colors.transparent),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: ListTile(
+        leading: Icon(
+          icon,
+          color: isActive
+              ? Colors.yellowAccent
+              : (isLogout ? Colors.red : Colors.black),
+          size: 20,
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+            color: isActive
+                ? Colors.yellowAccent
+                : (isLogout ? Colors.red : Colors.black),
+          ),
+        ),
+        onTap: onTap,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        dense: true,
+        visualDensity: VisualDensity.compact,
+        contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+      ),
+    );
+  }
+
+  PopupMenuItem _buildPopupMenuItem({
+    required String title,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return PopupMenuItem(
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.black),
+          SizedBox(width: 8),
+          Text(
+            title,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          ),
+        ],
+      ),
+      onTap: onTap,
     );
   }
 

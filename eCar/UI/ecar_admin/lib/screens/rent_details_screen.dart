@@ -8,6 +8,7 @@ import 'package:ecar_admin/providers/vehicle_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/rent_screen.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -51,16 +52,15 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   }
 
   Future initForm() async {
-   try {
+    try {
       vehicleResult = await vehicleProvider.get();
-    clientResult = await clientProvider.get();
-    setState(() {
-      isLoading = false;
-    });
-   } catch (e) {
-           ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
-
-   }
+      clientResult = await clientProvider.get();
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
   }
 
   @override
@@ -84,150 +84,96 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
     return FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
-      child: Column(
-        children: [
-          if (widget.rent == null) ...[
-            SizedBox(height: 15),
-            FormBuilderDateTimePicker(
-              name: 'rentingDate',
-              decoration: InputDecoration(
-                labelText: 'Renting Date',
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Column(
+          children: [
+            if (widget.rent == null) ...[
+              SizedBox(height: 15),
+              FormBuilderDateTimePicker(
+                name: 'rentingDate',
+                decoration: FormStyleHelpers.textFieldDecoration(
+                  labelText: 'Renting Date',
                 ),
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                filled: true,
-                fillColor: Colors.grey[200],
+                inputType: InputType.date,
+                validator: FormBuilderValidators.required(),
               ),
-              inputType: InputType.date,
-              validator: FormBuilderValidators.required(),
-            ),
-            const SizedBox(height: 20),
-            FormBuilderDateTimePicker(
-              name: 'endingDate',
-              decoration: InputDecoration(
-                labelText: 'Ending Date',
-                filled: true,
-                fillColor: Colors.grey[200],
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
+              const SizedBox(height: 20),
+              FormBuilderDateTimePicker(
+                name: 'endingDate',
+                decoration: FormStyleHelpers.textFieldDecoration(
+                  labelText: 'Ending Date',
                 ),
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
+                inputType: InputType.date,
+                validator: FormBuilderValidators.required(),
               ),
-              inputType: InputType.date,
-              validator: FormBuilderValidators.required(),
-            ),
-            const SizedBox(height: 20),
-            FormBuilderDropdown(
-              name: 'clientId',
-              decoration: InputDecoration(
-                labelText: 'Client',
-                filled: true,
-                fillColor: Colors.grey[200],
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
+              const SizedBox(height: 20),
+              FormBuilderDropdown(
+                name: 'clientId',
+                decoration: FormStyleHelpers.dropdownDecoration(
+                  labelText: 'Client',
                 ),
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-              ),
-              items: clientResult?.result!
-                      .map((item) => DropdownMenuItem(
-                            value: item.id.toString(),
-                            child: Text(
-                              "${item.user?.name} ${item.user?.surname}",
-                              style: TextStyle(
-                                color: Colors.red,
+                items: clientResult?.result!
+                        .map((item) => DropdownMenuItem(
+                              value: item.id.toString(),
+                              child: Text(
+                                "${item.user?.name} ${item.user?.surname}",
                               ),
-                            ),
-                          ))
-                      .toList() ??
-                  [],
-              validator: FormBuilderValidators.required(),
-            ),
-            const SizedBox(height: 20),
-            FormBuilderDropdown(
-              name: 'vehicleId',
-              decoration: InputDecoration(
-                labelText: 'Vehicle',
-                filled: true,
-                fillColor: Colors.grey[200],
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
+                            ))
+                        .toList() ??
+                    [],
+                validator: FormBuilderValidators.required(),
               ),
-              items: vehicleResult?.result!
-                      .map((item) => DropdownMenuItem(
-                            value: item.id.toString(),
-                            child: Text(
-                              "${item.name}",
-                              style: TextStyle(
-                                color: Colors.red,
+              const SizedBox(height: 20),
+              FormBuilderDropdown(
+                name: 'vehicleId',
+                decoration: FormStyleHelpers.dropdownDecoration(
+                  labelText: 'Vehicle',
+                ),
+                items: vehicleResult?.result!
+                        .map((item) => DropdownMenuItem(
+                              value: item.id.toString(),
+                              child: Text(
+                                "${item.name}",
                               ),
-                            ),
-                          ))
-                      .toList() ??
-                  [],
-              validator: FormBuilderValidators.required(),
-            ),
-            const SizedBox(height: 20),
-          ] else if (widget.rent != null) ...[
-            SizedBox(height: 15),
-            FormBuilderDateTimePicker(
-              name: 'endingDate',
-              decoration: InputDecoration(
-                labelText: 'Ending Date',
-                filled: true,
-                fillColor: Colors.grey[200],
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
+                            ))
+                        .toList() ??
+                    [],
+                validator: FormBuilderValidators.required(),
               ),
-              inputType: InputType.date,
-              validator: FormBuilderValidators.required(),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            FormBuilderDropdown(
-              name: 'vehicleId',
-              decoration: InputDecoration(
-                labelText: 'Vehicle',
-                filled: true,
-                fillColor: Colors.grey[200],
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
+              const SizedBox(height: 20),
+            ] else if (widget.rent != null) ...[
+              SizedBox(height: 15),
+              FormBuilderDateTimePicker(
+                name: 'endingDate',
+                decoration: FormStyleHelpers.textFieldDecoration(
+                  labelText: 'Ending Date',
                 ),
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
+                inputType: InputType.date,
+                validator: FormBuilderValidators.required(),
               ),
-              items: vehicleResult?.result!
-                      .map((item) => DropdownMenuItem(
-                            value: item.id.toString(),
-                            child: Text(
-                              "${item.name}",
-                              style: TextStyle(
-                                color: Colors.red,
+              SizedBox(
+                height: 20,
+              ),
+              FormBuilderDropdown(
+                name: 'vehicleId',
+                decoration: FormStyleHelpers.dropdownDecoration(
+                  labelText: 'Vehicle',
+                ),
+                items: vehicleResult?.result!
+                        .map((item) => DropdownMenuItem(
+                              value: item.id.toString(),
+                              child: Text(
+                                "${item.name}",
                               ),
-                            ),
-                          ))
-                      .toList() ??
-                  [],
-              validator: FormBuilderValidators.required(),
-            ),
-          ]
-        ],
+                            ))
+                        .toList() ??
+                    [],
+                validator: FormBuilderValidators.required(),
+              ),
+            ]
+          ],
+        ),
       ),
     );
   }
@@ -235,11 +181,11 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
 //TODO: Add update finish logic
   Widget _save() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -250,15 +196,16 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             ),
-            child: const Text("Go back"),
+            icon: Icon(Icons.arrow_back),
+            label: const Text("Go back"),
           ),
           SizedBox(
             width: 30,
           ),
           if (widget?.rent?.status != "active")
-            ElevatedButton(
+            ElevatedButton.icon(
               onPressed: () async {
                 _formKey.currentState?.saveAndValidate();
                 final formData = _formKey.currentState?.value;
@@ -311,12 +258,13 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellowAccent,
                 foregroundColor: Colors.black,
-                minimumSize: Size(300, 50),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
-              child: const Text("Save"),
+              icon: Icon(Icons.save),
+              label: const Text("Save"),
             ),
           if (widget?.rent?.status == "active")
-            ElevatedButton(
+            ElevatedButton.icon(
               onPressed: () async {
                 bool? confirmEdit =
                     await help.AlertHelpers.editConfirmation(context);
@@ -339,9 +287,10 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.black,
-                minimumSize: Size(300, 50),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
               ),
-              child: const Text("Finish"),
+              icon: Icon(Icons.check),
+              label: const Text("Finish"),
             ),
         ],
       ),

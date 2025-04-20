@@ -8,6 +8,7 @@ import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -89,48 +90,32 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
       key: _formKey,
       initialValue: _initialValue,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Row(
               children: [
                 Expanded(
                   child: FormBuilderTextField(
-                    decoration: InputDecoration(
+                    decoration: FormStyleHelpers.textFieldDecoration(
                       labelText: "Source point latitude",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
+                      prefixIcon:
+                          Icon(Icons.location_on, color: Colors.black54),
                     ),
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    style: FormStyleHelpers.textFieldTextStyle(),
                     name: "sourcePoint_latitude",
                     enabled: !isDisabled,
                   ),
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: 16),
                 Expanded(
                   child: FormBuilderTextField(
-                    decoration: InputDecoration(
+                    decoration: FormStyleHelpers.textFieldDecoration(
                       labelText: "Source point longitude",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
+                      prefixIcon:
+                          Icon(Icons.location_on, color: Colors.black54),
                     ),
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    style: FormStyleHelpers.textFieldTextStyle(),
                     name: "sourcePoint_longitude",
                     enabled: !isDisabled,
                   ),
@@ -138,47 +123,31 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
             Row(
               children: [
                 Expanded(
                   child: FormBuilderTextField(
-                    decoration: InputDecoration(
+                    decoration: FormStyleHelpers.textFieldDecoration(
                       labelText: "Destination point latitude",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
+                      prefixIcon:
+                          Icon(Icons.location_on, color: Colors.black54),
                     ),
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    style: FormStyleHelpers.textFieldTextStyle(),
                     name: "destinationPoint_latitude",
                     enabled: !isDisabled,
                   ),
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: 16),
                 Expanded(
                   child: FormBuilderTextField(
-                    decoration: InputDecoration(
+                    decoration: FormStyleHelpers.textFieldDecoration(
                       labelText: "Destination point longitude",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
+                      prefixIcon:
+                          Icon(Icons.location_on, color: Colors.black54),
                     ),
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    style: FormStyleHelpers.textFieldTextStyle(),
                     name: "destinationPoint_longitude",
                     enabled: !isDisabled,
                   ),
@@ -186,67 +155,43 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 20,
             ),
             Row(
               children: [
                 Expanded(
                   child: FormBuilderDropdown(
                     name: "driverID",
-                    decoration: InputDecoration(
+                    decoration: FormStyleHelpers.dropdownDecoration(
                       labelText: "Driver",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
                     ),
-                    style: TextStyle(color: Colors.black),
+                    style: FormStyleHelpers.textFieldTextStyle(),
                     enabled: !isDisabled,
                     items: driverResult?.result!
                             .map((item) => DropdownMenuItem(
                                   value: item.id.toString(),
                                   child: Text(
                                     "${item.user?.name} ${item.user?.surname}",
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                    ),
                                   ),
                                 ))
                             .toList() ??
                         [],
                   ),
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: 16),
                 Expanded(
                   child: FormBuilderDropdown(
                     name: "clientId",
-                    decoration: InputDecoration(
+                    decoration: FormStyleHelpers.dropdownDecoration(
                       labelText: "Client",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
                     ),
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    style: FormStyleHelpers.textFieldTextStyle(),
                     enabled: !isDisabled,
                     items: clientResult?.result
                             .map((item) => DropdownMenuItem(
                                   value: item.id.toString(),
                                   child: Text(
                                     "${item.user?.name} ${item.user?.surname}",
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                    ),
                                   ),
                                 ))
                             .toList() ??
@@ -265,11 +210,11 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   Widget _save() {
     bool? confirmEdit;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -277,41 +222,44 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 ),
               );
             },
+            icon: Icon(Icons.arrow_back),
+            label: Text(
+              "Go back",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text("Go back"),
           ),
-          SizedBox(
-            width: 30,
-          ),
-          if (widget.route == null) ...[
-            ElevatedButton(
+          SizedBox(width: 16),
+          if (widget.route == null)
+            ElevatedButton.icon(
               onPressed: () async {
                 _formKey.currentState?.saveAndValidate();
-                final formData = _formKey.currentState?.value;
-                final requestPayload = {
+                var formData = _formKey.currentState?.value;
+
+                var request = {
                   "sourcePoint": {
-                    "latitude": formData!['sourcePoint_latitude'],
                     "longitude": formData!['sourcePoint_longitude'],
-                    "srid": 4326,
+                    "latitude": formData!['sourcePoint_latitude']
                   },
                   "destinationPoint": {
-                    "latitude": formData!['destinationPoint_latitude'],
                     "longitude": formData!['destinationPoint_longitude'],
-                    "srid": 4326,
+                    "latitude": formData!['destinationPoint_latitude']
                   },
-                  "clientId": formData!['clientId'],
                   "driverID": formData!['driverID'],
+                  "clientId": formData!['clientId']
                 };
 
                 try {
-                  routeProvider.insert(requestPayload);
-
+                  routeProvider.insert(request);
                   ScaffoldHelpers.showScaffold(context, "Route added");
-                  await Future.delayed(const Duration(seconds: 3));
+                  await Future.delayed(const Duration(seconds: 2));
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => RouteListScreen(),
@@ -321,77 +269,20 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   ScaffoldHelpers.showScaffold(context, "${e.toString()}");
                 }
               },
+              icon: Icon(Icons.save),
+              label: Text(
+                "Save",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.yellowAccent,
                 foregroundColor: Colors.black,
-                minimumSize: Size(300, 50),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              child: const Text("Save"),
             ),
-          ],
-          if (widget.route?.status == "wait") ...[
-            ElevatedButton(
-              onPressed: () async {
-                bool? confirmEdit =
-                    await help.AlertHelpers.editConfirmation(context);
-
-                _formKey.currentState?.saveAndValidate();
-                if (confirmEdit == true) {
-                  try {
-                    routeProvider.update(
-                        widget.route?.id, _formKey.currentState?.value);
-
-                    ScaffoldHelpers.showScaffold(
-                        context, "Route updated to active");
-                    await Future.delayed(const Duration(seconds: 3));
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => RouteListScreen(),
-                      ),
-                    );
-                  } catch (e) {
-                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
-                  }
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                foregroundColor: Colors.black,
-                minimumSize: Size(300, 50),
-              ),
-              child: const Text("Active"),
-            ),
-          ] else if (widget.route?.status == "active") ...[
-            const SizedBox(width: 10),
-            ElevatedButton(
-              onPressed: () async {
-                bool? confirmEdit =
-                    await help.AlertHelpers.editConfirmation(context);
-                if (confirmEdit == true) {
-                  try {
-                    routeProvider.updateFinish(widget.route?.id);
-
-                    ScaffoldHelpers.showScaffold(
-                        context, "Route updated to finish");
-                    await Future.delayed(const Duration(seconds: 3));
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => RouteListScreen(),
-                      ),
-                    );
-                  } catch (e) {
-                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
-                  }
-                }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.black,
-                minimumSize: Size(300, 50),
-              ),
-              child: const Text("Finish"),
-            ),
-          ],
         ],
       ),
     );
