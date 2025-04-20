@@ -3,6 +3,7 @@ import 'package:ecar_admin/providers/notification_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/notification_details_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -64,92 +65,84 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   Widget _buildSearch() {
-    return Row(
-      children: [
-        SizedBox(
-          width: 50,
-        ),
-        Expanded(
-            child: Padding(
-          padding: const EdgeInsets.only(top: 20.0),
-          child: TextField(
-            decoration: InputDecoration(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              decoration: FormStyleHelpers.searchFieldDecoration(
                 labelText: "Heading",
-                filled: true,
-                fillColor: const Color.fromARGB(255, 255, 254, 254),
-                labelStyle: TextStyle(fontSize: 20, color: Colors.black),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 0.5, horizontal: 5.0)),
-            controller: _headingController,
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                hintText: "Search by heading",
+              ),
+              controller: _headingController,
+              style: FormStyleHelpers.textFieldTextStyle(),
+            ),
           ),
-        )),
-        SizedBox(
-          width: 50,
-        ),
-        Expanded(
-          child: Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: DropdownButtonFormField<String>(
-                isDense: true,
-                focusColor: const Color.fromARGB(255, 255, 255, 255),
-                decoration: InputDecoration(
-                    labelText: "Notification",
-                    labelStyle: TextStyle(fontSize: 20)),
-                value: selectedOption,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    selectedOption = newValue;
-                    selectedValue = availabilityOptions[newValue];
-                  });
-                },
-                items: availabilityOptions.keys.map((String key) {
-                  return DropdownMenuItem<String>(
-                    value: key,
-                    child: Text(key),
-                  );
-                }).toList(),
-              )),
-        ),
-        SizedBox(
-          width: 50,
-        ),
-        SizedBox(
-          width: 200,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: ElevatedButton(
+          SizedBox(width: 24),
+          Expanded(
+            child: DropdownButtonFormField<String>(
+              decoration: FormStyleHelpers.dropdownDecoration(
+                labelText: "Notification Type",
+                hintText: "Select type",
+              ),
+              value: selectedOption,
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedOption = newValue;
+                  selectedValue = availabilityOptions[newValue];
+                });
+              },
+              items: availabilityOptions.keys.map((String key) {
+                return DropdownMenuItem<String>(
+                  value: key,
+                  child: Text(key),
+                );
+              }).toList(),
+              style: FormStyleHelpers.textFieldTextStyle(),
+            ),
+          ),
+          SizedBox(width: 24),
+          SizedBox(
+            width: 120,
+            child: ElevatedButton.icon(
               onPressed: () async {
                 _fetchData();
               },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              icon: Icon(Icons.search),
+              label: Text("Search"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              child: Text("Search"),
             ),
           ),
-        ),
-        SizedBox(width: 50),
-        SizedBox(
-          width: 200,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: ElevatedButton(
+          SizedBox(width: 16),
+          SizedBox(
+            width: 120,
+            child: ElevatedButton.icon(
               onPressed: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => NotificationDetailsScreen()));
               },
-              child: Text("Add"),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              icon: Icon(Icons.add),
+              label: Text("Add"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 50,
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -209,12 +202,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
                             }),
                             cells: [
                               DataCell(Text(
-                                  e.heading!.substring(0, 10).toString(),
+                                  e.heading!.length > 10
+                                      ? e.heading!.substring(0, 10) + "..."
+                                      : e.heading!,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),
                               DataCell(Text(
-                                  e.content_!.substring(0, 20).toString(),
+                                  e.content_!.length > 20
+                                      ? e.content_!.substring(0, 20) + "..."
+                                      : e.content_!,
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),

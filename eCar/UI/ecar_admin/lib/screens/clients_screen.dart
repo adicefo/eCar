@@ -4,6 +4,7 @@ import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/screens/clients_details_screen.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -52,84 +53,72 @@ class _ClientListScreenState extends State<ClientListScreen> {
   }
 
   Widget _buildSearch() {
-    return Row(
-      children: [
-        SizedBox(
-          width: 50,
-        ),
-        Expanded(
-          child: Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: TextField(
-                decoration: InputDecoration(
-                    labelText: "Name",
-                    filled: true,
-                    fillColor: const Color.fromARGB(255, 255, 254, 254),
-                    labelStyle: TextStyle(fontSize: 20, color: Colors.black),
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 0.5, horizontal: 5.0)),
-                controller: _nameEditingController,
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              )),
-        ),
-        SizedBox(
-          width: 50,
-        ),
-        Expanded(
-            child: Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                      labelText: "Surname",
-                      filled: true,
-                      fillColor: const Color.fromARGB(255, 255, 254, 254),
-                      labelStyle: TextStyle(fontSize: 20, color: Colors.black),
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0.5, horizontal: 5.0)),
-                  controller: _surnameEditingController,
-                  style: TextStyle(
-                      color: Colors.black, fontWeight: FontWeight.bold),
-                ))),
-        SizedBox(
-          width: 100,
-        ),
-        SizedBox(
-          width: 200,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: ElevatedButton(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              decoration: FormStyleHelpers.searchFieldDecoration(
+                labelText: "Name",
+                hintText: "Search by name",
+              ),
+              controller: _nameEditingController,
+              style: FormStyleHelpers.textFieldTextStyle(),
+            ),
+          ),
+          SizedBox(width: 24),
+          Expanded(
+            child: TextField(
+              decoration: FormStyleHelpers.searchFieldDecoration(
+                labelText: "Surname",
+                hintText: "Search by surname",
+              ),
+              controller: _surnameEditingController,
+              style: FormStyleHelpers.textFieldTextStyle(),
+            ),
+          ),
+          SizedBox(width: 24),
+          SizedBox(
+            width: 120,
+            child: ElevatedButton.icon(
               onPressed: () async {
                 _fetchData();
               },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              icon: Icon(Icons.search),
+              label: Text("Search"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              child: Text("Search"),
             ),
           ),
-        ),
-        SizedBox(width: 70),
-        SizedBox(
-          width: 200,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: ElevatedButton(
+          SizedBox(width: 16),
+          SizedBox(
+            width: 120,
+            child: ElevatedButton.icon(
               onPressed: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => ClientsDetailsScreen()));
               },
-              child: Text("Add"),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              icon: Icon(Icons.add),
+              label: Text("Add"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 50,
-        ),
-      ],
+        ],
+      ),
     );
   }
 

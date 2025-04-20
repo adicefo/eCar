@@ -2,6 +2,7 @@ import 'package:ecar_admin/models/Review/review.dart';
 import 'package:ecar_admin/providers/review_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/review_screen.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -52,26 +53,20 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
               child: FormBuilderDropdown<int>(
                 name: 'value',
                 initialValue: widget.review?.value,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Value',
-                  labelStyle: TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
+                decoration: FormStyleHelpers.dropdownDecoration(
+                  labelText: 'Rating Value',
+                  hintText: 'Select rating',
                 ),
-                dropdownColor: Colors.white,
                 items: List.generate(
                   5,
                   (index) => DropdownMenuItem(
                     value: index + 1,
                     child: Text(
                       '${index + 1}',
-                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
+                style: FormStyleHelpers.textFieldTextStyle(),
                 onChanged: (value) {},
               ),
             ),
@@ -80,16 +75,12 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
               flex: 3,
               child: FormBuilderTextField(
                 name: 'description',
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  labelText: 'Description',
-                  labelStyle: TextStyle(color: Colors.black),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
+                decoration: FormStyleHelpers.textFieldDecoration(
+                  labelText: 'Review Description',
+                  prefixIcon: Icon(Icons.description, color: Colors.black54),
                 ),
-                style: TextStyle(color: Colors.black),
+                style: FormStyleHelpers.textFieldTextStyle(),
+                maxLines: 3,
               ),
             ),
           ],
@@ -101,7 +92,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
   Widget _save() {
     bool? confirmEdit;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -116,13 +107,17 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text("Go back"),
+            child: Text(
+              "Cancel",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
-          SizedBox(
-            width: 30,
-          ),
+          SizedBox(width: 16),
           ElevatedButton(
             onPressed: () async {
               _formKey.currentState?.saveAndValidate();
@@ -132,7 +127,8 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                 try {
                   provider.update(widget.review?.id, request);
 
-                  ScaffoldHelpers.showScaffold(context, "Review updated");
+                  ScaffoldHelpers.showScaffold(
+                      context, "Review updated successfully");
                   await Future.delayed(const Duration(seconds: 2));
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
@@ -147,9 +143,15 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text("Save"),
+            child: Text(
+              "Save",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),

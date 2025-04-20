@@ -4,6 +4,7 @@ import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/models/Route/route.dart' as Model;
 import 'package:ecar_admin/screens/route_details_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,66 +42,72 @@ class _RouteListScreenState extends State<RouteListScreen> {
   }
 
   Widget _buildSearch() {
-    return Row(
-      children: [
-        SizedBox(width: 50),
-        Expanded(
-          child: Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: DropdownButtonFormField<String>(
-                isDense: true,
-                focusColor: const Color.fromARGB(255, 255, 255, 255),
-                decoration: InputDecoration(
-                    labelText: "Status", labelStyle: TextStyle(fontSize: 20)),
-                value: _selectedStatus,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedStatus = newValue;
-                  });
-                },
-                items: [
-                  DropdownMenuItem(value: "wait", child: Text("Wait")),
-                  DropdownMenuItem(value: "active", child: Text("Active")),
-                  DropdownMenuItem(value: "finished", child: Text("Finished")),
-                ],
-              )),
-        ),
-        SizedBox(width: 200),
-        SizedBox(
-          width: 300,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: ElevatedButton(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: DropdownButtonFormField<String>(
+              decoration: FormStyleHelpers.dropdownDecoration(
+                labelText: "Route Status",
+                hintText: "Select status",
+              ),
+              value: _selectedStatus,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedStatus = newValue;
+                });
+              },
+              items: [
+                DropdownMenuItem(value: "wait", child: Text("Wait")),
+                DropdownMenuItem(value: "active", child: Text("Active")),
+                DropdownMenuItem(value: "finished", child: Text("Finished")),
+              ],
+              style: FormStyleHelpers.textFieldTextStyle(),
+            ),
+          ),
+          SizedBox(width: 24),
+          SizedBox(
+            width: 120,
+            child: ElevatedButton.icon(
               onPressed: () async {
                 _currentPage = 0;
                 await _fetchData();
               },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              icon: Icon(Icons.search),
+              label: Text("Search"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
-              child: Text("Search"),
             ),
           ),
-        ),
-        SizedBox(width: 100),
-        SizedBox(
-          width: 300,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20.0),
-            child: ElevatedButton(
+          SizedBox(width: 16),
+          SizedBox(
+            width: 120,
+            child: ElevatedButton.icon(
               onPressed: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => RouteDetailsScreen()));
               },
-              child: Text("Add"),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              icon: Icon(Icons.add),
+              label: Text("Add"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(width: 50),
-      ],
+        ],
+      ),
     );
   }
 

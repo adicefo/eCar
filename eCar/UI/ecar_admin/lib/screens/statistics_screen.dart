@@ -4,6 +4,7 @@ import 'package:ecar_admin/providers/statistics_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/statistics_detail_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -52,7 +53,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? Container()
+        ? Center(child: CircularProgressIndicator())
         : MasterScreen(
             "Statistics",
             Container(
@@ -66,14 +67,25 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   }
 
   Widget _buildAddBtn() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 250,
-          child: Padding(
-            padding: EdgeInsets.only(top: 20.0),
-            child: ElevatedButton(
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(
+            onPressed: () {
+              AlertHelpers.showAlert(context, "Statistics Explanation",
+                  "Generally, in the eCar app, the Statistics entity contains valuable information about the driver module. The application's concept is that a driver, as a company member, should be logged in once per each working day, which represents one statistics row. It contains columns such as the number of clients and the number of hours, which are necessary for the statistics function in the mobile app.");
+            },
+            icon: Icon(Icons.info),
+            color: Colors.blue,
+            iconSize: 30,
+            tooltip: "Info",
+          ),
+          SizedBox(width: 16),
+          SizedBox(
+            width: 120,
+            child: ElevatedButton.icon(
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
@@ -81,27 +93,20 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   ),
                 );
               },
-              child: Text("Add"),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              icon: Icon(Icons.add),
+              label: Text("Add"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        IconButton(
-          onPressed: () {
-            AlertHelpers.showAlert(context, "Statistics Explanation",
-                "Generally, in the eCar app, the Statistics entity contains valuable information about the driver module. The application's concept is that a driver, as a company member, should be logged in once per each working day, which represents one statistics row. It contains columns such as the number of clients and the number of hours, which are necessary for the statistics function in the mobile app.");
-          },
-          icon: Icon(Icons.info),
-          color: Colors.blue,
-          iconSize: 30,
-          tooltip: "Info",
-        )
-      ],
+        ],
+      ),
     );
   }
 
@@ -109,7 +114,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     return Expanded(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 50.0),
+          padding: const EdgeInsets.only(top: 20.0),
           child: Align(
             alignment: Alignment.center,
             child: Container(

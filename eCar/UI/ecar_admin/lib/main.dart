@@ -18,6 +18,7 @@ import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:ecar_admin/utils/authorization.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:provider/provider.dart';
@@ -50,25 +51,37 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'eCar Admin',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellowAccent),
         useMaterial3: true,
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: TextStyle(
+            color: Colors.black87,
+            fontWeight: FontWeight.w600,
+            fontSize: 16,
+          ),
+          floatingLabelStyle: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: Colors.black, width: 2),
+          ),
+          filled: true,
+          fillColor: Colors.grey.shade200,
+          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+        ),
       ),
       home: LoginPage(),
     );
@@ -113,7 +126,7 @@ class LoginPage extends StatelessWidget {
         ),
         backgroundColor: Colors.yellowAccent,
       ),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.grey[200],
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -121,123 +134,162 @@ class LoginPage extends StatelessWidget {
             child: Center(
               child: Container(
                 constraints:
-                    const BoxConstraints(maxHeight: 400, maxWidth: 400),
+                    const BoxConstraints(maxHeight: 450, maxWidth: 450),
                 child: Card(
-                  color: Colors.yellowAccent,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/55283.png",
-                            height: 100,
-                            width: 100,
-                          ),
-                          SizedBox(height: 10),
-                          TextField(
-                            controller: _emailController,
-                            decoration: InputDecoration(
-                              labelText: "Email",
-                              hintText: "Enter your email",
-                              prefixIcon: Icon(Icons.email_sharp),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            // Logo
+                            Container(
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.yellowAccent,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Image.asset(
+                                "assets/images/55283.png",
+                                height: 80,
+                                width: 80,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10),
-                          TextField(
-                            obscureText: true,
-                            controller: _passwordController,
-                            decoration: InputDecoration(
-                              labelText: "Password",
-                              hintText: "Enter your password",
-                              prefixIcon: Icon(Icons.password),
+                            SizedBox(height: 24),
+
+                            TextField(
+                              controller: _emailController,
+                              decoration: FormStyleHelpers.textFieldDecoration(
+                                labelText: "Email",
+                                hintText: "Enter your email",
+                                prefixIcon:
+                                    Icon(Icons.email, color: Colors.black54),
+                              ),
+                              style: FormStyleHelpers.textFieldTextStyle(),
                             ),
-                          ),
-                          SizedBox(height: 50),
-                          ElevatedButton(
-                            onPressed: () async {
-                              if (_emailController.text.isEmpty ||
-                                  _passwordController.text.isEmpty) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    title: Text("Invalid Input"),
-                                    content: Text(
-                                        "Please enter both email and password."),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () => Navigator.pop(context),
-                                        child: Text("OK"),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                                return;
-                              }
+                            SizedBox(height: 16),
 
-                              Authorization.email = _emailController.text;
-                              Authorization.password = _passwordController.text;
+                            TextField(
+                              obscureText: true,
+                              controller: _passwordController,
+                              decoration: FormStyleHelpers.textFieldDecoration(
+                                labelText: "Password",
+                                hintText: "Enter your password",
+                                prefixIcon:
+                                    Icon(Icons.lock, color: Colors.black54),
+                              ),
+                              style: FormStyleHelpers.textFieldTextStyle(),
+                            ),
+                            SizedBox(height: 32),
 
-                              try {
-                                var loginResponse = await _authProvide.login();
-                                if (loginResponse.result == 0) {
-                                  //added delay because of User get method in MasterScreen
-                                  await Future.delayed(
-                                      const Duration(seconds: 1));
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          DriversListScreen()));
-                                } else {
-                                  if (context.mounted) {
+                            // Login button
+                            SizedBox(
+                              width: double.infinity,
+                              height: 50,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  if (_emailController.text.isEmpty ||
+                                      _passwordController.text.isEmpty) {
                                     showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                              title:
-                                                  const Text("Invalid login"),
-                                              content: const Text(
-                                                  "Invalid login credentials."),
-                                              actions: [
-                                                TextButton(
-                                                    onPressed: () => {
-                                                          Navigator.pop(context)
-                                                        },
-                                                    child: const Text("OK"))
-                                              ],
-                                            ));
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text("Invalid Input"),
+                                        content: Text(
+                                            "Please enter both email and password."),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: Text("OK"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                    return;
                                   }
-                                }
-                              } on Exception catch (e) {
-                                if (context.mounted) {
-                                  AlertHelpers.showAlert(
-                                      context, "Error", e.toString());
-                                }
-                              }
-                              print(
-                                  "Credentials: ${_emailController.text} : ${_passwordController.text}");
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              foregroundColor: Colors.white,
-                              minimumSize: Size(300, 50),
+
+                                  Authorization.email = _emailController.text;
+                                  Authorization.password =
+                                      _passwordController.text;
+
+                                  try {
+                                    var loginResponse =
+                                        await _authProvide.login();
+                                    if (loginResponse.result == 0) {
+                                      //added delay because of User get method in MasterScreen
+                                      await Future.delayed(
+                                          const Duration(seconds: 1));
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DriversListScreen()));
+                                    } else {
+                                      if (context.mounted) {
+                                        showDialog(
+                                            context: context,
+                                            builder: (context) => AlertDialog(
+                                                  title: const Text(
+                                                      "Invalid login"),
+                                                  content: const Text(
+                                                      "Invalid login credentials."),
+                                                  actions: [
+                                                    TextButton(
+                                                        onPressed: () => {
+                                                              Navigator.pop(
+                                                                  context)
+                                                            },
+                                                        child: const Text("OK"))
+                                                  ],
+                                                ));
+                                      }
+                                    }
+                                  } on Exception catch (e) {
+                                    if (context.mounted) {
+                                      AlertHelpers.showAlert(
+                                          context, "Error", e.toString());
+                                    }
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.yellowAccent,
+                                  foregroundColor: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  elevation: 2,
+                                ),
+                                child: Text(
+                                  "LOGIN",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
                             ),
-                            child: Text("Login"),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Text(
-              "@eCar",
+              "@eCar Admin Panel",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 24,
-                color: Colors.white,
+                fontSize: 18,
+                color: Colors.black,
               ),
             ),
           ),

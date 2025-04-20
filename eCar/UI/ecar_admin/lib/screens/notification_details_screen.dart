@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:ecar_admin/providers/notification_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/notification_screen.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -56,282 +57,98 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
         key: _formKey,
         initialValue: _initialValue,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(children: [
-            if (widget.notification == null) ...[
-              Row(
-                children: [
-                  Expanded(
-                    child: FormBuilderTextField(
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        labelText: "Heading",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        alignLabelWithHint: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+            Row(
+              children: [
+                Expanded(
+                  child: FormBuilderTextField(
+                    maxLines: 5,
+                    decoration: FormStyleHelpers.textFieldDecoration(
+                      labelText: "Notification Heading",
+                      prefixIcon: Icon(Icons.title, color: Colors.black54),
+                    ),
+                    style: FormStyleHelpers.textFieldTextStyle(),
+                    name: "heading",
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: FormBuilderTextField(
+                    maxLines: 5,
+                    decoration: FormStyleHelpers.textFieldDecoration(
+                      labelText: "Notification Content",
+                      prefixIcon:
+                          Icon(Icons.description, color: Colors.black54),
+                    ),
+                    style: FormStyleHelpers.textFieldTextStyle(),
+                    name: "content_",
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                    child: FormBuilderField(
+                  name: "image",
+                  builder: (field) {
+                    return InputDecorator(
+                      decoration: FormStyleHelpers.textFieldDecoration(
+                        labelText: "Notification Image",
+                        prefixIcon: Icon(Icons.image, color: Colors.black54),
                       ),
+                      child: ListTile(
+                        title: Text("Select image"),
+                        trailing: Icon(Icons.file_upload_outlined),
+                        onTap: getImage,
+                      ),
+                    );
+                  },
+                )),
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: FormBuilderCheckbox(
+                    name: "isForClient",
+                    title: Text(
+                      "Notification for client",
                       style: TextStyle(
-                        color: Colors.black,
-                      ),
-                      name: "heading",
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16),
                     ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: FormBuilderTextField(
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        labelText: "Content",
-                        filled: true,
-                        hintMaxLines: 5,
-                        fillColor: Colors.grey[200],
-                        alignLabelWithHint: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                    initialValue: widget.notification?.isForClient,
+                    decoration: InputDecoration(
+                      filled: true,
+                      fillColor: Colors.grey[200],
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide:
+                            BorderSide(color: Colors.grey.shade400, width: 1.5),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                      name: "content_",
                     ),
+                    checkColor: Colors.black,
+                    activeColor: Colors.yellowAccent,
+                    controlAffinity: ListTileControlAffinity.trailing,
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: FormBuilderField(
-                    name: "image",
-                    builder: (field) {
-                      return InputDecorator(
-                        decoration: InputDecoration(
-                          labelText: "Select image",
-                          filled: true,
-                          fillColor: Colors.grey[200],
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                        ),
-                        child: ListTile(
-                          leading: Icon(Icons.image),
-                          title: Text("Select image"),
-                          trailing: Icon(Icons.file_upload_outlined),
-                          onTap: getImage,
-                        ),
-                      );
-                    },
-                  ))
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: FormBuilderCheckbox(
-                      name: "isForClient",
-                      title: Text(
-                        "Notification for client",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15),
-                      ),
-                      initialValue: widget.notification?.isForClient,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 10.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      checkColor: Colors.black,
-                      activeColor: Colors.yellowAccent,
-                      controlAffinity: ListTileControlAffinity.trailing,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                ],
-              ),
-            ] else if (widget.notification != null) ...[
-              Row(
-                children: [
-                  Expanded(
-                    child: FormBuilderTextField(
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        labelText: "Heading",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        alignLabelWithHint: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                      ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                      name: "heading",
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: FormBuilderTextField(
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        labelText: "Content",
-                        filled: true,
-                        hintMaxLines: 5,
-                        fillColor: Colors.grey[200],
-                        alignLabelWithHint: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                      ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                      name: "content_",
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: FormBuilderField(
-                    name: "image",
-                    builder: (field) {
-                      return InputDecorator(
-                        decoration: InputDecoration(
-                          labelText: "Select image",
-                          filled: true,
-                          fillColor: Colors.grey[200],
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                        ),
-                        child: ListTile(
-                          leading: Icon(Icons.image),
-                          title: Text("Select image"),
-                          trailing: Icon(Icons.file_upload_outlined),
-                          onTap: getImage,
-                        ),
-                      );
-                    },
-                  ))
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: FormBuilderCheckbox(
-                      name: "isForClient",
-                      title: Text(
-                        "Notification for client",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15),
-                      ),
-                      initialValue: widget.notification?.isForClient,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 10.0),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      checkColor: Colors.black,
-                      activeColor: Colors.yellowAccent,
-                      controlAffinity: ListTileControlAffinity.trailing,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: FormBuilderTextField(
-                      decoration: InputDecoration(
-                        labelText: "Status",
-                        filled: true,
-                        hintMaxLines: 5,
-                        fillColor: Colors.grey[200],
-                        alignLabelWithHint: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                      ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                      name: "status",
-                    ),
-                  ),
-                ],
-              ),
-            ]
+                ),
+              ],
+            ),
           ]),
         ));
-  }
-
-  File? _image;
-  String? _base64Image;
-  void getImage() async {
-    var result = await FilePicker.platform.pickFiles(type: FileType.image);
-    if (result != null && result.files.single.path != null) {
-      _image = File(result.files.single.path!);
-      _base64Image = base64Encode(_image!.readAsBytesSync());
-    }
   }
 
   Widget _save() {
     bool? confirmEdit;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -346,23 +163,32 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text("Go back"),
+            child: Text(
+              "Cancel",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
-          SizedBox(
-            width: 30,
-          ),
+          SizedBox(width: 16),
           ElevatedButton(
             onPressed: () async {
               _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
-              request['image'] = _base64Image;
+
+              if (_base64Image != null) {
+                request['image'] = _base64Image;
+              }
+
               if (widget.notification == null) {
                 try {
                   provider.insert(request);
-                  ScaffoldHelpers.showScaffold(context, "Notification added");
-                  await Future.delayed(const Duration(seconds: 3));
+                  ScaffoldHelpers.showScaffold(
+                      context, "Notification added successfully");
+                  await Future.delayed(const Duration(seconds: 2));
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => NotificationScreen(),
@@ -377,8 +203,8 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                   try {
                     provider.update(widget.notification?.id, request);
                     ScaffoldHelpers.showScaffold(
-                        context, "Notification updated");
-                    await Future.delayed(const Duration(seconds: 3));
+                        context, "Notification updated successfully");
+                    await Future.delayed(const Duration(seconds: 2));
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => NotificationScreen(),
@@ -393,12 +219,29 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text("Save"),
+            child: Text(
+              "Save",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  File? _image;
+  String? _base64Image;
+  void getImage() async {
+    var result = await FilePicker.platform.pickFiles(type: FileType.image);
+
+    if (result != null && result.files.single.path != null) {
+      _image = File(result.files.single.path!);
+      _base64Image = base64Encode(_image!.readAsBytesSync());
+    }
   }
 }

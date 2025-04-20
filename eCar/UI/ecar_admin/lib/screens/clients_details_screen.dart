@@ -3,6 +3,7 @@ import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/user_provider.dart';
 import 'package:ecar_admin/screens/clients_screen.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -58,7 +59,7 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
       key: _formKey,
       initialValue: _initialValue,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             if (widget.client == null) ...[
@@ -66,92 +67,66 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                 children: [
                   Expanded(
                     child: FormBuilderTextField(
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Name",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon: Icon(Icons.person, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "name",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
-                            errorText: "Field is required"),
+                            errorText: "Name is required"),
                         FormBuilderValidators.minLength(3,
                             errorText:
-                                "Name must contain at least 3 charaters"),
+                                "Name must contain at least 3 characters"),
                         FormBuilderValidators.match(nameSurname,
-                            errorText: "Name must start with an uppercase"),
+                            errorText:
+                                "Name must start with an uppercase letter"),
                       ]),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 16),
                   Expanded(
                     child: FormBuilderTextField(
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Surname",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon:
+                            Icon(Icons.person_outline, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "surname",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
-                            errorText: "Field is required"),
+                            errorText: "Surname is required"),
                         FormBuilderValidators.minLength(3,
                             errorText:
-                                "Name must contain at least 3 charaters"),
+                                "Surname must contain at least 3 characters"),
                         FormBuilderValidators.match(nameSurname,
-                            errorText: "Name must start with an uppercase"),
+                            errorText:
+                                "Surname must start with an uppercase letter"),
                       ]),
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                width: 20,
-                height: 10,
-              ),
+              SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: FormBuilderTextField(
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Username",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon:
+                            Icon(Icons.alternate_email, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "userName",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
-                            errorText: "Field is required"),
+                            errorText: "Username is required"),
                         FormBuilderValidators.minLength(5,
                             errorText:
-                                "Username must contain at least 5 charaters"),
+                                "Username must contain at least 5 characters"),
                         FormBuilderValidators.username(
                             checkNullOrEmpty: true,
                             allowDash: false,
@@ -160,118 +135,75 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                             allowNumbers: true,
                             allowSpecialChar: true,
                             errorText:
-                                "- _ . are not allowed. Correct example: userUser123")
+                                "- _ . are not allowed. Example: userUser123")
                       ]),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 16),
                   Expanded(
                     child: FormBuilderTextField(
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Email",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon: Icon(Icons.email, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "email",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
-                            errorText: "Field is required"),
+                            errorText: "Email is required"),
                         FormBuilderValidators.match(emailExp,
-                            errorText:
-                                "Email format is:name(name.surname)@something.com")
+                            errorText: "Please enter a valid email address")
                       ]),
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                width: 20,
-                height: 10,
-              ),
+              SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: FormBuilderTextField(
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Password",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon: Icon(Icons.lock, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "password",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
-                            errorText: "Field is required"),
+                            errorText: "Password is required"),
                       ]),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 16),
                   Expanded(
                     child: FormBuilderTextField(
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Confirm password",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon: Icon(Icons.lock, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "passwordConfirm",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
-                            errorText: "Field is required"),
+                            errorText: "Password confirmation is required"),
                       ]),
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                width: 80,
-                height: 10,
-              ),
+              SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: FormBuilderTextField(
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Telephone number",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon: Icon(Icons.phone, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "telephoneNumber",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.match(phoneExp,
@@ -279,19 +211,12 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                       ]),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 16),
                   Expanded(
                     child: FormBuilderDropdown<String>(
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Gender",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon: Icon(Icons.person, color: Colors.black54),
                       ),
                       name: "gender",
                       items: [
@@ -304,98 +229,68 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                           child: Text("Female"),
                         ),
                       ],
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                     ),
                   ),
                 ],
               ),
-            ] //if(widget.client==null)
-            else if (widget.client != null) ...[
+            ] else if (widget.client != null) ...[
               Row(
                 children: [
                   Expanded(
                     child: FormBuilderTextField(
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Name",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon: Icon(Icons.person, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "name",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
-                            errorText: "Field is required"),
+                            errorText: "Name is required"),
                         FormBuilderValidators.minLength(3,
                             errorText:
-                                "Name must contain at least 3 charaters"),
+                                "Name must contain at least 3 characters"),
                         FormBuilderValidators.match(nameSurname,
-                            errorText: "Name must start with an uppercase"),
+                            errorText:
+                                "Name must start with an uppercase letter"),
                       ]),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 16),
                   Expanded(
                     child: FormBuilderTextField(
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Surname",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon:
+                            Icon(Icons.person_outline, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "surname",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
-                            errorText: "Field is required"),
+                            errorText: "Surname is required"),
                         FormBuilderValidators.minLength(3,
                             errorText:
-                                "Name must contain at least 3 charaters"),
+                                "Surname must contain at least 3 characters"),
                         FormBuilderValidators.match(nameSurname,
-                            errorText: "Name must start with an uppercase"),
+                            errorText:
+                                "Surname must start with an uppercase letter"),
                       ]),
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                width: 20,
-                height: 10,
-              ),
+              SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: FormBuilderTextField(
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Telephone number",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon: Icon(Icons.phone, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "telephoneNumber",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.match(phoneExp,
@@ -403,96 +298,62 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                       ]),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 16),
                   Expanded(
                     child: FormBuilderTextField(
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Email",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon: Icon(Icons.email, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "email",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
-                            errorText: "Field is required"),
+                            errorText: "Email is required"),
                         FormBuilderValidators.match(emailExp,
-                            errorText:
-                                "Email format is:name(name.surname)@something.com")
+                            errorText: "Please enter a valid email address")
                       ]),
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                width: 20,
-                height: 10,
-              ),
+              SizedBox(height: 20),
               Row(
                 children: [
                   Expanded(
                     child: FormBuilderTextField(
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Password",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon: Icon(Icons.lock, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "password",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
-                            errorText: "Field is required"),
+                            errorText: "Password is required"),
                       ]),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: 16),
                   Expanded(
                     child: FormBuilderTextField(
                       obscureText: true,
-                      decoration: InputDecoration(
+                      decoration: FormStyleHelpers.textFieldDecoration(
                         labelText: "Confirm password",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                        prefixIcon: Icon(Icons.lock, color: Colors.black54),
                       ),
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
                       name: "passwordConfirm",
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(
-                            errorText: "Field is required"),
+                            errorText: "Password confirmation is required"),
                       ]),
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                width: 80,
-                height: 10,
-              ),
+              SizedBox(height: 20),
             ]
           ],
         ),

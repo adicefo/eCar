@@ -3,6 +3,7 @@ import 'package:ecar_admin/models/search_result.dart';
 import 'package:ecar_admin/providers/admin_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,7 +43,7 @@ class _AdminScreenState extends State<AdminScreen> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? Container()
+        ? Center(child: CircularProgressIndicator())
         : MasterScreen(
             "Admin",
             Container(
@@ -52,26 +53,32 @@ class _AdminScreenState extends State<AdminScreen> {
   }
 
   Widget _buildAddBtn() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          width: 200,
-          child: Padding(
-            padding: EdgeInsets.only(top: 20.0),
-            child: ElevatedButton(
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          SizedBox(
+            width: 220, 
+            child: ElevatedButton.icon(
               onPressed: () {
                 AlertHelpers.showAlert(context, "Unauthorized access",
                     "Due to application restrictions ONLY SUPER ADMIN/DEVELOPER have access to this operation. Thank you.");
               },
-              child: Text("Add"),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+              icon: Icon(Icons.admin_panel_settings),
+              label: Text("Add"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -79,7 +86,7 @@ class _AdminScreenState extends State<AdminScreen> {
     return Expanded(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 50.0),
+          padding: const EdgeInsets.only(top: 20.0),
           child: Align(
             alignment: Alignment.center,
             child: Container(

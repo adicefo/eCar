@@ -5,6 +5,7 @@ import 'package:ecar_admin/utils/alert_helpers.dart' as help;
 import 'package:ecar_admin/models/Vehicle/vehicle.dart';
 import 'package:ecar_admin/providers/vehicle_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,6 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     provider = context.read<VehicleProvider>();
     _initialValue = {
       "available": widget?.vehicle?.available,
@@ -50,7 +50,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
         key: _formKey,
         initialValue: _initialValue,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(children: [
             Row(
               children: [
@@ -61,18 +61,19 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                       "Availability of car",
                       style: TextStyle(
                           color: Colors.black,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 15),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16),
                     ),
                     initialValue: widget.vehicle?.available,
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Colors.white,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
+                      fillColor: Colors.grey[200],
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 16.0, horizontal: 12.0),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.0),
-                        borderSide: BorderSide.none,
+                        borderSide:
+                            BorderSide(color: Colors.grey.shade400, width: 1.5),
                       ),
                     ),
                     checkColor: Colors.black,
@@ -80,82 +81,49 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                     controlAffinity: ListTileControlAffinity.trailing,
                   ),
                 ),
-                SizedBox(
-                  width: 10,
-                ),
+                SizedBox(width: 16),
                 Expanded(
                   child: FormBuilderTextField(
-                    decoration: InputDecoration(
-                      labelText: "Average conspumtion",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
+                    decoration: FormStyleHelpers.textFieldDecoration(
+                      labelText: "Average Consumption (l/km)",
+                      prefixIcon:
+                          Icon(Icons.local_gas_station, color: Colors.black54),
                     ),
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    style: FormStyleHelpers.textFieldTextStyle(),
                     name: "averageConsumption",
                   ),
                 ),
               ],
             ),
-            SizedBox(
-              width: 50,
-              height: 10,
-            ),
+            SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
                   child: FormBuilderTextField(
-                    decoration: InputDecoration(
-                      labelText: "Name",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
+                    decoration: FormStyleHelpers.textFieldDecoration(
+                      labelText: "Vehicle Name",
+                      prefixIcon:
+                          Icon(Icons.directions_car, color: Colors.black54),
                     ),
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    style: FormStyleHelpers.textFieldTextStyle(),
                     name: "name",
                   ),
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: 16),
                 Expanded(
                   child: FormBuilderTextField(
-                    decoration: InputDecoration(
+                    decoration: FormStyleHelpers.textFieldDecoration(
                       labelText: "Price",
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
+                      prefixIcon:
+                          Icon(Icons.attach_money, color: Colors.black54),
                     ),
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    style: FormStyleHelpers.textFieldTextStyle(),
                     name: "price",
                   ),
                 ),
               ],
             ),
-            SizedBox(
-              width: 50,
-              height: 10,
-            ),
-            //TODO: Finish logic with adding image
+            SizedBox(height: 20),
             Row(
               children: [
                 Expanded(
@@ -163,19 +131,11 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                   name: "image",
                   builder: (field) {
                     return InputDecorator(
-                      decoration: InputDecoration(
-                        labelText: "Select image",
-                        filled: true,
-                        fillColor: Colors.grey[200],
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
+                      decoration: FormStyleHelpers.textFieldDecoration(
+                        labelText: "Vehicle Image",
+                        prefixIcon: Icon(Icons.image, color: Colors.black54),
                       ),
                       child: ListTile(
-                        leading: Icon(Icons.image),
                         title: Text("Select image"),
                         trailing: Icon(Icons.file_upload_outlined),
                         onTap: getImage,
@@ -189,20 +149,10 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
         ));
   }
 
-  File? _image;
-  String? _base64Image;
-  void getImage() async {
-    var result = await FilePicker.platform.pickFiles(type: FileType.image);
-    if (result != null && result.files.single.path != null) {
-      _image = File(result.files.single.path!);
-      _base64Image = base64Encode(_image!.readAsBytesSync());
-    }
-  }
-
   Widget _save() {
     bool? confirmEdit;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -217,41 +167,31 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text("Go back"),
+            child: Text(
+              "Cancel",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
-          SizedBox(
-            width: 30,
-          ),
+          SizedBox(width: 16),
           ElevatedButton(
             onPressed: () async {
-              _formKey.currentState?.saveAndValidate();
-              var request = Map.from(_formKey.currentState!.value);
-              request['image'] = _base64Image;
-
-              if (widget.vehicle == null) {
-                try {
-                  provider.insert(request);
-
-                  ScaffoldHelpers.showScaffold(context, "Vehicle added");
-                  await Future.delayed(const Duration(seconds: 3));
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => VehicleScreen(),
-                    ),
-                  );
-                } catch (e) {
-                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+              if (_formKey.currentState?.validate() ?? false) {
+                _formKey.currentState?.save();
+                var request = Map.from(_formKey.currentState!.value);
+                if (_base64Image != null) {
+                  request['image'] = _base64Image;
                 }
-              } else if (widget.vehicle != null) {
-                confirmEdit = await help.AlertHelpers.editConfirmation(context);
-                if (confirmEdit == true) {
+                if (widget.vehicle == null) {
                   try {
-                    provider.update(widget.vehicle?.id, request);
-
-                    ScaffoldHelpers.showScaffold(context, "Vehicle updated");
-                    await Future.delayed(const Duration(seconds: 3));
+                    provider.insert(request);
+                    ScaffoldHelpers.showScaffold(
+                        context, "Vehicle added successfully");
+                    await Future.delayed(const Duration(seconds: 2));
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => VehicleScreen(),
@@ -260,18 +200,55 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                   } catch (e) {
                     ScaffoldHelpers.showScaffold(context, "${e.toString()}");
                   }
+                } else if (widget.vehicle != null) {
+                  confirmEdit =
+                      await help.AlertHelpers.editConfirmation(context);
+                  if (confirmEdit == true) {
+                    try {
+                      provider.update(widget.vehicle?.id, request);
+                      ScaffoldHelpers.showScaffold(
+                          context, "Vehicle updated successfully");
+                      await Future.delayed(const Duration(seconds: 2));
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => VehicleScreen(),
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                    }
+                  }
                 }
+              } else {
+                help.AlertHelpers.showAlert(context, "Invalid Form",
+                    "Please fill all required fields correctly.");
               }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text("Save"),
+            child: Text(
+              "Save",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  File? _image;
+  String? _base64Image;
+  void getImage() async {
+    var result = await FilePicker.platform.pickFiles(type: FileType.image);
+    if (result != null && result.files.single.path != null) {
+      _image = File(result.files.single.path!);
+      _base64Image = base64Encode(_image!.readAsBytesSync());
+    }
   }
 }
