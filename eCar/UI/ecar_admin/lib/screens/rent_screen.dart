@@ -191,12 +191,12 @@ class _RentScreenState extends State<RentScreen> {
                             }),
                             cells: [
                               DataCell(Text(
-                                  e.rentingDate.toString().substring(0, 19),
+                                  e.rentingDate.toString().substring(0, 10),
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),
                               DataCell(Text(
-                                  e.endingDate.toString().substring(0, 19),
+                                  e.endingDate.toString().substring(0, 10),
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),

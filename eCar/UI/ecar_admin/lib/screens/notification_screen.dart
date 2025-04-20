@@ -232,7 +232,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       ),
                                     )),
                               DataCell(Text(
-                                  e.addingDate.toString().substring(0, 19),
+                                  e.addingDate.toString().substring(0, 10),
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),

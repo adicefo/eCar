@@ -184,20 +184,20 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                                   DataCell(Text(
                                       e.beginningOfWork
                                               ?.toString()
-                                              .substring(0, 19) ??
+                                              .substring(0, 16) ??
                                           DateTime.now()
                                               .toString()
-                                              .substring(0, 19),
+                                              .substring(0, 16),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold))),
                                   DataCell(Text(
                                       e.endOfWork
                                               ?.toString()
-                                              .substring(0, 19) ??
+                                              .substring(0, 16) ??
                                           DateTime.now()
                                               .toString()
-                                              .substring(0, 19),
+                                              .substring(0, 16),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold))),

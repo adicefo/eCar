@@ -161,10 +161,10 @@ class _CompanyPricesScreenState extends State<CompanyPricesScreen> {
                                   DataCell(Text(
                                       e.addingDate
                                               ?.toString()
-                                              .substring(0, 19) ??
+                                              .substring(0, 10) ??
                                           DateTime.now()
                                               .toString()
-                                              .substring(0, 19),
+                                              .substring(0, 10),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontWeight: FontWeight.bold))),
