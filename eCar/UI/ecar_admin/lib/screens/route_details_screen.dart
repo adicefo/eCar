@@ -9,8 +9,10 @@ import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:ecar_admin/utils/form_style_helpers.dart';
+import 'package:ecar_admin/utils/place_picker_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'dart:convert';
 
 import 'package:provider/provider.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart' as help;
@@ -35,6 +37,21 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   late DriverProvider driverProvider;
 
   bool isLoading = true;
+
+  //place search coordinates
+  Map<String, double> sourceCoordinates = {
+    'latitude': 0,
+    'longitude': 0,
+  };
+  Map<String, double> destinationCoordinates = {
+    'latitude': 0,
+    'longitude': 0,
+  };
+
+  //place search controllers
+  final sourceController = TextEditingController();
+  final destinationController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -52,13 +69,31 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
       "clientId": widget.route?.clientId.toString(),
       "driverID": widget.route?.driverID.toString()
     };
+
+    // initialize coordinates if editing
+    if (widget.route != null) {
+      sourceCoordinates = {
+        'latitude': widget.route!.sourcePoint!.latitude!,
+        'longitude': widget.route!.sourcePoint!.longitude!,
+      };
+      destinationCoordinates = {
+        'latitude': widget.route!.destinationPoint!.latitude!,
+        'longitude': widget.route!.destinationPoint!.longitude!,
+      };
+    }
+
     initForm();
   }
 
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
+  void dispose() {
+    sourceController.dispose();
+    destinationController.dispose();
+    super.dispose();
+  }
 
+  @override
+  void didChangeDependencies() {
     super.didChangeDependencies();
   }
 
@@ -79,7 +114,13 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
     return MasterScreen(
         "Route details",
         Column(
-          children: [isLoading ? Container() : _buildForm(), _save()],
+          children: [
+            isLoading
+                ? Center(child: CircularProgressIndicator())
+                : _buildForm(),
+            SizedBox(height: 20),
+            _save()
+          ],
         ));
   }
 
@@ -92,99 +133,312 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Expanded(
+            Text(
+              "Source Location",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 8),
+            if (isDisabled) ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: FormBuilderTextField(
+                      decoration: FormStyleHelpers.textFieldDecoration(
+                        labelText: "Source point latitude",
+                        prefixIcon:
+                            Icon(Icons.location_on, color: Colors.black54),
+                        fillColor: Colors.grey.shade100,
+                      ),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
+                      name: "sourcePoint_latitude",
+                      enabled: false,
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: FormBuilderTextField(
+                      decoration: FormStyleHelpers.textFieldDecoration(
+                        labelText: "Source point longitude",
+                        prefixIcon:
+                            Icon(Icons.location_on, color: Colors.black54),
+                        fillColor: Colors.grey.shade100,
+                      ),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
+                      name: "sourcePoint_longitude",
+                      enabled: false,
+                    ),
+                  ),
+                ],
+              ),
+            ] else ...[
+              // For adding new routes
+              PlaceSearchField(
+                key: UniqueKey(),
+                label: "Search for source location",
+                hint: "Enter a location",
+                onLocationSelected: (coords) {
+                  print(
+                      "Source coordinates selected: ${coords['latitude']}, ${coords['longitude']}");
+
+                  if (coords['latitude'] == 0.0 && coords['longitude'] == 0.0) {
+                    print("Warning: Source coordinates are zeros!");
+                    return;
+                  }
+
+                  setState(() {
+                    sourceCoordinates = {
+                      'latitude': coords['latitude'] ?? 0.0,
+                      'longitude': coords['longitude'] ?? 0.0,
+                    };
+
+                    print("Source coordinates updated: $sourceCoordinates");
+
+                    // Update form fields (though these are hidden, they're used for the API call)
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      final latField =
+                          _formKey.currentState?.fields['sourcePoint_latitude'];
+                      final lngField = _formKey
+                          .currentState?.fields['sourcePoint_longitude'];
+
+                      if (latField != null && lngField != null) {
+                        latField.didChange(
+                            sourceCoordinates['latitude'].toString());
+                        lngField.didChange(
+                            sourceCoordinates['longitude'].toString());
+                        print(
+                            "Source form fields updated with: ${sourceCoordinates['latitude']}, ${sourceCoordinates['longitude']}");
+                      } else {
+                        print("Warning: Could not find source form fields");
+                      }
+                    });
+                  });
+                },
+              ),
+              SizedBox(height: 10),
+              // Show the coordinates in a visible container for feedback
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: sourceCoordinates['latitude'] != 0 ||
+                          sourceCoordinates['longitude'] != 0
+                      ? Colors.green.shade800
+                      : Colors.grey.shade800,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      sourceCoordinates['latitude'] != 0 ||
+                              sourceCoordinates['longitude'] != 0
+                          ? Icons.check_circle
+                          : Icons.place,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      sourceCoordinates['latitude'] != 0 ||
+                              sourceCoordinates['longitude'] != 0
+                          ? "Location Selected: ${sourceCoordinates['latitude']?.toStringAsFixed(6) ?? '0.0'}, ${sourceCoordinates['longitude']?.toStringAsFixed(6) ?? '0.0'}"
+                          : "No Location Selected Yet",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              // Hidden fields to store coordinates
+              Opacity(
+                opacity: 0,
+                child: SizedBox(
+                  height: 0,
                   child: FormBuilderTextField(
-                    decoration: FormStyleHelpers.textFieldDecoration(
-                      labelText: "Source point latitude",
-                      prefixIcon:
-                          Icon(Icons.location_on, color: Colors.black54),
-                      fillColor: isDisabled
-                          ? Colors.grey.shade100
-                          : Colors.grey.shade200,
-                    ),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
                     name: "sourcePoint_latitude",
-                    enabled: !isDisabled,
+                    initialValue: sourceCoordinates['latitude'].toString(),
                   ),
                 ),
-                SizedBox(width: 16),
-                Expanded(
+              ),
+              Opacity(
+                opacity: 0,
+                child: SizedBox(
+                  height: 0,
                   child: FormBuilderTextField(
-                    decoration: FormStyleHelpers.textFieldDecoration(
-                      labelText: "Source point longitude",
-                      prefixIcon:
-                          Icon(Icons.location_on, color: Colors.black54),
-                      fillColor: isDisabled
-                          ? Colors.grey.shade100
-                          : Colors.grey.shade200,
-                    ),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
                     name: "sourcePoint_longitude",
-                    enabled: !isDisabled,
+                    initialValue: sourceCoordinates['longitude'].toString(),
                   ),
                 ),
-              ],
+              ),
+            ],
+
+            SizedBox(height: 25),
+
+            // Destination location section
+            Text(
+              "Destination Location",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Expanded(
+            SizedBox(height: 8),
+            if (isDisabled) ...[
+              Row(
+                children: [
+                  Expanded(
+                    child: FormBuilderTextField(
+                      decoration: FormStyleHelpers.textFieldDecoration(
+                        labelText: "Destination point latitude",
+                        prefixIcon:
+                            Icon(Icons.location_on, color: Colors.black54),
+                        fillColor: Colors.grey.shade100,
+                      ),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
+                      name: "destinationPoint_latitude",
+                      enabled: false,
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: FormBuilderTextField(
+                      decoration: FormStyleHelpers.textFieldDecoration(
+                        labelText: "Destination point longitude",
+                        prefixIcon:
+                            Icon(Icons.location_on, color: Colors.black54),
+                        fillColor: Colors.grey.shade100,
+                      ),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
+                      name: "destinationPoint_longitude",
+                      enabled: false,
+                    ),
+                  ),
+                ],
+              ),
+            ] else ...[
+              PlaceSearchField(
+                key: UniqueKey(),
+                label: "Search for destination location",
+                hint: "Enter a location",
+                onLocationSelected: (coords) {
+                  print(
+                      "Destination coordinates selected: ${coords['latitude']}, ${coords['longitude']}");
+
+                  if (coords['latitude'] == 0.0 && coords['longitude'] == 0.0) {
+                    print("Warning: Destination coordinates are zeros!");
+                    return;
+                  }
+
+                  setState(() {
+                    destinationCoordinates = {
+                      'latitude': coords['latitude'] ?? 0.0,
+                      'longitude': coords['longitude'] ?? 0.0,
+                    };
+
+                    print(
+                        "Destination coordinates updated: $destinationCoordinates");
+
+                    // Update form fields (though these are hidden, they're used for the API call)
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      final latField = _formKey
+                          .currentState?.fields['destinationPoint_latitude'];
+                      final lngField = _formKey
+                          .currentState?.fields['destinationPoint_longitude'];
+
+                      if (latField != null && lngField != null) {
+                        latField.didChange(
+                            destinationCoordinates['latitude'].toString());
+                        lngField.didChange(
+                            destinationCoordinates['longitude'].toString());
+                        print(
+                            "Destination form fields updated with: ${destinationCoordinates['latitude']}, ${destinationCoordinates['longitude']}");
+                      } else {
+                        print(
+                            "Warning: Could not find destination form fields");
+                      }
+                    });
+                  });
+                },
+              ),
+              SizedBox(height: 10),
+              // Show the coordinates in a visible container for feedback
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: destinationCoordinates['latitude'] != 0 ||
+                          destinationCoordinates['longitude'] != 0
+                      ? Colors.green.shade800
+                      : Colors.grey.shade800,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      destinationCoordinates['latitude'] != 0 ||
+                              destinationCoordinates['longitude'] != 0
+                          ? Icons.check_circle
+                          : Icons.place,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      destinationCoordinates['latitude'] != 0 ||
+                              destinationCoordinates['longitude'] != 0
+                          ? "Location Selected: ${destinationCoordinates['latitude']?.toStringAsFixed(6) ?? '0.0'}, ${destinationCoordinates['longitude']?.toStringAsFixed(6) ?? '0.0'}"
+                          : "No Location Selected Yet",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              // Hidden fields to store coordinates
+              Opacity(
+                opacity: 0,
+                child: SizedBox(
+                  height: 0,
                   child: FormBuilderTextField(
-                    decoration: FormStyleHelpers.textFieldDecoration(
-                      labelText: "Destination point latitude",
-                      prefixIcon:
-                          Icon(Icons.location_on, color: Colors.black54),
-                      fillColor: isDisabled
-                          ? Colors.grey.shade100
-                          : Colors.grey.shade200,
-                    ),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
                     name: "destinationPoint_latitude",
-                    enabled: !isDisabled,
+                    initialValue: destinationCoordinates['latitude'].toString(),
                   ),
                 ),
-                SizedBox(width: 16),
-                Expanded(
+              ),
+              Opacity(
+                opacity: 0,
+                child: SizedBox(
+                  height: 0,
                   child: FormBuilderTextField(
-                    decoration: FormStyleHelpers.textFieldDecoration(
-                      labelText: "Destination point longitude",
-                      prefixIcon:
-                          Icon(Icons.location_on, color: Colors.black54),
-                      fillColor: isDisabled
-                          ? Colors.grey.shade100
-                          : Colors.grey.shade200,
-                    ),
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
                     name: "destinationPoint_longitude",
-                    enabled: !isDisabled,
+                    initialValue:
+                        destinationCoordinates['longitude'].toString(),
                   ),
                 ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
+              ),
+            ],
+
+            SizedBox(height: 25),
+
+            // Driver and Client dropdowns
             Row(
               children: [
                 Expanded(
@@ -242,7 +496,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
     );
   }
 
-//TODO: Fix insert and finish edit for Route
   Widget _save() {
     bool? confirmEdit;
     return Padding(
@@ -287,26 +540,56 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           if (widget.route == null)
             ElevatedButton.icon(
               onPressed: () async {
+                if (sourceCoordinates['latitude'] == 0 &&
+                    sourceCoordinates['longitude'] == 0) {
+                  ScaffoldHelpers.showScaffold(
+                      context, "Please select a source location");
+                  return;
+                }
+
+                if (destinationCoordinates['latitude'] == 0 &&
+                    destinationCoordinates['longitude'] == 0) {
+                  ScaffoldHelpers.showScaffold(
+                      context, "Please select a destination location");
+                  return;
+                }
+
                 _formKey.currentState?.saveAndValidate();
                 var formData = _formKey.currentState?.value;
 
+                if (formData?['driverID'] == null ||
+                    formData?['clientId'] == null) {
+                  ScaffoldHelpers.showScaffold(
+                      context, "Please select a driver and client");
+                  return;
+                }
+
+                print(
+                    "Source coordinates before request: ${sourceCoordinates['latitude']}, ${sourceCoordinates['longitude']}");
+                print(
+                    "Destination coordinates before request: ${destinationCoordinates['latitude']}, ${destinationCoordinates['longitude']}");
+
                 var request = {
                   "sourcePoint": {
-                    "longitude": formData!['sourcePoint_longitude'],
-                    "latitude": formData!['sourcePoint_latitude']
+                    "longitude": sourceCoordinates['longitude']?.toDouble(),
+                    "latitude": sourceCoordinates['latitude']?.toDouble(),
+                    "srid": 4326
                   },
                   "destinationPoint": {
-                    "longitude": formData!['destinationPoint_longitude'],
-                    "latitude": formData!['destinationPoint_latitude']
+                    "longitude": destinationCoordinates['longitude']?.toDouble(),
+                    "latitude": destinationCoordinates['latitude']?.toDouble(),
+                    "srid": 4326
                   },
                   "driverID": formData!['driverID'],
                   "clientId": formData!['clientId']
                 };
 
                 try {
-                  routeProvider.insert(request);
-                  ScaffoldHelpers.showScaffold(context, "Route added");
-                  await Future.delayed(const Duration(seconds: 2));
+                  print("Sending request: ${jsonEncode(request)}");
+                  await routeProvider.insert(request);
+                  ScaffoldHelpers.showScaffold(
+                      context, "Route added successfully");
+                  await Future.delayed(const Duration(seconds: 1));
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => RouteListScreen(),
@@ -330,7 +613,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 ),
               ),
             ),
-          if (widget?.route?.status == "wait")
+          if (widget.route?.status == "wait")
             ElevatedButton.icon(
               onPressed: () async {
                 bool? confirmEdit =
@@ -340,7 +623,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                     routeProvider.update(widget.route?.id);
                     ScaffoldHelpers.showScaffold(
                         context, "Route updated to active");
-                    await Future.delayed(const Duration(seconds: 3));
+                    await Future.delayed(const Duration(seconds: 1));
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => RouteListScreen(),
@@ -359,7 +642,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
               icon: Icon(Icons.airplanemode_active),
               label: const Text("Active"),
             ),
-          if (widget?.route?.status == "active")
+          if (widget.route?.status == "active")
             ElevatedButton.icon(
               onPressed: () async {
                 bool? confirmEdit =
@@ -369,7 +652,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                     routeProvider.updateFinish(widget.route?.id);
                     ScaffoldHelpers.showScaffold(
                         context, "Route updated to finish");
-                    await Future.delayed(const Duration(seconds: 3));
+                    await Future.delayed(const Duration(seconds: 1));
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => RouteListScreen(),

@@ -36,9 +36,10 @@ namespace eCar.Services.StateMachine.RouteStateMachine
             // I have done manually mapping because of different data types between RequestClass and Model/Database Class
             var distanceMeters = DistanceGenerate.GetDistance(request.SourcePoint.Longitude,
                                  request.SourcePoint.Latitude, request.DestinationPoint.Longitude, request.DestinationPoint.Latitude);
+            
 
             var SourcePoint = new Point(request.SourcePoint.Longitude, request.SourcePoint.Latitude) { SRID = request.SourcePoint.SRID };
-            var DestinationPoint = new NetTopologySuite.Geometries.Point(request.DestinationPoint.Longitude, request.DestinationPoint.Latitude) { SRID = request.SourcePoint.SRID };
+            var DestinationPoint = new NetTopologySuite.Geometries.Point(request.DestinationPoint.Longitude, request.DestinationPoint.Latitude) { SRID = request.DestinationPoint.SRID };
 
             var lastPrice = Context.CompanyPrices.OrderByDescending(x => x.Id).FirstOrDefault();
 
