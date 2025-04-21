@@ -101,8 +101,15 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                       labelText: "Source point latitude",
                       prefixIcon:
                           Icon(Icons.location_on, color: Colors.black54),
+                      fillColor: isDisabled
+                          ? Colors.grey.shade100
+                          : Colors.grey.shade200,
                     ),
-                    style: FormStyleHelpers.textFieldTextStyle(),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
                     name: "sourcePoint_latitude",
                     enabled: !isDisabled,
                   ),
@@ -114,8 +121,15 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                       labelText: "Source point longitude",
                       prefixIcon:
                           Icon(Icons.location_on, color: Colors.black54),
+                      fillColor: isDisabled
+                          ? Colors.grey.shade100
+                          : Colors.grey.shade200,
                     ),
-                    style: FormStyleHelpers.textFieldTextStyle(),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
                     name: "sourcePoint_longitude",
                     enabled: !isDisabled,
                   ),
@@ -133,8 +147,15 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                       labelText: "Destination point latitude",
                       prefixIcon:
                           Icon(Icons.location_on, color: Colors.black54),
+                      fillColor: isDisabled
+                          ? Colors.grey.shade100
+                          : Colors.grey.shade200,
                     ),
-                    style: FormStyleHelpers.textFieldTextStyle(),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
                     name: "destinationPoint_latitude",
                     enabled: !isDisabled,
                   ),
@@ -146,8 +167,15 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                       labelText: "Destination point longitude",
                       prefixIcon:
                           Icon(Icons.location_on, color: Colors.black54),
+                      fillColor: isDisabled
+                          ? Colors.grey.shade100
+                          : Colors.grey.shade200,
                     ),
-                    style: FormStyleHelpers.textFieldTextStyle(),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
                     name: "destinationPoint_longitude",
                     enabled: !isDisabled,
                   ),
@@ -165,7 +193,11 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                     decoration: FormStyleHelpers.dropdownDecoration(
                       labelText: "Driver",
                     ),
-                    style: FormStyleHelpers.textFieldTextStyle(),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
                     enabled: !isDisabled,
                     items: driverResult?.result!
                             .map((item) => DropdownMenuItem(
@@ -185,7 +217,11 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                     decoration: FormStyleHelpers.dropdownDecoration(
                       labelText: "Client",
                     ),
-                    style: FormStyleHelpers.textFieldTextStyle(),
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
                     enabled: !isDisabled,
                     items: clientResult?.result
                             .map((item) => DropdownMenuItem(
@@ -214,6 +250,17 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          if (widget.route != null)
+            IconButton(
+              onPressed: () {
+                help.AlertHelpers.showAlert(context, "Route edit explanation",
+                    "In the eCar app, edit mode is used to change the route state(from 'wait' to 'active' or from 'active' to 'finished'). It is not used to edit the route details but those details are only used to read.");
+              },
+              icon: Icon(Icons.info),
+              color: Colors.blue,
+              iconSize: 30,
+              tooltip: "Info",
+            ),
           ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
@@ -282,6 +329,64 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
+            ),
+          if (widget?.route?.status == "wait")
+            ElevatedButton.icon(
+              onPressed: () async {
+                bool? confirmEdit =
+                    await help.AlertHelpers.editConfirmation(context);
+                if (confirmEdit == true) {
+                  try {
+                    routeProvider.update(widget.route?.id);
+                    ScaffoldHelpers.showScaffold(
+                        context, "Route updated to active");
+                    await Future.delayed(const Duration(seconds: 3));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => RouteListScreen(),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                  }
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              ),
+              icon: Icon(Icons.airplanemode_active),
+              label: const Text("Active"),
+            ),
+          if (widget?.route?.status == "active")
+            ElevatedButton.icon(
+              onPressed: () async {
+                bool? confirmEdit =
+                    await help.AlertHelpers.editConfirmation(context);
+                if (confirmEdit == true) {
+                  try {
+                    routeProvider.updateFinish(widget.route?.id);
+                    ScaffoldHelpers.showScaffold(
+                        context, "Route updated to finish");
+                    await Future.delayed(const Duration(seconds: 3));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => RouteListScreen(),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                  }
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              ),
+              icon: Icon(Icons.check),
+              label: const Text("Finish"),
             ),
         ],
       ),

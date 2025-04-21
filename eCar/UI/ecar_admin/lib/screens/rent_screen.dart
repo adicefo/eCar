@@ -218,50 +218,72 @@ class _RentScreenState extends State<RentScreen> {
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold))),
                               DataCell(
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    e.status == "wait"
-                                        ? Navigator.of(context).pushReplacement(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  RentRequestScreen(rent: e),
-                                            ),
-                                          )
-                                        : AlertHelpers.showAlert(
-                                            context,
-                                            "Invalid action",
-                                            "Unabled operation. Your status is not wait!");
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.blueAccent),
-                                  ),
-                                  child: Text(
-                                    "Active",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ),
+  e.status == "wait"
+      ? ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => RentRequestScreen(rent: e),
+              ),
+            );
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
+          ),
+          child: Text(
+            "Active",
+            style: TextStyle(color: Colors.black),
+          ),
+        )
+      : ElevatedButton(
+          onPressed: () {
+            AlertHelpers.showAlert(
+              context,
+              "Invalid action",
+              "Unable operation. Your status is not 'wait'!",
+            );
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.grey),
+          ),
+          child: Text(
+            "Active",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+),
                               DataCell(
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            RentDetailsScreen(rent: e),
-                                      ),
-                                    );
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.yellowAccent),
-                                  ),
-                                  child: Text(
-                                    "Edit",
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ),
+  e.status == "finished"
+      ? ElevatedButton(
+          onPressed: () {
+            AlertHelpers.showAlert(context, "Invalid action", "Unable operation. You cannot edit when your status is finished!");
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.grey),
+          ),
+          child: Text(
+            "Edit",
+            style: TextStyle(color: Colors.black),
+          ),
+        )
+      : ElevatedButton(
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => RentDetailsScreen(rent: e),
+              ),
+            );
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
+          ),
+          child: Text(
+            "Edit",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+),
+
                               DataCell(
                                 ElevatedButton(
                                   onPressed: () async {

@@ -71,11 +71,9 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
         Column(
           children: [
             isLoading
-                ? Container(child: Text("Still not implemented"))
+                ? Center(child: CircularProgressIndicator())
                 : _buildForm(),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             _save()
           ],
         ));
@@ -88,9 +86,13 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (widget.rent == null) ...[
-              SizedBox(height: 15),
+              // New rent form
+              SizedBox(height: 20),
+
+              // Renting Date section
               Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(left: 8, bottom: 4),
@@ -106,7 +108,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               ),
               FormBuilderDateTimePicker(
                 name: 'rentingDate',
-                decoration: FormStyleHelpers.dateFieldDecoration(
+                decoration: FormStyleHelpers.textFieldDecoration(
                   labelText: 'Renting Date',
                   hintText: 'Select start date (MM/DD/YYYY)',
                   fillColor: Colors.white,
@@ -115,7 +117,10 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 inputType: InputType.date,
                 validator: FormBuilderValidators.required(),
               ),
-              const SizedBox(height: 20),
+
+              SizedBox(height: 25),
+
+              // Ending Date section
               Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(left: 8, bottom: 4),
@@ -131,7 +136,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               ),
               FormBuilderDateTimePicker(
                 name: 'endingDate',
-                decoration: FormStyleHelpers.dateFieldDecoration(
+                decoration: FormStyleHelpers.textFieldDecoration(
                   labelText: 'Ending Date',
                   hintText: 'Select end date (MM/DD/YYYY)',
                   fillColor: Colors.white,
@@ -140,7 +145,10 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 inputType: InputType.date,
                 validator: FormBuilderValidators.required(),
               ),
-              const SizedBox(height: 35),
+
+              SizedBox(height: 25),
+
+              // Client dropdown
               FormBuilderDropdown(
                 name: 'clientId',
                 decoration: FormStyleHelpers.dropdownDecoration(
@@ -157,7 +165,10 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                     [],
                 validator: FormBuilderValidators.required(),
               ),
-              const SizedBox(height: 35),
+
+              SizedBox(height: 25),
+
+              // Vehicle dropdown
               FormBuilderDropdown(
                 name: 'vehicleId',
                 decoration: FormStyleHelpers.dropdownDecoration(
@@ -174,9 +185,45 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                     [],
                 validator: FormBuilderValidators.required(),
               ),
-              const SizedBox(height: 20),
             ] else if (widget.rent != null) ...[
-              SizedBox(height: 15),
+              // Edit rent form
+              SizedBox(height: 20),
+
+              // Renting Date section (disabled)
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 8, bottom: 4),
+                child: Text(
+                  "Date Format: MM/DD/YYYY",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+              FormBuilderDateTimePicker(
+                  name: 'rentingDate',
+                  decoration: FormStyleHelpers.textFieldDecoration(
+                    labelText: 'Renting Date',
+                    hintText: 'Select start date (MM/DD/YYYY)',
+                    fillColor: Colors.white,
+                  ),
+                  format: DateFormat('MM/dd/yyyy'),
+                  inputType: InputType.date,
+                  validator: FormBuilderValidators.required(),
+                  initialValue: widget.rent?.rentingDate,
+                  enabled: false,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  )),
+
+              SizedBox(height: 25),
+
+              // Ending Date section
               Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(left: 8, bottom: 4),
@@ -192,7 +239,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               ),
               FormBuilderDateTimePicker(
                 name: 'endingDate',
-                decoration: FormStyleHelpers.dateFieldDecoration(
+                decoration: FormStyleHelpers.textFieldDecoration(
                   labelText: 'Ending Date',
                   hintText: 'Select end date (MM/DD/YYYY)',
                   fillColor: Colors.white,
@@ -201,9 +248,37 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 inputType: InputType.date,
                 validator: FormBuilderValidators.required(),
               ),
-              SizedBox(
-                height: 20,
+
+              SizedBox(height: 25),
+
+              // Client dropdown (disabled)
+              FormBuilderDropdown(
+                name: 'clientId',
+                decoration: FormStyleHelpers.dropdownDecoration(
+                  labelText: 'Client',
+                ),
+                items: clientResult?.result!
+                        .map((item) => DropdownMenuItem(
+                              value: item.id.toString(),
+                              child: Text(
+                                "${item.user?.name} ${item.user?.surname}",
+                              ),
+                            ))
+                        .toList() ??
+                    [],
+                validator: FormBuilderValidators.required(),
+                initialValue: widget.rent?.clientId.toString(),
+                enabled: false,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
               ),
+
+              SizedBox(height: 25),
+
+              // Vehicle dropdown
               FormBuilderDropdown(
                 name: 'vehicleId',
                 decoration: FormStyleHelpers.dropdownDecoration(
@@ -227,13 +302,23 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
     );
   }
 
-//TODO: Add update finish logic
   Widget _save() {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          if (widget.rent != null)
+            IconButton(
+              onPressed: () {
+                help.AlertHelpers.showAlert(context, "Rent edit explanation",
+                    "In the eCar application, the rent edit feature is used to update the vehicle or the rent's ending date, or to change the rent status from 'active' to 'finish'. Fields that are not suitable for editing are displayed but locked.");
+              },
+              icon: Icon(Icons.info),
+              color: Colors.blue,
+              iconSize: 30,
+              tooltip: "Info",
+            ),
           ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
@@ -250,27 +335,48 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
             icon: Icon(Icons.arrow_back),
             label: const Text("Go back"),
           ),
-          SizedBox(
-            width: 30,
-          ),
-          if (widget?.rent?.status != "active")
-            ElevatedButton.icon(
-              onPressed: () async {
-                _formKey.currentState?.saveAndValidate();
-                final formData = _formKey.currentState?.value;
 
-                if (widget.rent == null) {
-                  final requestPayload = {
-                    "rentingDate": (formData!['rentingDate'] as DateTime)
-                        .toIso8601String(),
-                    "endingDate":
-                        (formData!['endingDate'] as DateTime).toIso8601String(),
-                    "clientId": formData!['clientId'],
-                    "vehicleId": formData!['vehicleId']
-                  };
+          SizedBox(width: 30),
+
+          // Save button
+          ElevatedButton.icon(
+            onPressed: () async {
+              _formKey.currentState?.saveAndValidate();
+              final formData = _formKey.currentState?.value;
+
+              if (widget.rent == null) {
+                final requestPayload = {
+                  "rentingDate":
+                      (formData!['rentingDate'] as DateTime).toIso8601String(),
+                  "endingDate":
+                      (formData!['endingDate'] as DateTime).toIso8601String(),
+                  "clientId": formData!['clientId'],
+                  "vehicleId": formData!['vehicleId']
+                };
+                try {
+                  rentProvider.insert(requestPayload);
+                  ScaffoldHelpers.showScaffold(context, "Rent added");
+                  await Future.delayed(const Duration(seconds: 3));
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => RentScreen(),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                }
+              } else if (widget.rent != null) {
+                final requestPayload = {
+                  "endingDate":
+                      (formData!['endingDate'] as DateTime).toIso8601String(),
+                  "vehicleId": formData!['vehicleId']
+                };
+                var confirmEdit =
+                    await help.AlertHelpers.editConfirmation(context);
+                if (confirmEdit == true) {
                   try {
-                    rentProvider.insert(requestPayload);
-                    ScaffoldHelpers.showScaffold(context, "Rent added");
+                    rentProvider.update(widget.rent?.id, requestPayload);
+                    ScaffoldHelpers.showScaffold(context, "Rent updated");
                     await Future.delayed(const Duration(seconds: 3));
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
@@ -280,39 +386,22 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                   } catch (e) {
                     ScaffoldHelpers.showScaffold(context, "${e.toString()}");
                   }
-                } else if (widget.rent != null) {
-                  final requestPayload = {
-                    "endingDate":
-                        (formData!['endingDate'] as DateTime).toIso8601String(),
-                    "vehicleId": formData!['vehicleId']
-                  };
-                  var confirmEdit =
-                      await help.AlertHelpers.editConfirmation(context);
-                  if (confirmEdit == true) {
-                    try {
-                      rentProvider.update(widget.rent?.id, requestPayload);
-                      ScaffoldHelpers.showScaffold(context, "Rent updated");
-                      await Future.delayed(const Duration(seconds: 3));
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => RentScreen(),
-                        ),
-                      );
-                    } catch (e) {
-                      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
-                    }
-                  }
                 }
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellowAccent,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              ),
-              icon: Icon(Icons.save),
-              label: const Text("Save"),
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
             ),
-          if (widget?.rent?.status == "active")
+            icon: Icon(Icons.save),
+            label: const Text("Save"),
+          ),
+
+          SizedBox(width: 30),
+
+          // Finish button (conditional)
+          if (widget.rent?.status == "active")
             ElevatedButton.icon(
               onPressed: () async {
                 bool? confirmEdit =
