@@ -183,6 +183,7 @@ class _DriverVehicleDetailsScreenState
                       fillColor: Colors.grey[200],
                       filled: true,
                     ),
+                    
                   ),
                 ],
               ),

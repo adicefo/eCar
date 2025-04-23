@@ -10,6 +10,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:ecar_admin/models/Notification/notification.dart' as Model;
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart' as help;
 
@@ -70,6 +71,10 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                     ),
                     style: FormStyleHelpers.textFieldTextStyle(),
                     name: "heading",
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Field is required"),
+                    ]),
                   ),
                 ),
                 SizedBox(width: 16),
@@ -83,6 +88,10 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                     ),
                     style: FormStyleHelpers.textFieldTextStyle(),
                     name: "content_",
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Field is required"),
+                    ]),
                   ),
                 ),
               ],
@@ -129,6 +138,10 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                     checkColor: Colors.black,
                     activeColor: Colors.yellowAccent,
                     controlAffinity: ListTileControlAffinity.trailing,
+                    validator: FormBuilderValidators.compose([
+                      FormBuilderValidators.required(
+                          errorText: "Field is required"),
+                    ]),
                   ),
                 ),
               ],
@@ -144,7 +157,7 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-         ElevatedButton.icon(
+          ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -169,34 +182,19 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
           SizedBox(width: 16),
           ElevatedButton.icon(
             onPressed: () async {
-              _formKey.currentState?.saveAndValidate();
-              var request = Map.from(_formKey.currentState!.value);
+              if (_formKey.currentState?.validate() ?? false) {
+                _formKey.currentState?.save();
+                var request = Map.from(_formKey.currentState!.value);
 
-              if (_base64Image != null) {
-                request['image'] = _base64Image;
-              }
-
-              if (widget.notification == null) {
-                try {
-                  provider.insert(request);
-                  ScaffoldHelpers.showScaffold(
-                      context, "Notification added successfully");
-                  await Future.delayed(const Duration(seconds: 2));
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => NotificationScreen(),
-                    ),
-                  );
-                } catch (e) {
-                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                if (_base64Image != null) {
+                  request['image'] = _base64Image;
                 }
-              } else if (widget.notification != null) {
-                confirmEdit = await help.AlertHelpers.editConfirmation(context);
-                if (confirmEdit == true) {
+
+                if (widget.notification == null) {
                   try {
-                    provider.update(widget.notification?.id, request);
+                    provider.insert(request);
                     ScaffoldHelpers.showScaffold(
-                        context, "Notification updated successfully");
+                        context, "Notification added successfully");
                     await Future.delayed(const Duration(seconds: 2));
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
@@ -206,7 +204,28 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                   } catch (e) {
                     ScaffoldHelpers.showScaffold(context, "${e.toString()}");
                   }
+                } else if (widget.notification != null) {
+                  confirmEdit =
+                      await help.AlertHelpers.editConfirmation(context);
+                  if (confirmEdit == true) {
+                    try {
+                      provider.update(widget.notification?.id, request);
+                      ScaffoldHelpers.showScaffold(
+                          context, "Notification updated successfully");
+                      await Future.delayed(const Duration(seconds: 2));
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => NotificationScreen(),
+                        ),
+                      );
+                    } catch (e) {
+                      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                    }
+                  }
                 }
+              } else {
+                help.AlertHelpers.showAlert(context, "Invalid Form",
+                    "Please fill all required fields correctly.");
               }
             },
             icon: Icon(Icons.save),

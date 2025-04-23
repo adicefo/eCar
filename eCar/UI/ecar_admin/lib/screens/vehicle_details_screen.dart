@@ -10,6 +10,7 @@ import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 
 class VehicleDetailsScreen extends StatefulWidget {
@@ -91,6 +92,10 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                     ),
                     style: FormStyleHelpers.textFieldTextStyle(),
                     name: "averageConsumption",
+                    validator:FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Average conspumption is required"),
+                      ]),
                   ),
                 ),
               ],
@@ -107,6 +112,10 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                     ),
                     style: FormStyleHelpers.textFieldTextStyle(),
                     name: "name",
+                    validator:FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Name is required"),
+                      ]),
                   ),
                 ),
                 SizedBox(width: 16),
@@ -119,6 +128,10 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                     ),
                     style: FormStyleHelpers.textFieldTextStyle(),
                     name: "price",
+                    validator:FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Price is required"),
+                      ]),
                   ),
                 ),
               ],
@@ -188,6 +201,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                   request['image'] = _base64Image;
                 }
                 if (widget.vehicle == null) {
+                  
                   try {
                     provider.insert(request);
                     ScaffoldHelpers.showScaffold(

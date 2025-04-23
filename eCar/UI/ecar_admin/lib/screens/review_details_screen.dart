@@ -6,6 +6,7 @@ import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart' as help;
 
@@ -68,6 +69,10 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                 ),
                 style: FormStyleHelpers.textFieldTextStyle(),
                 onChanged: (value) {},
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(
+                      errorText: "Rating is required"),
+                ]),
               ),
             ),
             SizedBox(width: 16.0),
@@ -81,6 +86,10 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                 ),
                 style: FormStyleHelpers.textFieldTextStyle(),
                 maxLines: 3,
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(
+                      errorText: "Description is required"),
+                ]),
               ),
             ),
           ],
@@ -96,7 +105,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-         ElevatedButton.icon(
+          ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -119,44 +128,49 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
             ),
           ),
           SizedBox(width: 16),
-           ElevatedButton.icon(
-              onPressed: () async {
-                 _formKey.currentState?.saveAndValidate();
-              var request = Map.from(_formKey.currentState!.value);
-              confirmEdit = await help.AlertHelpers.editConfirmation(context);
-              if (confirmEdit == true) {
-                try {
-                  provider.update(widget.review?.id, request);
+          ElevatedButton.icon(
+            onPressed: () async {
+              if (_formKey.currentState?.validate() ?? false) {
+                 _formKey.currentState?.save();
+                var request = Map.from(_formKey.currentState!.value);
+                confirmEdit = await help.AlertHelpers.editConfirmation(context);
+                if (confirmEdit == true) {
+                  try {
+                    provider.update(widget.review?.id, request);
 
-                  ScaffoldHelpers.showScaffold(
-                      context, "Review updated successfully");
-                  await Future.delayed(const Duration(seconds: 2));
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) => ReviewScreen(),
-                    ),
-                  );
-                } catch (e) {
-                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                    ScaffoldHelpers.showScaffold(
+                        context, "Review updated successfully");
+                    await Future.delayed(const Duration(seconds: 2));
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => ReviewScreen(),
+                      ),
+                    );
+                  } catch (e) {
+                    ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                  }
                 }
               }
-              },
-              icon: Icon(Icons.save),
-              label: Text(
-                "Save",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellowAccent,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+              else{
+                help.AlertHelpers.showAlert(context, "Invalid Form",
+                    "Please fill all required fields correctly.");
+              }
+            },
+            icon: Icon(Icons.save),
+            label: Text(
+              "Save",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
             ),
+          ),
           SizedBox(width: 16),
-         
         ],
       ),
     );
