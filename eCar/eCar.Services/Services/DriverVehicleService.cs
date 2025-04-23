@@ -58,8 +58,10 @@ namespace eCar.Services.Services
             if(vehicle!=null)
                 filteredQuery = filteredQuery.Where(x => x.VehicleId == search.VechicleId);
             if(search.DatePickUp!=null)
-                filteredQuery=filteredQuery.Where(x=>x.DatePickUp.Value.Date==search.DatePickUp.Value.Date);   
-              return filteredQuery;
+                filteredQuery=filteredQuery.Where(x=>x.DatePickUp.Value.Date==search.DatePickUp.Value.Date);
+            if (search.DriverName != null)
+                filteredQuery = filteredQuery.Where(x => x.Driver.User.Name.StartsWith(search.DriverName));
+            return filteredQuery;
         }
         public override IQueryable<DriverVehicle> AddInclude(DriverVehicleSearchObject search, IQueryable<DriverVehicle> query)
         {

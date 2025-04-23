@@ -366,7 +366,7 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -374,6 +374,11 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                 ),
               );
             },
+            icon: Icon(Icons.arrow_back),
+            label: Text(
+              "Go back",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
@@ -382,15 +387,11 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: Text(
-              "Cancel",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
           ),
-          SizedBox(width: 16),
-          ElevatedButton(
+           SizedBox(width: 16),
+          ElevatedButton.icon(
             onPressed: () async {
-              if (_formKey.currentState?.validate() ?? false) {
+               if (_formKey.currentState?.validate() ?? false) {
                 _formKey.currentState?.save();
                 var password = _formKey.currentState?.value['password'];
                 var confirmPassword =
@@ -441,6 +442,11 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                     "Please fill all required fields correctly.");
               }
             },
+            icon: Icon(Icons.save),
+            label: Text(
+              "Save",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
@@ -449,11 +455,8 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: Text(
-              "Save",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
           ),
+          
         ],
       ),
     );

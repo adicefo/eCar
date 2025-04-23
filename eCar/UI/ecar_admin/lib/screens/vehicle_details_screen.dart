@@ -156,7 +156,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -164,6 +164,11 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                 ),
               );
             },
+            icon: Icon(Icons.arrow_back),
+            label: Text(
+              "Go back",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
@@ -172,15 +177,11 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: Text(
-              "Cancel",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
           ),
           SizedBox(width: 16),
-          ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState?.validate() ?? false) {
+          ElevatedButton.icon(
+              onPressed: () async {
+                 if (_formKey.currentState?.validate() ?? false) {
                 _formKey.currentState?.save();
                 var request = Map.from(_formKey.currentState!.value);
                 if (_base64Image != null) {
@@ -223,20 +224,22 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                 help.AlertHelpers.showAlert(context, "Invalid Form",
                     "Please fill all required fields correctly.");
               }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellowAccent,
-              foregroundColor: Colors.black,
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+              },
+              icon: Icon(Icons.save),
+              label: Text(
+                "Save",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
-            child: Text(
-              "Save",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
+        
         ],
       ),
     );

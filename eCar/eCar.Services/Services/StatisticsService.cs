@@ -57,6 +57,8 @@ namespace eCar.Services.Services
                 filteredQuery = filteredQuery.Where(x => x.DriverId == search.DriverId);
             if (search.BeginningOfWork != null)
                 filteredQuery = filteredQuery.Where(x => x.BeginningOfWork.Value.Date == search.BeginningOfWork.Value.Date);
+            if (search.DriverName != null)
+                filteredQuery = filteredQuery.Where(x => x.Driver.User.Name.StartsWith(search.DriverName));
             return filteredQuery;
         }
         public override IQueryable<Statistic> AddInclude(StatisticsSearchObjectcs search, IQueryable<Statistic> query)

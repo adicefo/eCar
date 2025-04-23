@@ -9,6 +9,7 @@ namespace eCar.Model.SearchObjects
     public class DriverVehicleSearchObject:BaseSearchObject
     {
         public int? DriverId { get; set; }
+        public string? DriverName { get; set; }
         public int? VechicleId { get; set; }
         public DateTime? DatePickUp { get; set; }
     }

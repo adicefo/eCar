@@ -35,6 +35,8 @@ namespace eCar.Services.Services
         public override IQueryable<CompanyPrice> AddFilter(CompanyPriceSearchObject search, IQueryable<CompanyPrice> query)
         {
             var filteredQuery= base.AddFilter(search, query);
+            if (search.PricePerKilometer != null)
+                filteredQuery = filteredQuery.Where(x => x.PricePerKilometar == search.PricePerKilometer);
             if (search.PricePerKilometarGTE != null)
                 filteredQuery = filteredQuery.Where(x => x.PricePerKilometar >= search.PricePerKilometarGTE);
             if (search.PricePerKilometarLTE != null)

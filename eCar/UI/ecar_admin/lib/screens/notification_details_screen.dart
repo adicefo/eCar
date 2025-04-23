@@ -144,7 +144,7 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton.icon(
+         ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -152,9 +152,9 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                 ),
               );
             },
-            icon: Icon(Icons.cancel),
+            icon: Icon(Icons.arrow_back),
             label: Text(
-              "Cancel",
+              "Go back",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             style: ElevatedButton.styleFrom(

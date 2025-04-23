@@ -96,7 +96,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton(
+         ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -104,6 +104,11 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                 ),
               );
             },
+            icon: Icon(Icons.arrow_back),
+            label: Text(
+              "Go back",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
@@ -112,15 +117,11 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            child: Text(
-              "Cancel",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
           ),
           SizedBox(width: 16),
-          ElevatedButton(
-            onPressed: () async {
-              _formKey.currentState?.saveAndValidate();
+           ElevatedButton.icon(
+              onPressed: () async {
+                 _formKey.currentState?.saveAndValidate();
               var request = Map.from(_formKey.currentState!.value);
               confirmEdit = await help.AlertHelpers.editConfirmation(context);
               if (confirmEdit == true) {
@@ -139,20 +140,23 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                   ScaffoldHelpers.showScaffold(context, "${e.toString()}");
                 }
               }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellowAccent,
-              foregroundColor: Colors.black,
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
+              },
+              icon: Icon(Icons.save),
+              label: Text(
+                "Save",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
             ),
-            child: Text(
-              "Save",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
+          SizedBox(width: 16),
+         
         ],
       ),
     );

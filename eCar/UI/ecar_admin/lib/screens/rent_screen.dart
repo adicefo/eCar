@@ -25,6 +25,8 @@ class _RentScreenState extends State<RentScreen> {
   int _currentPage = 0;
   int _pageSize = 8;
   int _totalPages = 1;
+  bool isLoading = false;
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -34,6 +36,11 @@ class _RentScreenState extends State<RentScreen> {
   }
 
   Future<void> _fetchData() async {
+    setState(() {
+      isLoading = true;
+      result = null; // Clear current results to show loading indicator
+    });
+
     try {
       var filter = {
         'Status': _selectedStatus,
@@ -42,9 +49,16 @@ class _RentScreenState extends State<RentScreen> {
       };
       result = await provider.get(filter: filter);
       setState(() {
-        _totalPages = (result!.count! / _pageSize).ceil();
+        if (result != null && result!.count != null) {
+          _totalPages = (result!.count! / _pageSize).ceil();
+          if (_totalPages < 1) _totalPages = 1;
+        }
+        isLoading = false;
       });
     } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
     }
   }
@@ -54,278 +68,436 @@ class _RentScreenState extends State<RentScreen> {
     return MasterScreen(
         "Rent",
         Column(
-          children: [_buildSearch(), _buildResultView(), _buildPagination()],
+          children: [
+            _buildSearch(),
+            isLoading
+                ? Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(Colors.yellowAccent),
+                      ),
+                    ),
+                  )
+                : _buildResultView(),
+            if (!isLoading && result != null && result!.result.isNotEmpty)
+              _buildPagination()
+          ],
         ));
   }
 
   Widget _buildSearch() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: DropdownButtonFormField<String>(
-              decoration: FormStyleHelpers.dropdownDecoration(
-                labelText: "Rent Status",
-                hintText: "Select status",
-              ),
-              value: _selectedStatus,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedStatus = newValue;
-                });
-              },
-              items: const [
-                DropdownMenuItem(value: "wait", child: Text("Wait")),
-                DropdownMenuItem(value: "active", child: Text("Active")),
-                DropdownMenuItem(value: "finished", child: Text("Finished")),
-              ],
-              style: FormStyleHelpers.textFieldTextStyle(),
-            ),
-          ),
-          SizedBox(width: 24),
-          SizedBox(
-            width: 120,
-            child: ElevatedButton.icon(
-              onPressed: () async {
-                _currentPage = 0;
-                _fetchData();
-              },
-              icon: Icon(Icons.search),
-              label: Text("Search"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellowAccent,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.all(16.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Search Rentals",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
             ),
-          ),
-          SizedBox(width: 16),
-          SizedBox(
-            width: 120,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => RentDetailsScreen(),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    decoration: FormStyleHelpers.dropdownDecoration(
+                      labelText: 'Rent Status',
+                      hintText: 'Select status',
+                    ),
+                    value: _selectedStatus,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedStatus = value;
+                      });
+                    },
+                    items: const [
+                      DropdownMenuItem(value: null, child: Text('All')),
+                      DropdownMenuItem(value: 'wait', child: Text('Wait')),
+                      DropdownMenuItem(value: 'active', child: Text('Active')),
+                      DropdownMenuItem(
+                          value: 'finished', child: Text('Finished')),
+                    ],
+                    style: FormStyleHelpers.textFieldTextStyle(),
                   ),
-                );
-              },
-              icon: Icon(Icons.add),
-              label: Text("Add"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellowAccent,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
                 ),
-              ),
+                SizedBox(width: 24),
+                SizedBox(
+                  width: 120,
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      setState(() {
+                        _currentPage = 0;
+                      });
+                      await _fetchData();
+                    },
+                    icon: const Icon(Icons.search),
+                    label: const Text('Search'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellowAccent,
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                SizedBox(
+                  width: 120,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => RentDetailsScreen(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text('Add'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellowAccent,
+                      foregroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildResultView() {
+    if (result == null || result!.result.isEmpty) {
+      return Expanded(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.car_rental,
+                size: 64,
+                color: Colors.black26,
+              ),
+              SizedBox(height: 16),
+              Text(
+                "No rentals found",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black54,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                "Try adjusting your search criteria",
+                style: TextStyle(
+                  color: Colors.black38,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Expanded(
-        child: SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 50.0),
-        child: Align(
-          alignment: Alignment.center,
-          child: Container(
-            width: MediaQuery.of(context).size.width * 1,
-            color: Colors.white,
-            child: DataTable(
-              columnSpacing: 25,
-              columns: [
-                DataColumn(
-                    label: Text("RentingDate",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                DataColumn(
-                    label: Text("EndingDate",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                DataColumn(
-                    label: Text("FullPrice",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                DataColumn(
-                    label: Text("Status",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                DataColumn(
-                    label: Text("Vehicle name",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                DataColumn(
-                    label: Text("Client name",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                DataColumn(
-                    label: Text("Active",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                DataColumn(
-                    label: Text("Edit",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-                DataColumn(
-                    label: Text("Delete",
-                        style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold))),
-              ],
-              rows: result?.result
-                      .map((e) => DataRow(
-                            color: WidgetStateProperty<
-                                Color?>.fromMap(<WidgetStatesConstraint, Color?>{
-                              WidgetState.hovered & WidgetState.focused:
-                                  Colors.blueGrey,
-                              ~WidgetState.disabled: Colors.grey,
-                            }),
-                            cells: [
-                              DataCell(Text(
-                                  e.rentingDate.toString().substring(0, 10),
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(
-                                  e.endingDate.toString().substring(0, 10),
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text("${e.fullPrice.toString()} KM",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(e.status!,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(e.vehicle!.name!,
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(Text(
-                                  "${e.client?.user?.name} ${e.client?.user?.surname}",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold))),
-                              DataCell(
-  e.status == "wait"
-      ? ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => RentRequestScreen(rent: e),
-              ),
-            );
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.blueAccent),
-          ),
-          child: Text(
-            "Active",
-            style: TextStyle(color: Colors.black),
-          ),
-        )
-      : ElevatedButton(
-          onPressed: () {
-            AlertHelpers.showAlert(
-              context,
-              "Invalid action",
-              "Unable operation. Your status is not 'wait'!",
-            );
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.grey),
-          ),
-          child: Text(
-            "Active",
-            style: TextStyle(color: Colors.black),
-          ),
+      child: Card(
+        elevation: 4,
+        margin: const EdgeInsets.all(16.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-),
-                              DataCell(
-  e.status == "finished"
-      ? ElevatedButton(
-          onPressed: () {
-            AlertHelpers.showAlert(context, "Invalid action", "Unable operation. You cannot edit when your status is finished!");
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.grey),
-          ),
-          child: Text(
-            "Edit",
-            style: TextStyle(color: Colors.black),
-          ),
-        )
-      : ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => RentDetailsScreen(rent: e),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Rentals List",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  if (result != null && result!.count != null)
+                    Text(
+                      "${result!.result.length} of ${result!.count} rentals",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                ],
               ),
-            );
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.yellowAccent),
-          ),
-          child: Text(
-            "Edit",
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
-),
+              SizedBox(height: 16),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: DataTable(
+                      headingRowColor:
+                          MaterialStateProperty.all(Colors.grey.shade100),
+                      dataRowHeight: 70,
+                      columnSpacing: 24,
+                      horizontalMargin: 16,
+                      showBottomBorder: true,
+                      dividerThickness: 1,
+                      headingTextStyle: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                      columns: [
+                        DataColumn(
+                          label: Container(
+                            width: 90,
+                            child: Text("Start Date"),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: 90,
+                            child: Text("End Date"),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: 80,
+                            child: Text("Price"),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: 80,
+                            child: Text("Status"),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: 100,
+                            child: Text("Vehicle"),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: 120,
+                            child: Text("Client"),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Container(
+                            width: 120,
+                            child: Text("Actions"),
+                          ),
+                        ),
+                      ],
+                      rows: result!.result.asMap().entries.map((entry) {
+                        int idx = entry.key;
+                        Rent e = entry.value;
 
-                              DataCell(
-                                ElevatedButton(
-                                  onPressed: () async {
-                                    bool? confirmDelete =
-                                        await AlertHelpers.deleteConfirmation(
-                                            context);
+                        // Determine status color
+                        Color statusColor = Colors.grey.shade700;
+                        if (e.status == "wait")
+                          statusColor = Colors.orange.shade700;
+                        if (e.status == "active")
+                          statusColor = Colors.green.shade700;
+                        if (e.status == "finished")
+                          statusColor = Colors.blue.shade700;
 
-                                    if (confirmDelete == true) {
-                                      try {
-                                        provider.delete(e.id);
-                                        await Future.delayed(
-                                            const Duration(seconds: 1));
-                                        ScaffoldHelpers.showScaffold(context,
-                                            "Item successfully deleted");
-                                        result = await provider.get();
-                                        setState(() {});
-                                      } catch (e) {
-                                        ScaffoldHelpers.showScaffold(
-                                            context, "${e.toString()}");
-                                      }
-                                    }
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.redAccent),
-                                  ),
-                                  child: Text(
-                                    "Delete",
-                                    style: TextStyle(color: Colors.black),
+                        return DataRow(
+                          color: MaterialStateProperty.resolveWith<Color?>(
+                            (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.hovered))
+                                return Colors.yellowAccent.withOpacity(0.1);
+                              if (idx % 2 == 0) return Colors.grey.shade50;
+                              return null;
+                            },
+                          ),
+                          cells: [
+                            DataCell(
+                              Text(
+                                e.rentingDate.toString().substring(0, 10),
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                e.endingDate.toString().substring(0, 10),
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                "${e.fullPrice.toString()} KM",
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: statusColor.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border:
+                                      Border.all(color: statusColor, width: 1),
+                                ),
+                                child: Text(
+                                  e.status!.toUpperCase(),
+                                  style: TextStyle(
+                                    color: statusColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ),
-                            ],
-                          ))
-                      .toList()
-                      .cast<DataRow>() ??
-                  [],
-            ),
+                            ),
+                            DataCell(
+                              Text(
+                                e.vehicle!.name ?? "-",
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                "${e.client?.user?.name ?? ''} ${e.client?.user?.surname ?? ''}",
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Row(
+                                children: [
+                                  if (e.status == "wait")
+                                    IconButton(
+                                      icon: Icon(Icons.play_arrow,
+                                          color: Colors.blue),
+                                      tooltip: "Activate rent",
+                                      onPressed: () {
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                RentRequestScreen(rent: e),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  else
+                                    IconButton(
+                                      icon: Icon(Icons.play_arrow,
+                                          color: Colors.grey),
+                                      tooltip: "Status not 'wait'",
+                                      onPressed: () {
+                                        AlertHelpers.showAlert(
+                                          context,
+                                          "Invalid action",
+                                          "Unable operation. Your status is not 'wait'!",
+                                        );
+                                      },
+                                    ),
+                                  if (e.status != "finished")
+                                    IconButton(
+                                      icon:
+                                          Icon(Icons.edit, color: Colors.blue),
+                                      tooltip: "Edit rent",
+                                      onPressed: () {
+                                        Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                RentDetailsScreen(rent: e),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  else
+                                    IconButton(
+                                      icon:
+                                          Icon(Icons.edit, color: Colors.grey),
+                                      tooltip: "Cannot edit finished rent",
+                                      onPressed: () {
+                                        AlertHelpers.showAlert(
+                                          context,
+                                          "Invalid action",
+                                          "Unable operation. You cannot edit when your status is finished!",
+                                        );
+                                      },
+                                    ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete, color: Colors.red),
+                                    tooltip: "Delete rent",
+                                    onPressed: () async {
+                                      bool? confirmDelete =
+                                          await AlertHelpers.deleteConfirmation(
+                                              context);
+                                      if (confirmDelete == true) {
+                                        try {
+                                          provider.delete(e.id);
+                                          await Future.delayed(
+                                              const Duration(seconds: 1));
+                                          ScaffoldHelpers.showScaffold(context,
+                                              "Rent successfully deleted");
+                                          await _fetchData();
+                                        } catch (e) {
+                                          ScaffoldHelpers.showScaffold(
+                                              context, "${e.toString()}");
+                                        }
+                                      }
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
-    ));
+    );
   }
 
   Widget _buildPagination() {
@@ -390,7 +562,8 @@ class _RentScreenState extends State<RentScreen> {
       setState(() => _currentPage++);
       await _fetchData();
     } else {
-      AlertHelpers.showAlert(context, "Warning", "Something went wrong!");
+      AlertHelpers.showAlert(
+          context, "Warning", "You've reached the last page!");
     }
   }
 
@@ -399,7 +572,8 @@ class _RentScreenState extends State<RentScreen> {
       setState(() => _currentPage--);
       await _fetchData();
     } else {
-      AlertHelpers.showAlert(context, "Warning", "Something went wrong!");
+      AlertHelpers.showAlert(
+          context, "Warning", "You're already on the first page!");
     }
   }
 }

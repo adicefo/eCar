@@ -8,7 +8,9 @@ namespace eCar.Model.SearchObjects
 {
     public class CompanyPriceSearchObject:BaseSearchObject
     {
+        public decimal? PricePerKilometer { get; set; }
         public decimal? PricePerKilometarGTE { get; set; }
         public decimal? PricePerKilometarLTE { get; set; }
+
     }
 }

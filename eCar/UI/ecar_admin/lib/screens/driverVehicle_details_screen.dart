@@ -197,23 +197,28 @@ class _DriverVehicleDetailsScreenState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    Navigator.of(context).pop();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey[300],
-                    foregroundColor: Colors.black,
-                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                  child: Text(
-                    "Cancel",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
+               ElevatedButton.icon(
+            onPressed: () async {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => DriverVehicleScreen(),
                 ),
+              );
+            },
+            icon: Icon(Icons.arrow_back),
+            label: Text(
+              "Go back",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
                 SizedBox(width: 16),
                 ElevatedButton.icon(
                   onPressed: () async {
@@ -249,7 +254,7 @@ class _DriverVehicleDetailsScreenState
                   },
                   icon: Icon(Icons.save),
                   label: Text(
-                    "Assign Vehicle",
+                    "Save",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(

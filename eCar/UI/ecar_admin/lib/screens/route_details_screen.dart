@@ -185,7 +185,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 ],
               ),
             ] else ...[
-              // For adding new routes
               PlaceSearchField(
                 key: UniqueKey(),
                 label: "Search for source location",
@@ -207,7 +206,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
                     print("Source coordinates updated: $sourceCoordinates");
 
-                    // Update form fields (though these are hidden, they're used for the API call)
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       final latField =
                           _formKey.currentState?.fields['sourcePoint_latitude'];
@@ -229,7 +227,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 },
               ),
               SizedBox(height: 10),
-              // Show the coordinates in a visible container for feedback
               Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -260,7 +257,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   ],
                 ),
               ),
-              // Hidden fields to store coordinates
               Opacity(
                 opacity: 0,
                 child: SizedBox(
@@ -285,7 +281,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
             SizedBox(height: 25),
 
-            // Destination location section
             Text(
               "Destination Location",
               style: TextStyle(
@@ -358,7 +353,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                     print(
                         "Destination coordinates updated: $destinationCoordinates");
 
-                    // Update form fields (though these are hidden, they're used for the API call)
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       final latField = _formKey
                           .currentState?.fields['destinationPoint_latitude'];
@@ -381,7 +375,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 },
               ),
               SizedBox(height: 10),
-              // Show the coordinates in a visible container for feedback
               Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -412,7 +405,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   ],
                 ),
               ),
-              // Hidden fields to store coordinates
               Opacity(
                 opacity: 0,
                 child: SizedBox(
@@ -438,7 +430,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
 
             SizedBox(height: 25),
 
-            // Driver and Client dropdowns
             Row(
               children: [
                 Expanded(
@@ -576,7 +567,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                     "srid": 4326
                   },
                   "destinationPoint": {
-                    "longitude": destinationCoordinates['longitude']?.toDouble(),
+                    "longitude":
+                        destinationCoordinates['longitude']?.toDouble(),
                     "latitude": destinationCoordinates['latitude']?.toDouble(),
                     "srid": 4326
                   },

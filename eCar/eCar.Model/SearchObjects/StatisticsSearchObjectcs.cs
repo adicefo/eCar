@@ -9,6 +9,7 @@ namespace eCar.Model.SearchObjects
     public class StatisticsSearchObjectcs:BaseSearchObject
     {
         public int? DriverId { get; set; }
+        public string? DriverName { get; set; }
         public DateTime? BeginningOfWork { get; set; }
     }
 }

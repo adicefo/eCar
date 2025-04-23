@@ -8,7 +8,6 @@ import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:number_pagination/number_pagination.dart';
 
 class RouteListScreen extends StatefulWidget {
   const RouteListScreen({super.key});
@@ -24,6 +23,8 @@ class _RouteListScreenState extends State<RouteListScreen> {
   late RouteProvider provider;
   String? _selectedStatus;
   SearchResult<Model.Route>? result;
+  bool isLoading = true;
+
   @override
   void didChangeDependencies() {
     provider = context.read<RouteProvider>();
@@ -31,284 +32,468 @@ class _RouteListScreenState extends State<RouteListScreen> {
     _fetchData();
   }
 
+  Future<void> _fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      var filter = {
+        'Status': _selectedStatus,
+        'PageNumber': _currentPage.toString(),
+        'PageSize': _pageSize.toString(),
+      };
+
+      result = await provider.get(filter: filter);
+
+      // Calculate total pages based on result
+      if (result != null && result!.count != null) {
+        _totalPages = (result!.count! / _pageSize).ceil();
+        if (_totalPages < 1) _totalPages = 1;
+      }
+
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MasterScreen(
-        "Routes",
-        Container(
-            child: Column(
-          children: [_buildSearch(), _buildResultView(), _buildPagination()],
-        )));
+      "Routes",
+      Container(
+        child: Column(
+          children: [
+            _buildSearch(),
+            _buildResultView(),
+            _buildPagination(),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildSearch() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: DropdownButtonFormField<String>(
-              decoration: FormStyleHelpers.dropdownDecoration(
-                labelText: "Route Status",
-                hintText: "Select status",
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.all(16.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Filter Routes",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
-              value: _selectedStatus,
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedStatus = newValue;
-                });
-              },
-              items: [
-                DropdownMenuItem(value: "wait", child: Text("Wait")),
-                DropdownMenuItem(value: "active", child: Text("Active")),
-                DropdownMenuItem(value: "finished", child: Text("Finished")),
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    decoration: FormStyleHelpers.dropdownDecoration(
+                      labelText: "Route Status",
+                      hintText: "Select status",
+                    ),
+                    value: _selectedStatus,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedStatus = newValue;
+                      });
+                    },
+                    items: [
+                      DropdownMenuItem(
+                          value: null, child: Text("All statuses")),
+                      DropdownMenuItem(value: "wait", child: Text("Wait")),
+                      DropdownMenuItem(value: "active", child: Text("Active")),
+                      DropdownMenuItem(
+                          value: "finished", child: Text("Finished")),
+                    ],
+                    style: FormStyleHelpers.textFieldTextStyle(),
+                  ),
+                ),
+                SizedBox(width: 24),
+                SizedBox(
+                  width: 120,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      _currentPage = 0;
+                      _fetchData();
+                    },
+                    icon: Icon(Icons.filter_list),
+                    label: Text("Filter"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellowAccent,
+                      foregroundColor: Colors.black,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                SizedBox(
+                  width: 120,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => RouteDetailsScreen()));
+                    },
+                    icon: Icon(Icons.add),
+                    label: Text("Add"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellowAccent,
+                      foregroundColor: Colors.black,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
               ],
-              style: FormStyleHelpers.textFieldTextStyle(),
             ),
-          ),
-          SizedBox(width: 24),
-          SizedBox(
-            width: 120,
-            child: ElevatedButton.icon(
-              onPressed: () async {
-                _currentPage = 0;
-                await _fetchData();
-              },
-              icon: Icon(Icons.search),
-              label: Text("Search"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellowAccent,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-          SizedBox(
-            width: 120,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => RouteDetailsScreen()));
-              },
-              icon: Icon(Icons.add),
-              label: Text("Add"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellowAccent,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildResultView() {
-    if (result == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    return Expanded(
+      child: Card(
+        elevation: 4,
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Routes List",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  if (result != null && result!.count != null)
+                    Text(
+                      "Showing ${result!.result.length} of ${result!.count} routes",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                ],
+              ),
+              SizedBox(height: 16),
+              Expanded(
+                child: _buildTableContent(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-    if (result!.result == null) {
-      return const Center(child: Text("No routes found"));
-    }
-    if (result!.count == null) {
-      return Container(
-        child: Text(
-          "Error",
-          style: TextStyle(color: Colors.amber),
+  Widget _buildTableContent() {
+    if (isLoading) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.yellowAccent),
+            ),
+            SizedBox(height: 16),
+            Text(
+              "Loading routes...",
+              style: TextStyle(
+                color: Colors.black54,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
         ),
       );
     }
-    return Expanded(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 50.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: Container(
-              width: MediaQuery.of(context).size.width * 1,
-              color: Colors.white,
-              child: DataTable(
-                columnSpacing: 25,
-                columns: [
-                  DataColumn(
-                      label: Text("Client name",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Driver name",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Status",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Start date",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("End date",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Duration",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Number of kilometars",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Full price",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Edit",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Delete",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                ],
-                rows: result?.result
-                        .map((e) => DataRow(
-                                color: WidgetStateProperty<
-                                    Color?>.fromMap(<WidgetStatesConstraint, Color?>{
-                                  WidgetState.hovered & WidgetState.focused:
-                                      Colors.blueGrey,
-                                  ~WidgetState.disabled: Colors.grey,
-                                }),
-                                cells: [
-                                  DataCell(Text(e.client?.user?.name ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.driver?.user?.name ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.status ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(
-                                      e.startDate
-                                              ?.toString()
-                                              .substring(0, 16) ??
-                                          DateTime.now()
-                                              .toString()
-                                              .substring(0, 16),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(
-                                      e.endDate?.toString().substring(0, 16) ??
-                                          DateTime.now()
-                                              .toString()
-                                              .substring(0, 16),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.duration?.toString() ?? "0",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(
-                                      e.numberOfKilometars?.toString() ?? "0",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(
-                                      e.fullPrice != null
-                                          ? "${e.fullPrice.toString()} KM"
-                                          : "0KM",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                RouteDetailsScreen(route: e),
-                                          ),
-                                        );
-                                      },
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.yellowAccent),
-                                      ),
-                                      child: Text(
-                                        "Edit",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        bool? confirmDelete = await AlertHelpers
-                                            .deleteConfirmation(context);
-                                        if (confirmDelete == true) {
-                                          try {
-                                            provider.delete(e.id);
-                                            await Future.delayed(
-                                                const Duration(seconds: 1));
-                                            ScaffoldHelpers.showScaffold(
-                                                context,
-                                                "Item successfully deleted");
-                                            result = await provider.get(
-                                                filter: {
-                                                  'Status': _selectedStatus,
-                                                  'Page': _currentPage,
-                                                  'PageSize': _pageSize
-                                                });
-                                            setState(() {});
-                                          } catch (e) {
-                                            ScaffoldHelpers.showScaffold(
-                                                context, "${e.toString()}");
-                                          }
-                                        }
-                                      },
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.redAccent),
-                                      ),
-                                      child: Text(
-                                        "Delete",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                ]))
-                        .toList()
-                        .cast<DataRow>() ??
-                    [],
+
+    if (result == null || result!.result.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.route,
+              size: 64,
+              color: Colors.black26,
+            ),
+            SizedBox(height: 16),
+            Text(
+              "No routes found",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black54,
               ),
             ),
+            SizedBox(height: 8),
+            Text(
+              "Try adjusting your filter criteria",
+              style: TextStyle(
+                color: Colors.black38,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: DataTable(
+            headingRowColor: MaterialStateProperty.all(Colors.grey.shade100),
+            dataRowMinHeight: 60,
+            dataRowMaxHeight: 80,
+            columnSpacing: 24,
+            horizontalMargin: 16,
+            showBottomBorder: true,
+            dividerThickness: 1,
+            headingTextStyle: TextStyle(
+              color: Colors.black87,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            columns: [
+              DataColumn(
+                label: Container(
+                  width: 100,
+                  child: Text("Client"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 100,
+                  child: Text("Driver"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 80,
+                  child: Text("Status"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 120,
+                  child: Text("Start Date"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 120,
+                  child: Text("End Date"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 80,
+                  child: Text("Duration"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 80,
+                  child: Text("Distance"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 80,
+                  child: Text("Price"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 100,
+                  child: Text("Actions"),
+                ),
+              ),
+            ],
+            rows: result!.result.asMap().entries.map((entry) {
+              int idx = entry.key;
+              Model.Route e = entry.value;
+
+              // Determine status color
+              Color statusColor = Colors.grey.shade700;
+              if (e.status == "active") statusColor = Colors.green.shade700;
+              if (e.status == "wait") statusColor = Colors.orange.shade700;
+              if (e.status == "finished") statusColor = Colors.blue.shade700;
+
+              return DataRow(
+                color: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.hovered))
+                      return Colors.yellowAccent.withOpacity(0.1);
+                    if (idx % 2 == 0) return Colors.grey.shade50;
+                    return null;
+                  },
+                ),
+                cells: [
+                  DataCell(
+                    Text(
+                      e.client?.user?.name ?? "-",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      e.driver?.user?.name ?? "-",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: statusColor.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: statusColor, width: 1),
+                      ),
+                      child: Text(
+                        e.status?.toUpperCase() ?? "-",
+                        style: TextStyle(
+                          color: statusColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      e.startDate?.toString().substring(0, 16) ?? "-",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      e.endDate?.toString().substring(0, 16) ?? "-",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      e.duration?.toString() ?? "0",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      e.numberOfKilometars?.toString() ?? "0",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      e.fullPrice != null
+                          ? "${e.fullPrice.toString()} KM"
+                          : "0 KM",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit, color: Colors.blue),
+                          tooltip: "Edit route",
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    RouteDetailsScreen(route: e),
+                              ),
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          tooltip: "Delete route",
+                          onPressed: () async {
+                            bool? confirmDelete =
+                                await AlertHelpers.deleteConfirmation(context);
+                            if (confirmDelete == true) {
+                              try {
+                                await provider.delete(e.id);
+                                ScaffoldHelpers.showScaffold(
+                                    context, "Route successfully deleted");
+                                _fetchData();
+                              } catch (e) {
+                                ScaffoldHelpers.showScaffold(
+                                    context, "Error: ${e.toString()}");
+                              }
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
           ),
         ),
       ),
@@ -316,6 +501,10 @@ class _RouteListScreenState extends State<RouteListScreen> {
   }
 
   Widget _buildPagination() {
+    if (result == null || result!.result.isEmpty || _totalPages <= 1) {
+      return SizedBox.shrink();
+    }
+
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -372,31 +561,13 @@ class _RouteListScreenState extends State<RouteListScreen> {
     );
   }
 
-  Future<void> _fetchData() async {
-    try {
-      var filter = {
-        'Status': _selectedStatus,
-        'Page': _currentPage,
-        'PageSize': _pageSize,
-      };
-
-      result = await provider.get(filter: filter);
-      setState(() {
-        print("Count ${result!.count!}");
-        _totalPages = (result!.count! / _pageSize).ceil();
-        print(_totalPages);
-      });
-    } catch (e) {
-      ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
-    }
-  }
-
   void _goToNextPage() async {
     if (_currentPage < _totalPages - 1) {
       setState(() => _currentPage++);
       await _fetchData();
     } else {
-      AlertHelpers.showAlert(context, "Warning", "Something went wrong!");
+      AlertHelpers.showAlert(
+          context, "Warning", "You've reached the last page!");
     }
   }
 
@@ -405,7 +576,8 @@ class _RouteListScreenState extends State<RouteListScreen> {
       setState(() => _currentPage--);
       await _fetchData();
     } else {
-      AlertHelpers.showAlert(context, "Warning", "Something went wrong!");
+      AlertHelpers.showAlert(
+          context, "Warning", "You're already on the first page!");
     }
   }
 }

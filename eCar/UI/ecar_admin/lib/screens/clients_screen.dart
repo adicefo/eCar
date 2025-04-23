@@ -20,24 +20,33 @@ class _ClientListScreenState extends State<ClientListScreen> {
   SearchResult<Client>? result;
   TextEditingController _nameEditingController = TextEditingController();
   TextEditingController _surnameEditingController = TextEditingController();
+  bool isLoading = true;
+
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     provider = context.read<ClientProvider>();
     _fetchData();
     super.didChangeDependencies();
   }
 
   Future<void> _fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       var filter = {
-        'NameGTE': _nameEditingController.text ?? "",
-        'SurnameGTE': _surnameEditingController.text ?? ""
+        'NameGTE': _nameEditingController.text,
+        'SurnameGTE': _surnameEditingController.text
       };
       result = await provider.get(filter: filter);
-      setState(() {});
-      print(result);
+      setState(() {
+        isLoading = false;
+      });
     } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
       ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
     }
   }
@@ -53,344 +62,357 @@ class _ClientListScreenState extends State<ClientListScreen> {
   }
 
   Widget _buildSearch() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              decoration: FormStyleHelpers.searchFieldDecoration(
-                labelText: "Name",
-                hintText: "Search by name",
+    return Card(
+      elevation: 4,
+      margin: const EdgeInsets.all(16.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Search Clients",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
-              controller: _nameEditingController,
-              style: FormStyleHelpers.textFieldTextStyle(),
             ),
-          ),
-          SizedBox(width: 24),
-          Expanded(
-            child: TextField(
-              decoration: FormStyleHelpers.searchFieldDecoration(
-                labelText: "Surname",
-                hintText: "Search by surname",
-              ),
-              controller: _surnameEditingController,
-              style: FormStyleHelpers.textFieldTextStyle(),
-            ),
-          ),
-          SizedBox(width: 24),
-          SizedBox(
-            width: 120,
-            child: ElevatedButton.icon(
-              onPressed: () async {
-                _fetchData();
-              },
-              icon: Icon(Icons.search),
-              label: Text("Search"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellowAccent,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: FormStyleHelpers.searchFieldDecoration(
+                      labelText: "Name",
+                      hintText: "Search by name",
+                    ),
+                    controller: _nameEditingController,
+                    style: FormStyleHelpers.textFieldTextStyle(),
+                    onSubmitted: (_) => _fetchData(),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          SizedBox(width: 16),
-          SizedBox(
-            width: 120,
-            child: ElevatedButton.icon(
-              onPressed: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => ClientsDetailsScreen()));
-              },
-              icon: Icon(Icons.add),
-              label: Text("Add"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.yellowAccent,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                SizedBox(width: 24),
+                Expanded(
+                  child: TextField(
+                    decoration: FormStyleHelpers.searchFieldDecoration(
+                      labelText: "Surname",
+                      hintText: "Search by surname",
+                    ),
+                    controller: _surnameEditingController,
+                    style: FormStyleHelpers.textFieldTextStyle(),
+                    onSubmitted: (_) => _fetchData(),
+                  ),
                 ),
-              ),
+                SizedBox(width: 24),
+                SizedBox(
+                  width: 120,
+                  child: ElevatedButton.icon(
+                    onPressed: _fetchData,
+                    icon: Icon(Icons.search),
+                    label: Text("Search"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellowAccent,
+                      foregroundColor: Colors.black,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                SizedBox(
+                  width: 120,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => ClientsDetailsScreen()));
+                    },
+                    icon: Icon(Icons.add),
+                    label: Text("Add"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellowAccent,
+                      foregroundColor: Colors.black,
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildResultView() {
     return Expanded(
-      child: SingleChildScrollView(
+      child: Card(
+        elevation: 4,
+        margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Padding(
-          padding: const EdgeInsets.only(top: 50.0),
-          child: Align(
-            alignment: Alignment.center,
-            child: Container(
-              width: MediaQuery.of(context).size.width * 1,
-              color: Colors.white,
-              child: DataTable(
-                columnSpacing: 25,
-                columns: [
-                  DataColumn(
-                      label: Text("Name",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Surname",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Username",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Email",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Telephone number",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Edit",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Delete",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)))
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Clients List",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  if (result != null)
+                    Text(
+                      "${result!.result.length} clients found",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                 ],
-                rows: result?.result
-                        .map((e) => DataRow(
-                                color: WidgetStateProperty<
-                                    Color?>.fromMap(<WidgetStatesConstraint, Color?>{
-                                  WidgetState.hovered & WidgetState.focused:
-                                      Colors.blueGrey,
-                                  ~WidgetState.disabled: Colors.grey,
-                                }),
-                                cells: [
-                                  DataCell(Text(e.user?.name ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.user?.surname ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.user?.userName ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.user?.email ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.user?.telephoneNumber ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ClientsDetailsScreen(client: e),
-                                          ),
-                                        );
-                                      },
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.yellowAccent),
-                                      ),
-                                      child: Text(
-                                        "Edit",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        bool? confirmDelete = await AlertHelpers
-                                            .deleteConfirmation(context);
-                                        if (confirmDelete == true) {
-                                          try {
-                                            provider.delete(e.id);
-                                            await Future.delayed(
-                                                const Duration(seconds: 1));
-                                            ScaffoldHelpers.showScaffold(
-                                                context,
-                                                "Item successfully deleted");
-                                            result = await provider.get();
-                                            setState(() {});
-                                          } catch (e) {
-                                            ScaffoldHelpers.showScaffold(
-                                                context, "${e.toString()}");
-                                          }
-                                        }
-                                      },
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.redAccent),
-                                      ),
-                                      child: Text(
-                                        "Delete",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                ]))
-                        .toList()
-                        .cast<DataRow>() ??
-                    [],
               ),
-            ),
+              SizedBox(height: 16),
+              Expanded(
+                child: _buildTableContent(),
+              ),
+            ],
           ),
         ),
       ),
-    ); /*Expanded(child: 
-    SingleChildScrollView(child: 
-    Padding(padding: const EdgeInsets.only(top:50.0),child: 
-    Align(
-      alignment: Alignment.center,
-      child: Container(
-        child: DataTable(
-          columnSpacing: 25,
-          columns: [
-            DataColumn(
-                      label: Text("ID",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Name",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Surname",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Username",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Email",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Telephone number",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),DataColumn(
-                      label: Text("Edit",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold))),
-                  DataColumn(
-                      label: Text("Delete",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold)))
-          ],
-          rows: 
-            result?.result
-                        .map((e) => DataRow(
-                                color: WidgetStateProperty<
-                                    Color?>.fromMap(<WidgetStatesConstraint, Color?>{
-                                  WidgetState.hovered & WidgetState.focused:
-                                      Colors.blueGrey,
-                                  ~WidgetState.disabled: Colors.grey,
-                                }),
-                                cells: [
-                                  DataCell(Text(e.id.toString(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.user?.name ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.user?.surname ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.user?.userName ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.user?.email ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),
-                                  DataCell(Text(e.user?.telephoneNumber ?? " ",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold))),DataCell(
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pushReplacement(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                ClientsDetailsScreen(client: e),
-                                          ),
-                                        );
-                                      },
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.yellowAccent),
-                                      ),
-                                      child: Text(
-                                        "Edit",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    ElevatedButton(
-                                      onPressed: () async {
-                                        provider.delete(e.id);
-                                        await Future.delayed(
-                                            const Duration(seconds: 2));
-                                        result = await provider.get();
-                                        setState(() {});
-                                      },
-                                      style: ButtonStyle(
-                                        backgroundColor:
-                                            MaterialStateProperty.all(
-                                                Colors.redAccent),
-                                      ),
-                                      child: Text(
-                                        "Delete",
-                                        style: TextStyle(color: Colors.black),
-                                      ),
-                                    ),
-                                  ),
+    );
+  }
+
+  Widget _buildTableContent() {
+    if (isLoading) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.yellowAccent),
+            ),
+            SizedBox(height: 16),
+            Text(
+              "Loading clients...",
+              style: TextStyle(
+                color: Colors.black54,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
-      ).toList().cast<DataRow> ??[],
-    ),
-    ),
-    ),
-    ),),);*/
+      );
+    }
+
+    if (result == null || result!.result.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.people_outline,
+              size: 64,
+              color: Colors.black26,
+            ),
+            SizedBox(height: 16),
+            Text(
+              "No clients found",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black54,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              "Try adjusting your search criteria",
+              style: TextStyle(
+                color: Colors.black38,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: SingleChildScrollView(
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: DataTable(
+            headingRowColor: MaterialStateProperty.all(Colors.grey.shade100),
+            dataRowMinHeight: 60,
+            dataRowMaxHeight: 80,
+            columnSpacing: 32,
+            horizontalMargin: 16,
+            showBottomBorder: true,
+            dividerThickness: 1,
+            headingTextStyle: TextStyle(
+              color: Colors.black87,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            columns: [
+              DataColumn(
+                label: Container(
+                  width: 80,
+                  child: Text("Name"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 80,
+                  child: Text("Surname"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 100,
+                  child: Text("Username"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 150,
+                  child: Text("Email"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 120,
+                  child: Text("Phone"),
+                ),
+              ),
+              DataColumn(
+                label: Container(
+                  width: 100,
+                  child: Text("Actions"),
+                ),
+              ),
+            ],
+            rows: result!.result.asMap().entries.map((entry) {
+              int idx = entry.key;
+              Client e = entry.value;
+              return DataRow(
+                color: MaterialStateProperty.resolveWith<Color?>(
+                  (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.hovered))
+                      return Colors.yellowAccent.withOpacity(0.1);
+                    if (idx % 2 == 0) return Colors.grey.shade50;
+                    return null;
+                  },
+                ),
+                cells: [
+                  DataCell(
+                    Text(
+                      e.user?.name ?? "-",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      e.user?.surname ?? "-",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      e.user?.userName ?? "-",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      e.user?.email ?? "-",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Text(
+                      e.user?.telephoneNumber ?? "-",
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                  DataCell(
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit, color: Colors.blue),
+                          tooltip: "Edit client",
+                          onPressed: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ClientsDetailsScreen(client: e),
+                              ),
+                            );
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          tooltip: "Delete client",
+                          onPressed: () async {
+                            bool? confirmDelete =
+                                await AlertHelpers.deleteConfirmation(context);
+                            if (confirmDelete == true) {
+                              try {
+                                await provider.delete(e.id);
+                                ScaffoldHelpers.showScaffold(
+                                    context, "Client successfully deleted");
+                                _fetchData();
+                              } catch (e) {
+                                ScaffoldHelpers.showScaffold(
+                                    context, "Error: ${e.toString()}");
+                              }
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
   }
 }

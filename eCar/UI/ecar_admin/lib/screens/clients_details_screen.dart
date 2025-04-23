@@ -368,7 +368,7 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: () async {
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
@@ -376,19 +376,26 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                 ),
               );
             },
+            icon: Icon(Icons.arrow_back),
+            label: Text(
+              "Go back",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.yellowAccent,
               foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
             ),
-            child: const Text("Go back"),
           ),
           SizedBox(
             width: 30,
           ),
-          ElevatedButton(
-            onPressed: () async {
-              if (_formKey.currentState?.validate() ?? false) {
+          ElevatedButton.icon(
+              onPressed: () async {
+                 if (_formKey.currentState?.validate() ?? false) {
                 _formKey.currentState?.save();
                 var password = _formKey.currentState?.value['password'];
                 var confirmPassword =
@@ -436,14 +443,22 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                       "Form is not valid. Please fix the values");
                 }
               }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellowAccent,
-              foregroundColor: Colors.black,
-              minimumSize: Size(300, 50),
+              },
+              icon: Icon(Icons.save),
+              label: Text(
+                "Save",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellowAccent,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
             ),
-            child: const Text("Save"),
-          ),
+          
         ],
       ),
     );
