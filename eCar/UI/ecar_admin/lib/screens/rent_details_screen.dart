@@ -89,7 +89,6 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
           children: [
             if (widget.rent == null) ...[
               const SizedBox(height: 20),
-
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(left: 8, bottom: 4),
@@ -114,9 +113,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 inputType: InputType.date,
                 validator: FormBuilderValidators.required(),
               ),
-
               const SizedBox(height: 25),
-
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(left: 8, bottom: 4),
@@ -141,9 +138,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 inputType: InputType.date,
                 validator: FormBuilderValidators.required(),
               ),
-
               const SizedBox(height: 25),
-
               FormBuilderDropdown(
                 name: 'clientId',
                 decoration: FormStyleHelpers.dropdownDecoration(
@@ -160,9 +155,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                     [],
                 validator: FormBuilderValidators.required(),
               ),
-
               const SizedBox(height: 25),
-
               FormBuilderDropdown(
                 name: 'vehicleId',
                 decoration: FormStyleHelpers.dropdownDecoration(
@@ -181,7 +174,6 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               ),
             ] else if (widget.rent != null) ...[
               const SizedBox(height: 20),
-
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(left: 8, bottom: 4),
@@ -212,9 +204,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
                   )),
-
               const SizedBox(height: 25),
-
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(left: 8, bottom: 4),
@@ -239,9 +229,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 inputType: InputType.date,
                 validator: FormBuilderValidators.required(),
               ),
-
               const SizedBox(height: 25),
-
               FormBuilderDropdown(
                 name: 'clientId',
                 decoration: FormStyleHelpers.dropdownDecoration(
@@ -265,9 +253,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                   fontSize: 16,
                 ),
               ),
-
               const SizedBox(height: 25),
-
               FormBuilderDropdown(
                 name: 'vehicleId',
                 decoration: FormStyleHelpers.dropdownDecoration(
@@ -324,9 +310,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
             icon: const Icon(Icons.arrow_back),
             label: const Text("Go back"),
           ),
-
           const SizedBox(width: 30),
-
           ElevatedButton.icon(
             onPressed: () async {
               _formKey.currentState?.saveAndValidate();
@@ -362,8 +346,9 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                       (formData!['endingDate'] as DateTime).toIso8601String(),
                   "vehicleId": formData['vehicleId']
                 };
-                var confirmEdit =
-                    await help.AlertHelpers.editConfirmation(context);
+                var confirmEdit = await help.AlertHelpers.editConfirmation(
+                    context,
+                    entity: "Rent");
                 if (confirmEdit == true) {
                   try {
                     await rentProvider.update(widget.rent?.id, requestPayload);
@@ -391,14 +376,13 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
             icon: const Icon(Icons.save),
             label: const Text("Save"),
           ),
-
           const SizedBox(width: 30),
-
           if (widget.rent?.status == "active")
             ElevatedButton.icon(
               onPressed: () async {
-                bool? confirmEdit =
-                    await help.AlertHelpers.editConfirmation(context);
+                bool? confirmEdit = await help.AlertHelpers.editConfirmation(
+                    context,
+                    entity: "Rent");
                 if (confirmEdit == true) {
                   try {
                     await rentProvider.updateFinish(widget.rent?.id);

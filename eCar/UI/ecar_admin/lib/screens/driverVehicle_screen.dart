@@ -368,7 +368,7 @@ class _DriverVehicleScreenState extends State<DriverVehicleScreen> {
                                     tooltip: "Edit not available",
                                     onPressed: () {
                                       AlertHelpers.showAlert(context, "Warning",
-                                          "Due to application restriction you can not edit driver vehicle. Thank you");
+                                          "You can not edit driver vehicle because this entity is only used to assign vehicle to driver. Thank you");
                                     },
                                   ),
                                   IconButton(

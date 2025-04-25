@@ -294,8 +294,9 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                     ScaffoldHelpers.showScaffold(context, "${e.toString()}");
                   }
                 } else if (widget.notification != null) {
-                  confirmEdit =
-                      await help.AlertHelpers.editConfirmation(context);
+                  confirmEdit = await help.AlertHelpers.editConfirmation(
+                      context,
+                      entity: "Notification");
                   if (confirmEdit == true) {
                     try {
                       provider.update(widget.notification?.id, request);
@@ -313,8 +314,8 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                   }
                 }
               } else {
-              help.AlertHelpers.showAlert(context, "Invalid form",
-                      "Form is not valid. Please fix the values");
+                help.AlertHelpers.showAlert(context, "Invalid form",
+                    "Form is not valid. Please fix the values");
               }
             },
             icon: Icon(Icons.save),

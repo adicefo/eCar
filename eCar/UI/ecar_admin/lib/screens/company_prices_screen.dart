@@ -357,7 +357,7 @@ class _CompanyPricesScreenState extends State<CompanyPricesScreen> {
                                     tooltip: "Editing not allowed",
                                     onPressed: () {
                                       AlertHelpers.showAlert(context, "Warning",
-                                          "Due to application restriction you can not edit company price. If you want to change it you can add new.");
+                                          "You can not edit price because this entity is only used to assign price to company. If you want to change it you can add new.");
                                     },
                                   ),
                                   IconButton(

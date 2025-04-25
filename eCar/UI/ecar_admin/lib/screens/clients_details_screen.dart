@@ -178,7 +178,7 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
               SizedBox(height: 20),
               Row(
                 children: [
-                   Expanded(
+                  Expanded(
                     child: FormBuilderTextField(
                       obscureText: true,
                       decoration: FormStyleHelpers.textFieldDecoration(
@@ -752,8 +752,6 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
               if (_formKey.currentState?.validate() ?? false) {
                 _formKey.currentState?.save();
 
-                
-
                 var request = Map.from(_formKey.currentState!.value);
 
                 if (_base64Image != null) {
@@ -776,8 +774,9 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                     ScaffoldHelpers.showScaffold(context, "${e.toString()}");
                   }
                 } else if (widget.client != null) {
-                  confirmEdit =
-                      await help.AlertHelpers.editConfirmation(context);
+                  confirmEdit = await help.AlertHelpers.editConfirmation(
+                      context,
+                      entity: "Client");
                   if (confirmEdit == true) {
                     try {
                       request.remove('password');

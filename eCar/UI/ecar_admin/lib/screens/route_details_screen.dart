@@ -278,9 +278,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 ),
               ),
             ],
-
             SizedBox(height: 25),
-
             Text(
               "Destination Location",
               style: TextStyle(
@@ -427,9 +425,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                 ),
               ),
             ],
-
             SizedBox(height: 25),
-
             Row(
               children: [
                 Expanded(
@@ -608,8 +604,9 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           if (widget.route?.status == "wait")
             ElevatedButton.icon(
               onPressed: () async {
-                bool? confirmEdit =
-                    await help.AlertHelpers.editConfirmation(context);
+                bool? confirmEdit = await help.AlertHelpers.editConfirmation(
+                    context,
+                    entity: "Route");
                 if (confirmEdit == true) {
                   try {
                     routeProvider.update(widget.route?.id);
@@ -637,8 +634,9 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           if (widget.route?.status == "active")
             ElevatedButton.icon(
               onPressed: () async {
-                bool? confirmEdit =
-                    await help.AlertHelpers.editConfirmation(context);
+                bool? confirmEdit = await help.AlertHelpers.editConfirmation(
+                    context,
+                    entity: "Route");
                 if (confirmEdit == true) {
                   try {
                     routeProvider.updateFinish(widget.route?.id);

@@ -232,7 +232,8 @@ class _DriverVehicleDetailsScreenState
                       "vehicleId": _selectedVehicle?.id
                     };
                     bool? editConfirmation =
-                        await AlertHelpers.editConfirmation(context);
+                        await AlertHelpers.editConfirmation(context,
+                            entity: "Driver Vehicle");
                     if (editConfirmation == true) {
                       try {
                         driverVehicleProvider.insert(request);

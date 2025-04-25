@@ -65,7 +65,6 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                 ),
               ),
             ),
-
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -82,7 +81,6 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
                   Row(
                     children: const [
                       Icon(Icons.star, color: Colors.amber),
@@ -97,11 +95,9 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      
                       Expanded(
                         flex: 1,
                         child: FormBuilderDropdown<int>(
@@ -142,7 +138,6 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                         ),
                       ),
                       const SizedBox(width: 16.0),
-
                       Expanded(
                         flex: 2,
                         child: FormBuilderTextField(
@@ -165,9 +160,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                 ],
               ),
             ),
-
             const SizedBox(height: 24.0),
-
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
@@ -198,7 +191,6 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -233,7 +225,6 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                         ),
                       ),
                       const SizedBox(width: 16.0),
-
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -310,7 +301,8 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
               if (_formKey.currentState?.validate() ?? false) {
                 _formKey.currentState?.save();
                 var request = Map.from(_formKey.currentState!.value);
-                confirmEdit = await help.AlertHelpers.editConfirmation(context);
+                confirmEdit = await help.AlertHelpers.editConfirmation(context,
+                    entity: "Review");
                 if (confirmEdit == true) {
                   try {
                     provider.update(widget.review?.id, request);

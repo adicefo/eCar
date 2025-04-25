@@ -9,5 +9,6 @@ namespace eCar.Model.SearchObjects
     public class AdminSearchObject:BaseSearchObject
     {
         public bool IsUserIncluded {  get; set; }
+        public string? Username {  get; set; }
     }
 }

@@ -49,6 +49,14 @@ namespace eCar.Services.Services
             return Mapper.Map<Model.Model.Admin>(entity);
 
         }
+        public override IQueryable<Admin> AddFilter(AdminSearchObject search, IQueryable<Admin> query)
+        {
+            var filteredQuery = base.AddFilter(search, query);
+            if (!string.IsNullOrEmpty(search.Username))
+                filteredQuery = filteredQuery.Where(x => x.User.UserName.StartsWith(search.Username));
+            return filteredQuery;
+
+        }
 
         public override IQueryable<Admin> AddInclude(AdminSearchObject search, IQueryable<Admin> query)
         {

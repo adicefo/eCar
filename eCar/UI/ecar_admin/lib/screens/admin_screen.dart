@@ -124,25 +124,7 @@ class _AdminScreenState extends State<AdminScreen> {
                   ),
                 ),
                 SizedBox(width: 16),
-                SizedBox(
-                  width: 120,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      AlertHelpers.showAlert(context, "Unauthorized access",
-                          "Due to application restrictions ONLY SUPER ADMIN/DEVELOPER have access to this operation. Thank you.");
-                    },
-                    icon: Icon(Icons.admin_panel_settings),
-                    label: Text("Add"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.yellowAccent,
-                      foregroundColor: Colors.black,
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
+                
               ],
             ),
           ],
@@ -338,16 +320,15 @@ class _AdminScreenState extends State<AdminScreen> {
                             DataCell(
                               Row(
                                 children: [
-                                  IconButton(
-                                    icon: Icon(Icons.edit, color: Colors.blue),
-                                    tooltip: "Edit administrator",
+                                   IconButton(
+                                    icon: Icon(Icons.edit, color: Colors.grey),
+                                    tooltip: "Editing not allowed",
                                     onPressed: () {
-                                      AlertHelpers.showAlert(
-                                          context,
-                                          "Unauthorized access",
+                                      AlertHelpers.showAlert(context, "Warning",
                                           "Due to application restrictions ONLY SUPER ADMIN/DEVELOPER have access to this operation. Thank you.");
                                     },
                                   ),
+                                  
                                   IconButton(
                                     icon: Icon(Icons.delete, color: Colors.red),
                                     tooltip: "Delete administrator",

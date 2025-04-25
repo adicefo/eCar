@@ -721,8 +721,9 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                     ScaffoldHelpers.showScaffold(context, "${e.toString()}");
                   }
                 } else if (widget.driver != null) {
-                  confirmEdit =
-                      await help.AlertHelpers.editConfirmation(context);
+                  confirmEdit = await help.AlertHelpers.editConfirmation(
+                      context,
+                      entity: "Driver");
                   if (confirmEdit == true) {
                     try {
                       request.remove('password');

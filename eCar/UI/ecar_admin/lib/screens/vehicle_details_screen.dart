@@ -303,8 +303,9 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                     ScaffoldHelpers.showScaffold(context, "${e.toString()}");
                   }
                 } else if (widget.vehicle != null) {
-                  confirmEdit =
-                      await help.AlertHelpers.editConfirmation(context);
+                  confirmEdit = await help.AlertHelpers.editConfirmation(
+                      context,
+                      entity: "Vehicle");
                   if (confirmEdit == true) {
                     try {
                       provider.update(widget.vehicle?.id, request);
