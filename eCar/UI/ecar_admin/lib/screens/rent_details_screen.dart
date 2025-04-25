@@ -380,10 +380,10 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
           if (widget.rent?.status == "active")
             ElevatedButton.icon(
               onPressed: () async {
-                bool? confirmEdit = await help.AlertHelpers.editConfirmation(
+                bool? confirmFinish = await help.AlertHelpers.finishConfirmation(
                     context,
                     entity: "Rent");
-                if (confirmEdit == true) {
+                if (confirmFinish == true) {
                   try {
                     await rentProvider.updateFinish(widget.rent?.id);
                     help.AlertHelpers.successAlert(

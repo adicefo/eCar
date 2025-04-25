@@ -76,6 +76,8 @@ namespace eCar.Services.Services
             entity.User.PasswordHash = PasswordGenerate.GenerateHash(user.PasswordSalt, request.Password);
             entity.User.RegistrationDate= DateTime.Now;
             entity.User.IsActive= true;
+            entity.NumberOfHoursAmount = 0;
+            entity.NumberOfClientsAmount = 0;
             base.BeforeInsert(request, entity);
         }
 

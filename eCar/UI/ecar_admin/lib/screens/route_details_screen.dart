@@ -604,10 +604,10 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           if (widget.route?.status == "wait")
             ElevatedButton.icon(
               onPressed: () async {
-                bool? confirmEdit = await help.AlertHelpers.editConfirmation(
+                bool? confirmActive = await help.AlertHelpers.activeConfirmation(
                     context,
                     entity: "Route");
-                if (confirmEdit == true) {
+                if (confirmActive == true) {
                   try {
                     routeProvider.update(widget.route?.id);
                     ScaffoldHelpers.showScaffold(
@@ -634,10 +634,10 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           if (widget.route?.status == "active")
             ElevatedButton.icon(
               onPressed: () async {
-                bool? confirmEdit = await help.AlertHelpers.editConfirmation(
+                bool? confirmFinish = await help.AlertHelpers.finishConfirmation(
                     context,
                     entity: "Route");
-                if (confirmEdit == true) {
+                if (confirmFinish == true) {
                   try {
                     routeProvider.updateFinish(widget.route?.id);
                     ScaffoldHelpers.showScaffold(

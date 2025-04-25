@@ -257,7 +257,7 @@ public partial class ECarDbContext : DbContext
 
             entity.HasOne(d => d.Driver).WithMany(p => p.Statistics)
                 .HasForeignKey(d => d.DriverId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_Statistics_Driver");
         });
 
