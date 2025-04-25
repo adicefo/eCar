@@ -9,11 +9,20 @@ namespace eCar.Model.Requests
 {
     public class DriverUpdateRequest
     {
+
         [Required]
-        public string Password { get; set; }
+        public string Name { get; set; }
         [Required]
-        public string PasswordConfirm { get; set; }
+
+        public string Surname { get; set; }
+        [Required]
+
+        public string UserName { get; set; }
+        [Required]
+        public string Email { get; set; }
+    
         public string? TelephoneNumber { get; set; }
-        public string? Email { get; set; }
+
+        public string? Gender { get; set; }
     }
 }

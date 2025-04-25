@@ -12,14 +12,14 @@ namespace eCar.API.Controllers
 
     [ApiController]
     public class ClientController : BaseCRUDController<Model.Model.Client,ClientSearchObject
-        ,ClientUpsertRequest,ClientUpsertRequest>
+        ,ClientInserRequest,ClientUpdateRequest>
     {
         public ClientController(IClientService service):base(service)
         {
            
         }
         [AllowAnonymous]
-        public override Client Insert(ClientUpsertRequest request)
+        public override Client Insert(ClientInserRequest request)
         {
             return base.Insert(request);
         }

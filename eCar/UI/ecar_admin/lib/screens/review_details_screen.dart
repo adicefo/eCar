@@ -28,6 +28,10 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
     _initialValue = {
       "value": widget.review?.value,
       "description": widget?.review?.description,
+      "driverName":
+          "${widget?.review?.reviewed?.user?.name} ${widget?.review?.reviewed?.user?.surname}",
+      "clientName":
+          "${widget?.review?.reviews?.user?.name} ${widget?.review?.reviews?.user?.surname}",
     };
     super.initState();
   }
@@ -47,49 +51,222 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
       child: FormBuilder(
         key: _formKey,
         initialValue: _initialValue,
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 2,
-              child: FormBuilderDropdown<int>(
-                name: 'value',
-                initialValue: widget.review?.value,
-                decoration: FormStyleHelpers.dropdownDecoration(
-                  labelText: 'Rating Value',
-                  hintText: 'Select rating',
+            Container(
+              margin: const EdgeInsets.only(bottom: 16),
+              child: const Text(
+                "Review Information",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
-                items: List.generate(
-                  5,
-                  (index) => DropdownMenuItem(
-                    value: index + 1,
-                    child: Text(
-                      '${index + 1}',
-                    ),
-                  ),
-                ),
-                style: FormStyleHelpers.textFieldTextStyle(),
-                onChanged: (value) {},
-                validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(
-                      errorText: "Rating is required"),
-                ]),
               ),
             ),
-            SizedBox(width: 16.0),
-            Expanded(
-              flex: 3,
-              child: FormBuilderTextField(
-                name: 'description',
-                decoration: FormStyleHelpers.textFieldDecoration(
-                  labelText: 'Review Description',
-                  prefixIcon: Icon(Icons.description, color: Colors.black54),
-                ),
-                style: FormStyleHelpers.textFieldTextStyle(),
-                maxLines: 3,
-                validator: FormBuilderValidators.compose([
-                  FormBuilderValidators.required(
-                      errorText: "Description is required"),
-                ]),
+
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  Row(
+                    children: const [
+                      Icon(Icons.star, color: Colors.amber),
+                      SizedBox(width: 8),
+                      Text(
+                        "Rating Details",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      
+                      Expanded(
+                        flex: 1,
+                        child: FormBuilderDropdown<int>(
+                          name: 'value',
+                          initialValue: widget.review?.value,
+                          decoration: FormStyleHelpers.dropdownDecoration(
+                            labelText: 'Rating Value',
+                            hintText: 'Select rating',
+                          ),
+                          items: List.generate(
+                            5,
+                            (index) => DropdownMenuItem(
+                              value: index + 1,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '${index + 1} ',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Row(
+                                    children: List.generate(
+                                      index + 1,
+                                      (_) => const Icon(Icons.star,
+                                          color: Colors.amber, size: 16),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          style: FormStyleHelpers.textFieldTextStyle(),
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(
+                                errorText: "Rating is required"),
+                          ]),
+                        ),
+                      ),
+                      const SizedBox(width: 16.0),
+
+                      Expanded(
+                        flex: 2,
+                        child: FormBuilderTextField(
+                          name: 'description',
+                          decoration: FormStyleHelpers.textFieldDecoration(
+                            labelText: 'Review Description',
+                            prefixIcon:
+                                Icon(Icons.description, color: Colors.black54),
+                          ),
+                          style: FormStyleHelpers.textFieldTextStyle(),
+                          maxLines: 3,
+                          validator: FormBuilderValidators.compose([
+                            FormBuilderValidators.required(
+                                errorText: "Description is required"),
+                          ]),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24.0),
+
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: const [
+                      Icon(Icons.people, color: Colors.blue),
+                      SizedBox(width: 8),
+                      Text(
+                        "People Involved",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Driver (Person being reviewed)",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            FormBuilderTextField(
+                              name: 'driverName',
+                              decoration: FormStyleHelpers.textFieldDecoration(
+                                labelText: 'Driver Name',
+                                prefixIcon: Icon(Icons.drive_eta,
+                                    color: Colors.black54),
+                              ),
+                              enabled: false,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 16.0),
+
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Client (Reviewer)",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            FormBuilderTextField(
+                              name: 'clientName',
+                              decoration: FormStyleHelpers.textFieldDecoration(
+                                labelText: 'Client Name',
+                                prefixIcon:
+                                    Icon(Icons.person, color: Colors.black54),
+                              ),
+                              enabled: false,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],
@@ -131,7 +308,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
           ElevatedButton.icon(
             onPressed: () async {
               if (_formKey.currentState?.validate() ?? false) {
-                 _formKey.currentState?.save();
+                _formKey.currentState?.save();
                 var request = Map.from(_formKey.currentState!.value);
                 confirmEdit = await help.AlertHelpers.editConfirmation(context);
                 if (confirmEdit == true) {
@@ -150,8 +327,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
                     ScaffoldHelpers.showScaffold(context, "${e.toString()}");
                   }
                 }
-              }
-              else{
+              } else {
                 help.AlertHelpers.showAlert(context, "Invalid Form",
                     "Please fill all required fields correctly.");
               }

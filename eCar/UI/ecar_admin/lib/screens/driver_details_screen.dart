@@ -36,6 +36,8 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
       "surname": widget.driver?.user?.surname,
       "telephoneNumber": widget.driver?.user?.telephoneNumber,
       "email": widget.driver?.user?.email,
+      "userName": widget.driver?.user?.userName,
+      "gender": widget.driver?.user?.gender,
       "password": "",
       "passwordConfirm": "",
     };
@@ -167,10 +169,20 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                       ),
                       style: FormStyleHelpers.textFieldTextStyle(),
                       name: "password",
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(
-                            errorText: "Password is required"),
-                      ]),
+                      validator: (value) {
+                        final confirmPassword = _formKey
+                            .currentState?.fields['passwordConfirm']?.value;
+                        if (_formKey.currentState?.fields['passwordConfirm'] !=
+                                null &&
+                            confirmPassword != null &&
+                            value != confirmPassword) {
+                          return 'Password and Confirm Password must be equal';
+                        }
+                        if (value == null || value.isEmpty) {
+                          return 'Password is required';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   SizedBox(width: 16),
@@ -184,10 +196,17 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                       ),
                       style: FormStyleHelpers.textFieldTextStyle(),
                       name: "passwordConfirm",
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(
-                            errorText: "Password confirmation is required"),
-                      ]),
+                      validator: (value) {
+                        final password =
+                            _formKey.currentState?.fields['password']?.value;
+                        if (value != password) {
+                          return 'Password and Confirm Password must be equal';
+                        }
+                        if (value == null || value.isEmpty) {
+                          return 'Password confirmation is required';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                 ],
@@ -320,42 +339,332 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                 children: [
                   Expanded(
                     child: FormBuilderTextField(
-                      obscureText: true,
                       decoration: FormStyleHelpers.textFieldDecoration(
-                        labelText: "Password",
-                        prefixIcon: Icon(Icons.lock, color: Colors.black54),
+                        labelText: "Registration Date",
+                        prefixIcon:
+                            Icon(Icons.calendar_today, color: Colors.black54),
                       ),
                       style: FormStyleHelpers.textFieldTextStyle(),
-                      name: "password",
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(
-                            errorText: "Password is required"),
-                      ]),
+                      name: "registrationDate",
+                      enabled: false,
+                      initialValue: widget.driver?.user?.registrationDate
+                              ?.toString()
+                              .substring(0, 10) ??
+                          DateTime.now().toString().substring(0, 10),
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: FormBuilderDropdown<String>(
+                      decoration: FormStyleHelpers.textFieldDecoration(
+                        labelText: "Gender",
+                        prefixIcon: Icon(Icons.people, color: Colors.black54),
+                      ),
+                      name: "gender",
+                      items: [
+                        DropdownMenuItem(
+                          value: "Male",
+                          child: Text("Male"),
+                        ),
+                        DropdownMenuItem(
+                          value: "Female",
+                          child: Text("Female"),
+                        ),
+                      ],
+                      style: FormStyleHelpers.textFieldTextStyle(),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: FormBuilderTextField(
+                      decoration: FormStyleHelpers.textFieldDecoration(
+                        labelText: "Number of Clients",
+                        prefixIcon:
+                            Icon(Icons.people_outline, color: Colors.black54),
+                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
+                      name: "numberOfClients",
+                      enabled: false,
+                      initialValue:
+                          widget.driver?.numberOfClientsAmount.toString(),
                     ),
                   ),
                   SizedBox(width: 16),
                   Expanded(
                     child: FormBuilderTextField(
-                      obscureText: true,
                       decoration: FormStyleHelpers.textFieldDecoration(
-                        labelText: "Confirm password",
+                        labelText: "Number of Hours",
                         prefixIcon:
-                            Icon(Icons.lock_outline, color: Colors.black54),
+                            Icon(Icons.access_time, color: Colors.black54),
                       ),
                       style: FormStyleHelpers.textFieldTextStyle(),
-                      name: "passwordConfirm",
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(
-                            errorText: "Password confirmation is required"),
-                      ]),
+                      name: "numberOfHours",
+                      enabled: false,
+                      initialValue:
+                          widget.driver?.numberOfHoursAmount.toString(),
                     ),
                   ),
                 ],
               ),
-            ]
+              SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: FormBuilderTextField(
+                      decoration: FormStyleHelpers.textFieldDecoration(
+                        labelText: "Username",
+                        prefixIcon:
+                            Icon(Icons.alternate_email, color: Colors.black54),
+                      ),
+                      style: FormStyleHelpers.textFieldTextStyle(),
+                      name: "userName",
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(
+                            errorText: "Username is required"),
+                        FormBuilderValidators.minLength(5,
+                            errorText:
+                                "Username must contain at least 5 characters"),
+                        FormBuilderValidators.username(
+                            checkNullOrEmpty: true,
+                            allowDash: false,
+                            allowDots: false,
+                            allowUnderscore: false,
+                            allowNumbers: true,
+                            allowSpecialChar: true,
+                            errorText:
+                                "- _ . are not allowed. Example: userUser123")
+                      ]),
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () => _showPasswordUpdateDialog(context),
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.grey.shade50,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.lock_reset, color: Colors.blue),
+                                SizedBox(width: 12),
+                                Text(
+                                  "Update Password",
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                            Icon(Icons.arrow_forward_ios,
+                                size: 16, color: Colors.grey),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ],
         ),
       ),
+    );
+  }
+
+  void _showPasswordUpdateDialog(BuildContext context) {
+    final _passwordController = TextEditingController();
+    final _confirmPasswordController = TextEditingController();
+    bool _obscurePassword = true;
+    bool _obscureConfirmPassword = true;
+    String? _passwordError;
+    String? _confirmPasswordError;
+    bool _isSubmitting = false;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Text("Update Password"),
+              content: Container(
+                width: 400,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Enter a new password for this driver",
+                      style: TextStyle(color: Colors.black54),
+                    ),
+                    SizedBox(height: 20),
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        labelText: "New Password",
+                        hintText: "Enter new password",
+                        errorText: _passwordError,
+                        prefixIcon: Icon(Icons.lock, color: Colors.black54),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    TextField(
+                      controller: _confirmPasswordController,
+                      obscureText: _obscureConfirmPassword,
+                      decoration: InputDecoration(
+                        labelText: "Confirm Password",
+                        hintText: "Confirm new password",
+                        errorText: _confirmPasswordError,
+                        prefixIcon:
+                            Icon(Icons.lock_outline, color: Colors.black54),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureConfirmPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
+                            });
+                          },
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                      ),
+                    ),
+                    if (_isSubmitting) ...[
+                      SizedBox(height: 20),
+                      Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Colors.yellowAccent),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  child: Text("Cancel"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ElevatedButton(
+                  child: Text("Save"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.yellowAccent,
+                    foregroundColor: Colors.black,
+                  ),
+                  onPressed: _isSubmitting
+                      ? null
+                      : () async {
+                          setState(() {
+                            _passwordError = null;
+                            _confirmPasswordError = null;
+                          });
+
+                          if (_passwordController.text.isEmpty) {
+                            setState(() {
+                              _passwordError = "Password is required";
+                            });
+                            return;
+                          }
+
+                          if (_confirmPasswordController.text.isEmpty) {
+                            setState(() {
+                              _confirmPasswordError =
+                                  "Please confirm your password";
+                            });
+                            return;
+                          }
+
+                          if (_passwordController.text !=
+                              _confirmPasswordController.text) {
+                            setState(() {
+                              _confirmPasswordError = "Passwords do not match";
+                            });
+                            return;
+                          }
+
+                          setState(() {
+                            _isSubmitting = true;
+                          });
+
+                          try {
+                            var request = {
+                              "password": _passwordController.text,
+                              "passwordConfirm":
+                                  _confirmPasswordController.text,
+                            };
+
+                            await userProvider.updatePassword(
+                                widget.driver?.userID, request);
+
+                            Navigator.of(context).pop();
+                            ScaffoldHelpers.showScaffold(
+                                context, "Password updated successfully");
+                          } catch (e) {
+                            setState(() {
+                              _isSubmitting = false;
+                            });
+                            ScaffoldHelpers.showScaffold(
+                                context, "Error: ${e.toString()}");
+                          }
+                        },
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
@@ -388,27 +697,21 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
               ),
             ),
           ),
-           SizedBox(width: 16),
+          SizedBox(width: 16),
           ElevatedButton.icon(
             onPressed: () async {
-               if (_formKey.currentState?.validate() ?? false) {
+              if (_formKey.currentState?.validate() ?? false) {
                 _formKey.currentState?.save();
-                var password = _formKey.currentState?.value['password'];
-                var confirmPassword =
-                    _formKey.currentState?.value['passwordConfirm'];
-                if (password != confirmPassword) {
-                  help.AlertHelpers.showAlert(context, "Password Mismatch",
-                      "Passwords do not match. Please try again.");
-                  return;
-                }
+
                 var request = Map.from(_formKey.currentState!.value);
+
                 if (widget.driver == null) {
                   try {
                     driverProvider.insert(request);
 
                     ScaffoldHelpers.showScaffold(
                         context, "Driver added successfully");
-                    await Future.delayed(const Duration(seconds: 3));
+                    await Future.delayed(const Duration(seconds: 2));
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => DriversListScreen(),
@@ -422,7 +725,14 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                       await help.AlertHelpers.editConfirmation(context);
                   if (confirmEdit == true) {
                     try {
-                      userProvider.update(widget.driver?.userID, request);
+                      request.remove('password');
+                      request.remove('passwordConfirm');
+
+                      request.remove('numberOfClients');
+                      request.remove('numberOfHours');
+                      request.remove('registrationDate');
+
+                      driverProvider.update(widget.driver?.id, request);
 
                       ScaffoldHelpers.showScaffold(
                           context, "Driver updated successfully");
@@ -456,7 +766,6 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
               ),
             ),
           ),
-          
         ],
       ),
     );

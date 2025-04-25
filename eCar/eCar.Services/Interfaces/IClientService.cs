@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace eCar.Services.Interfaces
 {
     public interface IClientService:ICRUDService<Model.Model.Client,
-        ClientSearchObject, ClientUpsertRequest, ClientUpsertRequest>
+        ClientSearchObject, ClientInserRequest, ClientUpdateRequest>
     {
         public Model.Model.Client InsertBasedOnUser(int userId);
     }

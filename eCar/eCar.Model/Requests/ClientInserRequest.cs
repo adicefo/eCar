@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace eCar.Model.Requests
 {
-    public class ClientUpsertRequest
+    public class ClientInserRequest
     {
         [Required]
        

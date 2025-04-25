@@ -17,7 +17,7 @@ using eCar.Services.Helpers;
 namespace eCar.Services.Services
 {
     public class ClientService:BaseCRUDService<Model.Model.Client,
-        ClientSearchObject,Database.Client,ClientUpsertRequest,ClientUpsertRequest>,IClientService
+        ClientSearchObject,Database.Client,ClientInserRequest,ClientUpdateRequest>,IClientService
     {
         public ClientService(ECarDbContext context,IMapper mapper)
             :base(context,mapper)
@@ -69,7 +69,7 @@ namespace eCar.Services.Services
             }
             return filteredQuery;
         }
-        public override void BeforeInsert(ClientUpsertRequest request, Client entity)
+        public override void BeforeInsert(ClientInserRequest request, Client entity)
         {
             if (request.Password != request.PasswordConfirm)
                 throw new UserException("Password and Confirmed password are not the same");
@@ -82,7 +82,7 @@ namespace eCar.Services.Services
             entity.User.IsActive = true;
             base.BeforeInsert(request, entity);
         }
-        public override Model.Model.Client Update(int id, ClientUpsertRequest request)
+        public override Model.Model.Client Update(int id, ClientUpdateRequest request)
         {
             var set = Context.Set<Database.Client>();
             var entity = set.Include(x=>x.User).FirstOrDefault(c=>c.Id==id);

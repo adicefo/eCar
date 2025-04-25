@@ -38,6 +38,11 @@ namespace eCar.API.Controllers
             return (_service as IUserService).AuthenticateUser(login.Email, login.Password, "Driver");
 
         }
+        [HttpPut("updatePassword/{id}")]
+        public Model.Model.User UpdatePassword(int id,UserUpdatePasswordRequest request)
+        {
+            return (_service as IUserService).UpdatePassword(id, request);
+        }
         [HttpGet("token/{token}")]
         [AllowAnonymous]
         public Model.Model.User GetBasedOnToken(string token)

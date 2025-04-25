@@ -183,7 +183,6 @@ class _DriverVehicleDetailsScreenState
                       fillColor: Colors.grey[200],
                       filled: true,
                     ),
-                    
                   ),
                 ],
               ),
@@ -198,28 +197,28 @@ class _DriverVehicleDetailsScreenState
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-               ElevatedButton.icon(
-            onPressed: () async {
-              Navigator.of(context).pushReplacement(
-                MaterialPageRoute(
-                  builder: (context) => DriverVehicleScreen(),
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => DriverVehicleScreen(),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.arrow_back),
+                  label: Text(
+                    "Go back",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.yellowAccent,
+                    foregroundColor: Colors.black,
+                    padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
                 ),
-              );
-            },
-            icon: Icon(Icons.arrow_back),
-            label: Text(
-              "Go back",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellowAccent,
-              foregroundColor: Colors.black,
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
                 SizedBox(width: 16),
                 ElevatedButton.icon(
                   onPressed: () async {

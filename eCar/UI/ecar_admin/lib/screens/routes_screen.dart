@@ -457,6 +457,7 @@ class _RouteListScreenState extends State<RouteListScreen> {
                   DataCell(
                     Row(
                       children: [
+                        if(e.status!="finished")
                         IconButton(
                           icon: Icon(Icons.edit, color: Colors.blue),
                           tooltip: "Edit route",
@@ -468,7 +469,20 @@ class _RouteListScreenState extends State<RouteListScreen> {
                               ),
                             );
                           },
-                        ),
+                        )
+                        else
+                          IconButton(
+                                      icon:
+                                          Icon(Icons.edit, color: Colors.grey),
+                                      tooltip: "Cannot edit finished route",
+                                      onPressed: () {
+                                        AlertHelpers.showAlert(
+                                          context,
+                                          "Invalid action",
+                                          "Unable operation. You cannot edit when your status is finished!",
+                                        );
+                                      },
+                                    ),
                         IconButton(
                           icon: Icon(Icons.delete, color: Colors.red),
                           tooltip: "Delete route",

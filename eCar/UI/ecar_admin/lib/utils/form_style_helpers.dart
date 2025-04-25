@@ -23,17 +23,14 @@ class FormStyleHelpers {
         fontWeight: FontWeight.bold,
         fontSize: 18,
       ),
-     
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
       ),
-      
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
       ),
-      
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
         borderSide: BorderSide(color: Colors.black, width: 2),
@@ -50,7 +47,6 @@ class FormStyleHelpers {
       fontSize: 16,
     );
   }
-
 
   static InputDecoration searchFieldDecoration({
     required String labelText,
@@ -88,7 +84,6 @@ class FormStyleHelpers {
     );
   }
 
-  
   static InputDecoration dropdownDecoration({
     required String labelText,
     String? hintText,
@@ -124,7 +119,6 @@ class FormStyleHelpers {
     );
   }
 
- 
   static InputDecoration checkboxDecoration({
     required String labelText,
     String? hintText,
@@ -146,6 +140,71 @@ class FormStyleHelpers {
       enabledBorder: InputBorder.none,
       focusedBorder: InputBorder.none,
       contentPadding: EdgeInsets.symmetric(vertical: 8),
+    );
+  }
+
+  static Widget labelWithIcon({
+    required String label,
+    required IconData icon,
+    bool required = false,
+  }) {
+    return Row(
+      children: [
+        Icon(icon, color: Colors.blue[800], size: 20),
+        const SizedBox(width: 8),
+        Text(
+          label + (required ? ' *' : ''),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+      ],
+    );
+  }
+
+  static InputDecorationTheme get dropdownDecorationTheme {
+    return InputDecorationTheme(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      fillColor: Colors.grey[200],
+      filled: true,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(color: Colors.blue, width: 2),
+      ),
+    );
+  }
+
+  static ButtonStyle get primaryButtonStyle {
+    return ElevatedButton.styleFrom(
+      backgroundColor: Colors.blue[700],
+      foregroundColor: Colors.white,
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      elevation: 2,
+    );
+  }
+
+  static ButtonStyle get secondaryButtonStyle {
+    return ElevatedButton.styleFrom(
+      backgroundColor: Colors.grey[300],
+      foregroundColor: Colors.black87,
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      elevation: 1,
     );
   }
 }

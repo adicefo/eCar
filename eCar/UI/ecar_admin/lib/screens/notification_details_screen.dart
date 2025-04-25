@@ -6,6 +6,7 @@ import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/notification_screen.dart';
 import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
+import 'package:ecar_admin/utils/string_helpers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:ecar_admin/models/Notification/notification.dart' as Model;
@@ -27,20 +28,26 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
   late NotificationProvider provider;
+  File? _image;
+  String? _base64Image;
 
   @override
   void initState() {
-    // TODO: implement initState
-
     provider = context.read<NotificationProvider>();
     _initialValue = {
       'heading': widget.notification?.heading,
       'content_': widget.notification?.content_,
-      'image': widget.notification?.image,
       'addingDate': widget.notification?.addingDate.toString(),
-      'isForClient': widget.notification?.isForClient,
+      'isForClient': widget.notification?.isForClient ?? false,
       'status': widget.notification?.status
     };
+
+    // Initialize base64Image from notification if available
+    if (widget.notification?.image != null &&
+        widget.notification!.image!.isNotEmpty) {
+      _base64Image = widget.notification!.image;
+    }
+
     super.initState();
   }
 
@@ -49,7 +56,7 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
     return MasterScreen(
         "Notification details",
         Column(
-          children: [_buildForm(), _save()],
+          children: [_buildForm(), _buildImageSection(), _save()],
         ));
   }
 
@@ -100,28 +107,6 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
             Row(
               children: [
                 Expanded(
-                    child: FormBuilderField(
-                  name: "image",
-                  builder: (field) {
-                    return InputDecorator(
-                      decoration: FormStyleHelpers.textFieldDecoration(
-                        labelText: "Notification Image",
-                        prefixIcon: Icon(Icons.image, color: Colors.black54),
-                      ),
-                      child: ListTile(
-                        title: Text("Select image"),
-                        trailing: Icon(Icons.file_upload_outlined),
-                        onTap: getImage,
-                      ),
-                    );
-                  },
-                )),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
                   child: FormBuilderCheckbox(
                     name: "isForClient",
                     title: Text(
@@ -131,7 +116,7 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                           fontWeight: FontWeight.w600,
                           fontSize: 16),
                     ),
-                    initialValue: widget.notification?.isForClient,
+                    initialValue: widget.notification?.isForClient ?? false,
                     decoration: FormStyleHelpers.checkboxDecoration(
                       labelText: "Client Notification",
                     ),
@@ -148,6 +133,110 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
             ),
           ]),
         ));
+  }
+
+  // New image section outside the form
+  Widget _buildImageSection() {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+        ),
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Notification Image",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Container(
+                  height: 120,
+                  width: 120,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade300),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(7),
+                    child: _image != null
+                        ? Image.file(
+                            _image!,
+                            fit: BoxFit.cover,
+                          )
+                        : _base64Image != null && _base64Image!.isNotEmpty
+                            ? StringHelpers.imageFromBase64String(_base64Image!)
+                            : Image.asset(
+                                'assets/images/no_image_placeholder.png',
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    color: Colors.grey.shade200,
+                                    child: Icon(
+                                      Icons.notifications,
+                                      size: 60,
+                                      color: Colors.grey,
+                                    ),
+                                  );
+                                },
+                              ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Upload a notification image",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        "Recommended size: less than 2MB",
+                        style: TextStyle(
+                          color: Colors.grey.shade600,
+                          fontSize: 14,
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        onPressed: getImage,
+                        icon: Icon(Icons.photo_library),
+                        label: Text("Select Image"),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.yellowAccent,
+                          foregroundColor: Colors.black,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 20),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _save() {
@@ -224,8 +313,8 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
                   }
                 }
               } else {
-                help.AlertHelpers.showAlert(context, "Invalid Form",
-                    "Please fill all required fields correctly.");
+              help.AlertHelpers.showAlert(context, "Invalid form",
+                      "Form is not valid. Please fix the values");
               }
             },
             icon: Icon(Icons.save),
@@ -247,14 +336,25 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
     );
   }
 
-  File? _image;
-  String? _base64Image;
   void getImage() async {
-    var result = await FilePicker.platform.pickFiles(type: FileType.image);
+    try {
+      var result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: false,
+      );
 
-    if (result != null && result.files.single.path != null) {
-      _image = File(result.files.single.path!);
-      _base64Image = base64Encode(_image!.readAsBytesSync());
+      if (result != null && result.files.single.path != null) {
+        final file = File(result.files.single.path!);
+        final fileSize = await file.length();
+
+        setState(() {
+          _image = file;
+          _base64Image = base64Encode(_image!.readAsBytesSync());
+        });
+      }
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(
+          context, "Error selecting image: ${e.toString()}");
     }
   }
 }

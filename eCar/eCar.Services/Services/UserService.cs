@@ -72,6 +72,18 @@ namespace eCar.Services.Services
             };
 
         }
+        public Model.Model.User UpdatePassword(int id,UserUpdatePasswordRequest request)
+        {
+            var entity=Context.Users.Find(id);
+            if (entity == null)
+                throw new UserException($"User with {id} not found");
+            if (request.Password != request.PasswordConfirm)
+                throw new UserException($"Password and confirm password must be equal");
+            entity.PasswordSalt = PasswordGenerate.GenerateSalt();
+            entity.PasswordHash = PasswordGenerate.GenerateHash(entity.PasswordSalt, request.Password);
+            Context.SaveChanges();
+            return Mapper.Map<Model.Model.User>(entity);
+        }
         public override IQueryable<Database.User> AddFilter(UserSearchObject search, IQueryable<Database.User> query)
         {
             var filteredQuery = base.AddFilter(search, query);
@@ -133,5 +145,7 @@ namespace eCar.Services.Services
             return Mapper.Map<Model.Model.User>(entity);
 
         }
+
+        
     }
 }

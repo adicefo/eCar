@@ -19,6 +19,27 @@ class AlertHelpers {
             ));
   }
 
+  static void successAlert(
+    context,
+    title,
+    text,
+  ) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => AlertDialog(
+              title: Text(title),
+              content: Text(text),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: const Text("OK"))
+              ],
+            ));
+  }
+
   static Future<bool?> deleteConfirmation(context) async {
     return showDialog<bool>(
       context: context,

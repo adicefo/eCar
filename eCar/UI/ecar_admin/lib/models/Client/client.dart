@@ -7,8 +7,9 @@ class Client {
   int? id;
   int? userId;
   User? user;
+  String? image;
 
-  Client({this.id, this.userId, this.user});
+  Client({this.id, this.userId, this.user, this.image});
 
   factory Client.fromJson(Map<String, dynamic> json) => _$ClientFromJson(json);
 

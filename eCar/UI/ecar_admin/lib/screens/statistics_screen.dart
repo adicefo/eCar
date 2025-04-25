@@ -1,12 +1,17 @@
+import 'package:ecar_admin/models/Driver/driver.dart';
 import 'package:ecar_admin/models/Statistics/statistics.dart';
 import 'package:ecar_admin/models/search_result.dart';
+import 'package:ecar_admin/providers/driver_provider.dart';
 import 'package:ecar_admin/providers/statistics_provider.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/statistics_detail_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:ecar_admin/utils/form_style_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
+import 'package:ecar_admin/utils/statistics_add_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 
 class StatisticsScreen extends StatefulWidget {
@@ -23,14 +28,18 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   TextEditingController _driverNameController = TextEditingController();
 
   SearchResult<Statistics>? data;
+  SearchResult<Driver>? drivers;
 
   late StatisticsProvider statisticsProvider;
+  late DriverProvider driverProvider;
 
   bool isLoading = true;
+  bool isLoadingDrivers = false;
 
   @override
   void initState() {
     statisticsProvider = context.read<StatisticsProvider>();
+    driverProvider = context.read<DriverProvider>();
     super.initState();
 
     _initForm();
@@ -65,6 +74,60 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       });
       ScaffoldHelpers.showScaffold(context, "Error: ${e.toString()}");
     }
+  }
+
+  // Method to fetch drivers for the add statistics dialog
+  Future<void> _fetchDrivers() async {
+    setState(() {
+      isLoadingDrivers = true;
+    });
+
+    try {
+      drivers = await driverProvider.get();
+      setState(() {
+        isLoadingDrivers = false;
+      });
+    } catch (e) {
+      setState(() {
+        isLoadingDrivers = false;
+      });
+      ScaffoldHelpers.showScaffold(
+          context, "Error loading drivers: ${e.toString()}");
+    }
+  }
+
+  // Method to show modal dialog for adding new statistics
+  void _showAddStatisticsModal() async {
+    // Fetch drivers if not already loaded
+    if (drivers == null) {
+      await _fetchDrivers();
+      if (drivers == null) {
+        ScaffoldHelpers.showScaffold(
+            context, "Failed to load drivers. Please try again.");
+        return;
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatisticsAddDialog(
+          drivers: drivers!,
+          onSave: (int driverId) async {
+            try {
+              Map<String, dynamic> request = {"driverId": driverId.toString()};
+              await statisticsProvider.insert(request);
+              ScaffoldHelpers.showScaffold(
+                  context, "Statistics added successfully");
+              await Future.delayed(const Duration(seconds: 2));
+              await _initForm(); // Refresh the list after adding
+            } catch (e) {
+              ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+            }
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -114,26 +177,28 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: _driverNameController,
-                    decoration: FormStyleHelpers.searchFieldDecoration(
+                  child: FormBuilderTextField(
+                    name: "driverName",
+                    initialValue: _driverNameController.text,
+                    decoration: FormStyleHelpers.textFieldDecoration(
                       labelText: "Driver Name",
-                      hintText: "Search by driver name",
+                      hintText: "Enter driver name to search",
+                      prefixIcon: Icon(Icons.person),
                     ),
                     style: FormStyleHelpers.textFieldTextStyle(),
-                    onSubmitted: (_) {
-                      setState(() => _currentPage = 0);
-                      _initForm();
+                    onChanged: (value) {
+                      setState(() {
+                        _driverNameController.text = value ?? '';
+                      });
                     },
                   ),
                 ),
-                SizedBox(width: 24),
+                SizedBox(width: 16),
                 SizedBox(
                   width: 120,
                   child: ElevatedButton.icon(
-                    onPressed: () {
-                      setState(() => _currentPage = 0);
-                      _initForm();
+                    onPressed: () async {
+                      await _initForm();
                     },
                     icon: Icon(Icons.search),
                     label: Text("Search"),
@@ -151,13 +216,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 SizedBox(
                   width: 120,
                   child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => StatisticsDetailScreen(),
-                        ),
-                      );
-                    },
+                    onPressed: _showAddStatisticsModal,
                     icon: Icon(Icons.add),
                     label: Text("Add"),
                     style: ElevatedButton.styleFrom(
@@ -171,15 +230,17 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   ),
                 ),
                 SizedBox(width: 16),
-                IconButton(
-                  onPressed: () {
-                    AlertHelpers.showAlert(context, "Statistics Explanation",
-                        "Generally, in the eCar app, the Statistics entity contains valuable information about the driver module. The application's concept is that a driver, as a company member, should be logged in once per each working day, which represents one statistics row. It contains columns such as the number of clients and the number of hours, which are necessary for the statistics function in the mobile app.");
-                  },
-                  icon: Icon(Icons.info),
-                  color: Colors.blue,
-                  iconSize: 30,
-                  tooltip: "Info",
+                Tooltip(
+                  message: "Statistics Information",
+                  child: IconButton(
+                    onPressed: () {
+                      AlertHelpers.showAlert(context, "Statistics Explanation",
+                          "Generally, in the eCar app, the Statistics entity contains valuable information about the driver module. The application's concept is that a driver, as a company member, should be logged in once per each working day, which represents one statistics row. It contains columns such as the number of clients and the number of hours, which are necessary for the statistics function in the mobile app.");
+                    },
+                    icon: Icon(Icons.info),
+                    color: Colors.blue,
+                    iconSize: 30,
+                  ),
                 ),
               ],
             ),
@@ -530,3 +591,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     }
   }
 }
+
+
+

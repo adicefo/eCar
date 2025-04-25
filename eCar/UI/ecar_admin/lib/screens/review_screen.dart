@@ -131,25 +131,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
                   ),
                 ),
                 SizedBox(width: 16),
-                SizedBox(
-                  width: 120,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => ReviewDetailsScreen()));
-                    },
-                    icon: Icon(Icons.add),
-                    label: Text("Add"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.yellowAccent,
-                      foregroundColor: Colors.black,
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                  ),
-                ),
+               
               ],
             ),
           ],
