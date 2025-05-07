@@ -79,15 +79,18 @@ class _ReviewScreenState extends State<ReviewScreen> {
           Container(
             height: 500,
             child: GridView(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  childAspectRatio: 0.6),
-              scrollDirection: Axis.vertical,
-              children: _buildOrderGrid(),
-            ),
-          ),
+                crossAxisCount: 2,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
+      childAspectRatio: 0.6,
+    ),
+    scrollDirection: Axis.vertical,
+    children: _buildOrderGrid(),
+  ),
+),
+
           _buildButton(),
         ],
       ),

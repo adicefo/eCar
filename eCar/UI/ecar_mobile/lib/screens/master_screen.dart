@@ -144,9 +144,9 @@ class _MasterScreenState extends State<MasterScreen> {
           if (widget.title == "Profile")
             Padding(
               padding: EdgeInsets.only(right: 50),
-              child: ElevatedButton(
-                  onPressed: () async {
-                    if (statistics != null) {
+              child: ElevatedButton.icon(
+                onPressed: ()async{
+if (statistics != null) {
                       try {
                         statistics = await statisticsProvider
                             .updateFinish(statistics?.id);
@@ -156,11 +156,19 @@ class _MasterScreenState extends State<MasterScreen> {
                       }
                     }
                     authProvider.logout(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white),
-                  child: Text("Logout")),
+                },
+                
+                icon: Icon(Icons.login),
+                label: Text("Logout"),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    minimumSize: Size(100, 36),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
+              ),
             ),
         ],
         centerTitle: true,

@@ -12,10 +12,12 @@ Client _$ClientFromJson(Map<String, dynamic> json) => Client(
       user: json['user'] == null
           ? null
           : User.fromJson(json['user'] as Map<String, dynamic>),
+      image: json['image'] as String?,
     );
 
 Map<String, dynamic> _$ClientToJson(Client instance) => <String, dynamic>{
       'id': instance.id,
       'userId': instance.userId,
       'user': instance.user,
+      'image': instance.image,
     };

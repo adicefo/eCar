@@ -120,7 +120,25 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(Icons.person, size: 80),
+                                widget.role == "client"
+                                    ? x?.client?.image != null
+                                        ? Container(
+                                            width: 80,
+                                            height: 80,
+                                            child: StringHelpers
+                                                .imageFromBase64String(
+                                                    x.client!.image!),
+                                          )
+                                        : Container(
+                                            width: 80,
+                                            height: 80,
+                                            child: Image.asset(
+                                              "assets/images/no_image_placeholder.png",
+                                              height: 80,
+                                              width: 80,
+                                            ),
+                                          )
+                                    : Icon(Icons.person, size: 80),
                                 SizedBox(height: 8),
                                 Padding(
                                   padding: EdgeInsets.only(left: 10.0),
