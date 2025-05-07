@@ -72,7 +72,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
   bool isLoading = true;
   @override
   void initState() {
-    // TODO: implement initState
     routeProvider = context.read<RouteProvider>();
     requestProvider = context.read<RequestProvider>();
     userProvider = context.read<UserProvider>();
@@ -126,8 +125,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
 
       Position position = await Geolocator.getCurrentPosition();
       setState(() {
-        sourcePoint =
-            LatLng(latitude: position.latitude, longitude: position.longitude);
+        
       });
     } catch (e) {
       ScaffoldHelpers.showScaffold(
@@ -149,16 +147,129 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
   Widget _buildScreen() {
     return Column(
       children: [
+        Card(
+          margin: EdgeInsets.only(bottom: 12),
+          elevation: 2,
+          color: Colors.blue.shade50,
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              children: [
+                Icon(Icons.info_outline, color: Colors.blue.shade700),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "How to use the map:",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue.shade900,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        "1. Tap and hold on the map to set your source point"
+                        "\n2. Tap and hold again to set your destination",
+                        style: TextStyle(fontSize: 13),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+              decoration: BoxDecoration(
+                color: sourcePoint == null 
+                    ? Colors.orange.shade100 
+                    : destinationPoint == null 
+                        ? Colors.blue.shade100 
+                        : Colors.green.shade100,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    sourcePoint == null 
+                        ? Icons.location_searching 
+                        : destinationPoint == null 
+                            ? Icons.location_on 
+                            : Icons.check_circle,
+                    size: 16,
+                    color: sourcePoint == null 
+                        ? Colors.orange.shade800 
+                        : destinationPoint == null 
+                            ? Colors.blue.shade800 
+                            : Colors.green.shade800,
+                  ),
+                  SizedBox(width: 8),
+                  Text(
+                    sourcePoint == null 
+                        ? "Set source point" 
+                        : destinationPoint == null 
+                            ? "Now set destination point" 
+                            : "Route points set!",
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: sourcePoint == null 
+                          ? Colors.orange.shade800 
+                          : destinationPoint == null 
+                              ? Colors.blue.shade800 
+                              : Colors.green.shade800,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+            if (sourcePoint != null)
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      sourcePoint = null;
+                      destinationPoint = null;
+                      _sourceAddress = null;
+                      _destinationAddress = null;
+                      _controller.clearMarkers();
+                    });
+                  },
+                  icon: Icon(Icons.clear, size: 16),
+                  label: Text("Clear", style: TextStyle(fontSize: 13)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red.shade100,
+                    foregroundColor: Colors.red.shade800,
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    minimumSize: Size(0, 0),
+                  ),
+                ),
+              ),
+          ],
+        ),
+        
         Container(
             height: 350,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black, width: 2),
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.yellowAccent),
-            child: SizedBox(
-                height: 350,
-                width: double.infinity,
-                child: Center(
+            child: Stack(
+              children: [
+                SizedBox(
+                  height: 350,
+                  width: double.infinity,
                   child: GoogleMapsMapView(
                     initialCameraPosition: _initialPosition,
                     onViewCreated: (GoogleMapViewController controller) {
@@ -166,70 +277,188 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                     },
                     onMapLongClicked: addMarker,
                   ),
-                ))),
-        SizedBox(
-          height: 30,
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                "Driver:",
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
+                ),
+                if (sourcePoint == null)
+                  Positioned(
+                    bottom: 16,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          "Tap and hold to set source point",
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+                if (sourcePoint != null && destinationPoint == null)
+                  Positioned(
+                    bottom: 16,
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          "Now tap and hold to set destination",
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            )),
+        SizedBox(height: 20),
+        
+        Card(
+          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.blue.shade100,
+                  radius: 24,
+                  child: Icon(Icons.person, size: 28, color: Colors.blue.shade800),
+                ),
+                SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Your Driver",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                      Text(
+                        "${widget.object?.driver?.user?.name} ${widget.object?.driver?.user?.surname}",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  "${widget.object?.driver?.user?.name} ${widget.object?.driver?.user?.surname}",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black),
-                )),
-          ],
+          ),
         ),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                "Source point:\n ${_sourceAddress == null ? "Unknown" : _sourceAddress!}",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
+        
+        Card(
+          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: sourcePoint == null ? Colors.grey.shade200 : Colors.green.shade100,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.location_on,
+                        color: sourcePoint == null ? Colors.grey.shade600 : Colors.green.shade800,
+                        size: 20,
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Source Point",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade800,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            _sourceAddress == null ? "Not set yet" : _sourceAddress!,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: _sourceAddress == null ? Colors.grey.shade500 : Colors.black87,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                
+                Divider(height: 24),
+                
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: destinationPoint == null ? Colors.grey.shade200 : Colors.blue.shade100,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.flag,
+                        color: destinationPoint == null ? Colors.grey.shade600 : Colors.blue.shade800,
+                        size: 20,
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Destination Point",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade800,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            _destinationAddress == null ? "Not set yet" : _destinationAddress!,
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: _destinationAddress == null ? Colors.grey.shade500 : Colors.black87,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                "Destination point:\n ${_destinationAddress == null ? "Unknown" : _destinationAddress!}",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 20,
-        ),
+        
+        SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -328,7 +557,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with status indicator
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
@@ -378,14 +606,12 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
             ),
           ),
           
-          // Content
           Padding(
             padding: EdgeInsets.all(10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Driver info
                 Row(
                   children: [
                     CircleAvatar(
@@ -421,10 +647,8 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                 
                 Divider(height: 16),
                 
-                // Route details
                 Row(
                   children: [
-                    // Price
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -447,7 +671,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                       ),
                     ),
                     
-                    // Distance
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -475,7 +698,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
             ),
           ),
           
-          // Payment button
           InkWell(
             onTap: () async {
               if (route.paid == true) {
