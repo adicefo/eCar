@@ -55,16 +55,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             Align(
               alignment: Alignment.centerRight,
-              child: ElevatedButton(
+              child: ElevatedButton.icon(
                 onPressed: () {
                   Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) => LoginPage()));
                 },
-                child: Text("Login screen"),
+                icon: Icon(Icons.login),
+                label: Text("Login"),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
-                    minimumSize: Size(10, 30)),
+                    minimumSize: Size(100, 36),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
               ),
             ),
             Text(
@@ -126,17 +131,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       FormBuilderTextField(
                         decoration: InputDecoration(
                           labelText: "Name",
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                           filled: true,
                           fillColor: Colors.black,
+                          hintText: "Enter your first name",
+                          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                          prefixIcon: Icon(Icons.person, color: Colors.yellowAccent),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 1.5),
                           ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 2.0),
                           ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.redAccent, width: 1.5),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
                           color: Colors.yellowAccent,
+                          fontSize: 16,
                         ),
                         name: "name",
                         validator: FormBuilderValidators.compose([
@@ -155,17 +172,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       FormBuilderTextField(
                         decoration: InputDecoration(
                           labelText: "Surname",
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                           filled: true,
                           fillColor: Colors.black,
+                          hintText: "Enter your last name",
+                          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                          prefixIcon: Icon(Icons.person_outline, color: Colors.yellowAccent),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 1.5),
                           ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 2.0),
                           ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.redAccent, width: 1.5),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
                           color: Colors.yellowAccent,
+                          fontSize: 16,
                         ),
                         name: "surname",
                         validator: FormBuilderValidators.compose([
@@ -185,17 +214,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       FormBuilderTextField(
                         decoration: InputDecoration(
                           labelText: "Username",
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                           filled: true,
                           fillColor: Colors.black,
+                          hintText: "Create a username",
+                          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                          prefixIcon: Icon(Icons.account_circle, color: Colors.yellowAccent),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 1.5),
                           ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 2.0),
                           ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.redAccent, width: 1.5),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
                           color: Colors.yellowAccent,
+                          fontSize: 16,
                         ),
                         name: "userName",
                         validator: FormBuilderValidators.compose([
@@ -221,17 +262,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       FormBuilderTextField(
                         decoration: InputDecoration(
                           labelText: "Email",
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                           filled: true,
                           fillColor: Colors.black,
+                          hintText: "Enter your email address",
+                          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                          prefixIcon: Icon(Icons.email, color: Colors.yellowAccent),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 1.5),
                           ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 2.0),
                           ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.redAccent, width: 1.5),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
                           color: Colors.yellowAccent,
+                          fontSize: 16,
                         ),
                         name: "email",
                         validator: FormBuilderValidators.compose([
@@ -249,17 +302,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         obscureText: true,
                         decoration: InputDecoration(
                           labelText: "Password",
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                           filled: true,
                           fillColor: Colors.black,
+                          hintText: "Create a secure password",
+                          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                          prefixIcon: Icon(Icons.lock, color: Colors.yellowAccent),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 1.5),
                           ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 2.0),
                           ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.redAccent, width: 1.5),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
                           color: Colors.yellowAccent,
+                          fontSize: 16,
                         ),
                         name: "password",
                         validator: FormBuilderValidators.compose([
@@ -273,18 +338,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       FormBuilderTextField(
                         obscureText: true,
                         decoration: InputDecoration(
-                          labelText: "Password confirm",
+                          labelText: "Confirm Password",
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                           filled: true,
                           fillColor: Colors.black,
+                          hintText: "Re-enter your password",
+                          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                          prefixIcon: Icon(Icons.lock_outline, color: Colors.yellowAccent),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 1.5),
                           ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 2.0),
                           ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.redAccent, width: 1.5),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
                           color: Colors.yellowAccent,
+                          fontSize: 16,
                         ),
                         name: "passwordConfirm",
                         validator: FormBuilderValidators.compose([
@@ -297,18 +374,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       FormBuilderTextField(
                         decoration: InputDecoration(
-                          labelText: "Telephone number",
+                          labelText: "Telephone Number",
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                           filled: true,
                           fillColor: Colors.black,
+                          hintText: "Format: 06x-xxx-xxx(x)",
+                          hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                          prefixIcon: Icon(Icons.phone, color: Colors.yellowAccent),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 1.5),
                           ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 2.0),
                           ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.redAccent, width: 1.5),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
                           color: Colors.yellowAccent,
+                          fontSize: 16,
                         ),
                         name: "telephoneNumber",
                         validator: FormBuilderValidators.compose([
@@ -323,28 +412,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         dropdownColor: Colors.black,
                         decoration: InputDecoration(
                           labelText: "Gender",
+                          labelStyle: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                           filled: true,
                           fillColor: Colors.black,
+                          prefixIcon: Icon(Icons.person_pin, color: Colors.yellowAccent),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 1.5),
                           ),
-                          disabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.yellowAccent, width: 2.0),
                           ),
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(color: Colors.redAccent, width: 1.5),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         name: "gender",
                         items: [
                           DropdownMenuItem(
                             value: "Male",
-                            child: Text("Male"),
+                            child: Text("Male", style: TextStyle(color: Colors.yellowAccent, fontSize: 16)),
                           ),
                           DropdownMenuItem(
                             value: "Female",
-                            child: Text("Female"),
+                            child: Text("Female", style: TextStyle(color: Colors.yellowAccent, fontSize: 16)),
                           ),
                         ],
                         style: TextStyle(
                           color: Colors.yellowAccent,
+                          fontSize: 16,
                         ),
                       ),
                       SizedBox(
