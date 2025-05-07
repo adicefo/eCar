@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:ecar_mobile/models/Client/client.dart';
 import 'package:ecar_mobile/models/Rent/rent.dart';
 import 'package:ecar_mobile/models/User/user.dart';
@@ -18,10 +16,8 @@ import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:ecar_mobile/utils/stripe_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 
 class RentDetailsScreen extends StatefulWidget {
   bool? isOrder;
@@ -425,103 +421,263 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   }
 
   Widget _buildListRents() {
-    return SingleChildScrollView(
-        child: Container(
-            height: MediaQuery.of(context).size.height * 0.8,
-            child: Column(
-              children: [
-                buildHeader("My rents"),
-                SizedBox(
-                  height: 30,
+    return Column(
+      children: [
+        buildHeader("My rents"),
+        SizedBox(height: 16),
+        Expanded(
+          child: data?.result == null || data!.result.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.car_rental_outlined, size: 64, color: Colors.grey),
+                    SizedBox(height: 16),
+                    Text(
+                      "No rentals available",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  height: 350,
-                  child: GridView(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 1),
-                    scrollDirection: Axis.horizontal,
-                    children: _buildOrderGrid(),
-                  ),
+              )
+            : ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                itemCount: data!.result.length,
+                itemBuilder: (context, index) => _buildRentItem(data!.result[index]),
+              ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RentScreen(),
                 ),
-                SizedBox(
-                  height: 90,
-                ),
-                Container(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RentScreen(),
-                        ),
-                      );
-                    },
-                    child: Text("Go back"),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(76, 255, 255, 255),
-                        foregroundColor: Colors.black,
-                        minimumSize: Size(200, 50)),
-                  ),
-                )
-              ],
-            )));
+              );
+            },
+            child: Text("Go back"),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(76, 255, 255, 255),
+                foregroundColor: Colors.black,
+                minimumSize: Size(200, 50)),
+          ),
+        )
+      ],
+    );
   }
 
-  List<Widget> _buildOrderGrid() {
-    if (data?.result?.length == 0) {
-      return [SizedBox.shrink()];
-    }
-    List<Widget> list = data!.result
-        .map((x) => Container(
-              height: 300,
-              width: 300,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                border: Border.all(color: Colors.black, strokeAlign: 1),
-                borderRadius: BorderRadius.circular(10),
+  Widget _buildRentItem(Rent rent) {
+    return Card(
+      margin: EdgeInsets.only(bottom: 16),
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: rent.status == "wait" 
+                ? Colors.orange.shade100 
+                : rent.status == "active" 
+                  ? Colors.blue.shade100 
+                  : Colors.green.shade100,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
               ),
-              child: Column(
-                children: [
-                  Text(
-                    "Renting date: ${x?.rentingDate.toString().substring(0, 10)}",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  rent.status == "wait" 
+                    ? Icons.hourglass_top 
+                    : rent.status == "active" 
+                      ? Icons.car_rental 
+                      : Icons.check_circle,
+                  color: rent.status == "wait" 
+                    ? Colors.orange.shade800 
+                    : rent.status == "active" 
+                      ? Colors.blue.shade800 
+                      : Colors.green.shade800,
+                  size: 16,
+                ),
+                SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    rent.status == "wait" 
+                      ? "WAITING" 
+                      : rent.status == "active" 
+                        ? "ACTIVE" 
+                        : "COMPLETED",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: rent.status == "wait" 
+                        ? Colors.orange.shade800 
+                        : rent.status == "active" 
+                          ? Colors.blue.shade800 
+                          : Colors.green.shade800,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
+                ),
+              ],
+            ),
+          ),
+          
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 14,
+                      backgroundColor: Colors.grey.shade200,
+                      child: Icon(Icons.date_range, size: 16, color: Colors.black87),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Rental Period",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Text(
+                            "${rent.rentingDate?.toString().substring(0, 10) ?? 'N/A'} - ${rent.endingDate?.toString().substring(0, 10) ?? 'N/A'}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                
+                Divider(height: 16),
+                
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 14,
+                      backgroundColor: Colors.grey.shade200,
+                      child: Icon(Icons.attach_money, size: 16, color: Colors.black87),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Total Price",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Text(
+                            "${rent.fullPrice?.toStringAsFixed(2) ?? '0.00'} KM",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          
+          InkWell(
+            onTap: () async {
+              if (rent.paid == true) {
+                AlertHelpers.showAlert(
+                    context, "Already Paid", "You have already paid for this rental");
+                return;
+              }
+              if (rent.status == "wait") {
+                AlertHelpers.showAlert(context, "Payment Not Available",
+                    "Only active rentals can be paid.");
+                return;
+              }
+              await makePayment(rent);
+            },
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              decoration: BoxDecoration(
+                color: rent.paid == true 
+                  ? Colors.grey.shade200 
+                  : (rent.status == "wait" 
+                    ? Colors.grey.shade300 
+                    : Colors.black),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    rent.paid == true 
+                      ? Icons.check_circle 
+                      : (rent.status == "wait" 
+                        ? Icons.hourglass_disabled 
+                        : Icons.payment),
+                    color: rent.paid == true 
+                      ? Colors.green 
+                      : (rent.status == "wait" 
+                        ? Colors.grey.shade600 
+                        : Colors.yellow),
+                    size: 16,
+                  ),
+                  SizedBox(width: 4),
                   Text(
-                      "Ending date: ${x?.endingDate.toString().substring(0, 10)}",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text("Full price: ${x?.fullPrice.toString()} KM",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Center(
-                      child: Text(
-                          "Status: ${x.status == "wait" ? "Waiting for response" : "Rent is active"}",
-                          style: TextStyle(fontWeight: FontWeight.bold))),
-                  IconButton(
-                      onPressed: () async {
-                        if (x?.paid == true) {
-                          AlertHelpers.showAlert(
-                              context, "Warning", "You have already paid");
-                          return;
-                        }
-                        if (x.status == "wait") {
-                          AlertHelpers.showAlert(context, "Warning",
-                              "Only active rents can be paid.");
-                          return;
-                        }
-                        await makePayment(x);
-                      },
-                      icon: Icon(
-                        Icons.add_circle_sharp,
-                        color: Colors.deepOrangeAccent,
-                      ))
+                    rent.paid == true 
+                      ? "PAID" 
+                      : (rent.status == "wait" 
+                        ? "PENDING" 
+                        : "PAY NOW"),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: rent.paid == true 
+                        ? Colors.green 
+                        : (rent.status == "wait" 
+                          ? Colors.grey.shade600 
+                          : Colors.white),
+                    ),
+                  ),
                 ],
               ),
-            ))
-        .cast<Widget>()
-        .toList();
-    return list;
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   //start of logic for Stripe payment
@@ -532,9 +688,9 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
           c?.user?.email, c?.user?.name, c?.user?.surname);
       paymentIntentData = await createPaymentIntent(rent!.fullPrice.toString(),
           'BAM', c?.user?.email, customerId, c?.user?.name, c?.user?.surname);
-      await Stripe.instance
+      await stripe.Stripe.instance
           .initPaymentSheet(
-            paymentSheetParameters: SetupPaymentSheetParameters(
+            paymentSheetParameters: stripe.SetupPaymentSheetParameters(
               setupIntentClientSecret: stripeSecretKey,
               paymentIntentClientSecret: paymentIntentData!['client_secret'],
               customFlow: true,
@@ -551,7 +707,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
 
   Future<void> displayPaymentSheet(Rent? rent) async {
     try {
-      final result = await Stripe.instance.presentPaymentSheet();
+      final result = await stripe.Stripe.instance.presentPaymentSheet();
       if (result == null) {
         return;
       }
@@ -575,7 +731,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
         print('Payment failed.');
         ScaffoldHelpers.showScaffold(context, "Payment is unsuccessful.");
       }
-    } on StripeException catch (e) {
+    } on stripe.StripeException catch (e) {
       print('Exception/DISPLAYPAYMENTSHEET==> $e');
       showDialog(
         context: context,

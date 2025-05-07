@@ -17,10 +17,11 @@ import 'package:ecar_mobile/utils/getAddresLatLng_helpers.dart';
 import 'package:ecar_mobile/utils/isLoading_helpers.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
 import 'package:ecar_mobile/utils/stripe_helpers.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:flutter_stripe/flutter_stripe.dart' as stripe;
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
@@ -267,97 +268,257 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
   }
 
   Widget _buildListOrders() {
-    return SingleChildScrollView(
-        child: Container(
-            height: MediaQuery.of(context).size.height * 0.8,
-            child: Column(
-              children: [
-                buildHeader("My orders"),
-                SizedBox(
-                  height: 30,
+    return Column(
+      children: [
+        buildHeader("My orders"),
+        SizedBox(height: 16),
+        Expanded(
+          child: routes?.result == null || routes!.result.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.route_outlined, size: 64, color: Colors.grey),
+                    SizedBox(height: 16),
+                    Text(
+                      "No routes available",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ],
                 ),
-                Container(
-                  height: 350,
-                  child: GridView(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 1),
-                    scrollDirection: Axis.horizontal,
-                    children: _buildOrderGrid(),
-                  ),
+              )
+            : ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                itemCount: routes!.result.length,
+                itemBuilder: (context, index) => _buildRouteItem(routes!.result[index]),
+              ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RouteOrderScreen(),
                 ),
-                SizedBox(
-                  height: 90,
-                ),
-                Container(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RouteOrderScreen(),
-                        ),
-                      );
-                    },
-                    child: Text("Go back"),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(76, 255, 255, 255),
-                        foregroundColor: Colors.black,
-                        minimumSize: Size(200, 50)),
-                  ),
-                )
-              ],
-            )));
+              );
+            },
+            child: Text("Go back"),
+            style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(76, 255, 255, 255),
+                foregroundColor: Colors.black,
+                minimumSize: Size(200, 50)),
+          ),
+        )
+      ],
+    );
   }
 
-  List<Widget> _buildOrderGrid() {
-    if (routes?.result?.length == 0) {
-      return [SizedBox.shrink()];
-    }
-    List<Widget> list = routes!.result
-        .map((x) => Container(
-              height: 300,
-              width: 300,
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                border: Border.all(color: Colors.black, strokeAlign: 1),
-                borderRadius: BorderRadius.circular(10),
+  Widget _buildRouteItem(Model.Route route) {
+    return Card(
+      margin: EdgeInsets.only(bottom: 16),
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header with status indicator
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: route.status == "wait" 
+                ? Colors.orange.shade100 
+                : route.status == "active" 
+                  ? Colors.blue.shade100 
+                  : Colors.green.shade100,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
               ),
-              child: Column(
-                children: [
-                  Text(
-                    "Driver: ${x?.driver?.user?.name} ${x?.driver?.user?.surname}",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  route.status == "wait" 
+                    ? Icons.hourglass_top 
+                    : route.status == "active" 
+                      ? Icons.directions_car 
+                      : Icons.check_circle,
+                  color: route.status == "wait" 
+                    ? Colors.orange.shade800 
+                    : route.status == "active" 
+                      ? Colors.blue.shade800 
+                      : Colors.green.shade800,
+                  size: 16,
+                ),
+                SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    "Status: ${route.status?.toUpperCase() ?? 'UNKNOWN'}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: route.status == "wait" 
+                        ? Colors.orange.shade800 
+                        : route.status == "active" 
+                          ? Colors.blue.shade800 
+                          : Colors.green.shade800,
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  Text("Price: ${x.fullPrice}KM",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  Center(
-                      child: Text(
-                          "Number of kilometars:\n              ${x.numberOfKilometars}",
-                          style: TextStyle(fontWeight: FontWeight.bold))),
-                  Text("Status: ${x.status}",
-                      style: TextStyle(fontWeight: FontWeight.bold)),
-                  IconButton(
-                      onPressed: () async {
-                        if (x?.paid == true) {
-                          AlertHelpers.showAlert(
-                              context, "Warning", "You have already paid");
-                          return;
-                        }
-                        await makePayment(x);
-                      },
-                      icon: Icon(
-                        Icons.add_circle_sharp,
-                        color: Colors.deepOrangeAccent,
-                      ))
+                ),
+              ],
+            ),
+          ),
+          
+          // Content
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Driver info
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 14,
+                      backgroundColor: Colors.grey.shade200,
+                      child: Icon(Icons.person, size: 16, color: Colors.black87),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Driver",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Text(
+                            "${route.driver?.user?.name ?? ''} ${route.driver?.user?.surname ?? ''}",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                
+                Divider(height: 16),
+                
+                // Route details
+                Row(
+                  children: [
+                    // Price
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Price",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Text(
+                            "${route.fullPrice?.toStringAsFixed(2) ?? '0.00'} KM",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    // Distance
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Distance",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          Text(
+                            "${route.numberOfKilometars?.toStringAsFixed(1) ?? '0.0'} km",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          
+          // Payment button
+          InkWell(
+            onTap: () async {
+              if (route.paid == true) {
+                AlertHelpers.showAlert(
+                    context, "Already Paid", "You have already paid for this route");
+                return;
+              }
+              await makePayment(route);
+            },
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              decoration: BoxDecoration(
+                color: route.paid == true ? Colors.grey.shade200 : Colors.black,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
+                ),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    route.paid == true ? Icons.check_circle : Icons.payment,
+                    color: route.paid == true ? Colors.green : Colors.yellow,
+                    size: 16,
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    route.paid == true ? "PAID" : "PAY NOW",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: route.paid == true ? Colors.green : Colors.white,
+                    ),
+                  ),
                 ],
               ),
-            ))
-        .cast<Widget>()
-        .toList();
-    return list;
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void addMarker(LatLng pos) async {
@@ -409,7 +570,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
       _controller.addMarkers([_sourceMark!.options]);
     }
 
-    // Refresh UI
     setState(() {});
   }
 
@@ -465,9 +625,9 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
           c?.user?.email, c?.user?.name, c?.user?.surname);
       paymentIntentData = await createPaymentIntent(route!.fullPrice.toString(),
           'BAM', c?.user?.email, customerId, c?.user?.name, c?.user?.surname);
-      await Stripe.instance
+      await stripe.Stripe.instance
           .initPaymentSheet(
-            paymentSheetParameters: SetupPaymentSheetParameters(
+            paymentSheetParameters: stripe.SetupPaymentSheetParameters(
               setupIntentClientSecret: stripeSecretKey,
               paymentIntentClientSecret: paymentIntentData!['client_secret'],
               customFlow: true,
@@ -484,7 +644,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
 
   Future<void> displayPaymentSheet(Model.Route? route) async {
     try {
-      final result = await Stripe.instance.presentPaymentSheet();
+      final result = await stripe.Stripe.instance.presentPaymentSheet();
       if (result == null) {
         return;
       }
@@ -509,7 +669,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
         ScaffoldHelpers.showScaffold(context,
             "Payment is unsuccessfull for ${route?.driver?.user?.name} ${route?.driver?.user?.surname}");
       }
-    } on StripeException catch (e) {
+    } on stripe.StripeException catch (e) {
       print('Exception/DISPLAYPAYMENTSHEET==> $e');
       showDialog(
         context: context,
