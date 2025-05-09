@@ -126,21 +126,29 @@ class _MasterScreenState extends State<MasterScreen> {
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         actions: <Widget>[
-          if (isClient! == false && widget.title != "Profile")
-            IconButton(
-              icon: const Icon(Icons.car_repair_sharp),
-              color: Colors.black,
-              padding: EdgeInsets.only(right: 90.0),
-              tooltip: "Pick up car",
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => VehicleAssigmentScreen(user: user),
-                  ),
-                );
-              },
+         if (isClient! == false && widget.title != "Profile")
+  Align(
+    alignment: Alignment.bottomRight,
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: FloatingActionButton.extended(
+        icon: Icon(Icons.directions_car),
+        label: Text("Pick Up Car"),
+        backgroundColor: Colors.green,
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => VehicleAssigmentScreen(user: user),
             ),
+          );
+        },
+      ),
+    ),
+  ),
+
+
+
           if (widget.title == "Profile")
             Padding(
               padding: EdgeInsets.only(right: 50),
@@ -161,8 +169,9 @@ if (statistics != null) {
                 icon: Icon(Icons.login),
                 label: Text("Logout"),
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    foregroundColor: Colors.white,
+                  textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+                    backgroundColor: Colors.yellowAccent,
+                    foregroundColor: Colors.black,
                     minimumSize: Size(100, 36),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),

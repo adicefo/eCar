@@ -27,4 +27,20 @@ class UserProvider extends BaseProvider<Model.User> {
       throw Exception("Unknown error in GET request");
     }
   }
+  Future<Model.User> updatePassword(int? id,dynamic request) async {
+  var url = "${getBaseUrl()}Users/updatePassword/$id";
+    var uri = Uri.parse(url);
+    var headers = await createHeaders();
+    var jsonRequest = jsonEncode(request);
+    var response = await http!.put(uri, headers: headers,body: jsonRequest);
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      var result = Model.User.fromJson(data);
+      return result;
+    } else if (response.statusCode == 204) {
+      return Model.User();
+    } else {
+      throw Exception("Unknown error in PUT request");
+    }
+  }
 }

@@ -130,6 +130,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       children: _buildGridView(),
                     ),
                   ),
+                  SizedBox(height: 50,),
                   _buildStatistics(),
                 ],
               ),

@@ -20,9 +20,206 @@ class ProfileEditScreen extends StatefulWidget {
 
 class _ProfileEditScreenState extends State<ProfileEditScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
+  final _formKeyPassword=GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
-
+  Map<String, dynamic> _initialValuePassword = {
+    "password":"",
+    "passwordConfirm":""
+  };
   late UserProvider provider;
+  
+  void _showChangePasswordDialog(BuildContext context) {
+    final _passwordController = TextEditingController();
+    final _confirmPasswordController = TextEditingController();
+    bool _obscurePassword = true;
+    bool _obscureConfirmPassword = true;
+    String? _passwordError;
+    String? _confirmPasswordError;
+    bool _isSubmitting = false;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return FormBuilder(
+              key: _formKeyPassword,
+              initialValue: _initialValuePassword,
+              child: 
+            AlertDialog(
+              title: Text("Change Password", 
+                style: TextStyle(fontWeight: FontWeight.bold)),
+              content: Container(
+                width: double.maxFinite,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Enter your new password",
+                      style: TextStyle(color: Colors.grey.shade600),
+                    ),
+                    SizedBox(height: 20),
+                   FormBuilderTextField(
+  name: "password",
+  controller: _passwordController,
+  obscureText: _obscurePassword,
+  decoration: InputDecoration(
+    labelText: "New Password",
+    hintText: "Enter new password",
+    errorText: _passwordError,
+    prefixIcon: Icon(Icons.lock, color: Colors.grey.shade700),
+    suffixIcon: IconButton(
+      icon: Icon(
+        _obscurePassword ? Icons.visibility : Icons.visibility_off,
+        color: Colors.grey,
+      ),
+      onPressed: () {
+        setState(() {
+          _obscurePassword = !_obscurePassword;
+        });
+      },
+    ),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(color: Colors.grey),
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide(color: Colors.grey),
+    ),
+    filled: true,
+    fillColor: Colors.grey[200],
+  ),
+  style: TextStyle(
+    color: Colors.black87,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  ),
+  validator: FormBuilderValidators.compose([
+    FormBuilderValidators.required(errorText: "Password is required"),
+    (value) {
+      final confirmPassword =
+          _formKeyPassword.currentState?.fields['passwordConfirm']?.value;
+      if (confirmPassword != null && value != confirmPassword) {
+        return 'Password and Confirm Password must match';
+      }
+      return null;
+    },
+  ]),
+),
+
+                    SizedBox(height: 16),
+                    FormBuilderTextField(
+                      name: "passwordConfirm",
+                      controller: _confirmPasswordController,
+                      obscureText: _obscureConfirmPassword,
+                      decoration: InputDecoration(
+                        labelText: "Confirm Password",
+                        hintText: "Confirm new password",
+                        errorText: _confirmPasswordError,
+                        prefixIcon: Icon(Icons.lock_outline, color: Colors.grey.shade700),
+                        
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureConfirmPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                            });
+                          },
+                          
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                      ),
+                      style: TextStyle(
+                        color: Colors.black87,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold
+                      ),
+                      validator: FormBuilderValidators.compose([
+    FormBuilderValidators.required(errorText: "Confirm password is required"),
+    (value) {
+      final password =
+          _formKeyPassword.currentState?.fields['password']?.value;
+      if (password != null && value != password) {
+        return 'Password and Confirm Password must match';
+      }
+      return null;
+    },
+  ]),
+                    ),
+                    if (_isSubmitting) ...[
+                      SizedBox(height: 20), 
+                      Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  child: Text("Cancel", 
+                    style: TextStyle(color: Colors.grey.shade700)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ElevatedButton(
+                  child: Text("Save"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(79, 255, 255, 255),
+                    foregroundColor: Colors.black,
+                  ),
+                  onPressed: () async{
+                   
+                      if(_formKeyPassword.currentState?.validate() ?? false){
+                        _formKeyPassword.currentState?.save();
+                      var request ={
+                        "password": _formKeyPassword.currentState?.value['password'],
+                        "passwordConfirm": _formKeyPassword.currentState?.value['passwordConfirm'],
+                      };
+                      try {
+                        provider.updatePassword(widget?.user?.id, request);
+                        ScaffoldHelpers.showScaffold(context, "Password has been changed");
+                        await Future.delayed(const Duration(seconds: 2));
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(),
+                          ),
+                        );
+                      } catch (e) {
+                        ScaffoldHelpers.showScaffold(context, e.toString());
+                      }
+                   
+                  }
+                  else{
+                      AlertHelpers.showAlert(context, "Invalid form", "Form is not valid. Please fix values");
+                  }}
+                ),
+              ],
+            ));
+          },
+        );
+      },
+    );
+  }
+  
   @override
   void initState() {
     provider = context.read<UserProvider>();
@@ -31,8 +228,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       "surname": widget?.user?.surname,
       "telephoneNumber": widget?.user?.telephoneNumber,
       "email": widget?.user?.email,
-      "password": "",
-      "passwordConfirm": "",
+      "username": widget?.user?.userName,
+  
     };
     super.initState();
   }
@@ -84,7 +281,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 fillColor: Colors.grey[200],
                 label: Text("Name...")),
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: "Field is required"),
               FormBuilderValidators.minLength(3,
                   errorText: "Name must contain at least 3 charaters"),
               FormBuilderValidators.match(nameSurname,
@@ -109,7 +305,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 fillColor: Colors.grey[200],
                 label: Text("Surname...")),
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: "Field is required"),
               FormBuilderValidators.minLength(3,
                   errorText: "Name must contain at least 3 charaters"),
               FormBuilderValidators.match(nameSurname,
@@ -134,7 +329,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 fillColor: Colors.grey[200],
                 label: Text("Telephone number...")),
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: "Field is required"),
               FormBuilderValidators.match(phoneExp,
                   errorText: "Number format: 06x-xxx-xxx(x)")
             ]),
@@ -157,7 +351,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 fillColor: Colors.grey[200],
                 label: Text("Email...")),
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: "Field is required"),
               FormBuilderValidators.match(emailExp,
                   errorText: "Email format is:name(name.surname)@something.com")
             ]),
@@ -166,9 +359,8 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             height: 15,
           ),
           FormBuilderTextField(
-            name: "password",
+            name: "username",
             enabled: true,
-            obscureText: true,
             style: TextStyle(fontWeight: FontWeight.bold),
             decoration: InputDecoration(
                 disabledBorder: OutlineInputBorder(
@@ -179,32 +371,88 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 ),
                 filled: true,
                 fillColor: Colors.grey[200],
-                label: Text("Password...")),
+                label: Text("Username...")),
             validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: "Field is required"),
+           FormBuilderValidators.minLength(5,
+                              errorText:
+                                  "Username must contain at least 5 charaters"),
+                          FormBuilderValidators.username(
+                              checkNullOrEmpty: true,
+                              allowDash: false,
+                              allowDots: false,
+                              allowUnderscore: false,
+                              allowNumbers: true,
+                              allowSpecialChar: true,
+                              errorText:
+                                  "- _ . are not allowed. Correct example: userUser123")
+                        
             ]),
           ),
+
           SizedBox(
             height: 15,
           ),
-          FormBuilderTextField(
-            name: "passwordConfirm",
-            obscureText: true,
-            enabled: true,
-            style: TextStyle(fontWeight: FontWeight.bold),
-            decoration: InputDecoration(
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                filled: true,
+           FormBuilderDropdown<String>(
+                        dropdownColor: const Color.fromARGB(255, 254, 225, 189),
+                        decoration: InputDecoration(
+                          labelText: "Gender",
+                          labelStyle: TextStyle(color: Colors.black, fontSize: 18),
+                          filled: true,
                 fillColor: Colors.grey[200],
-                label: Text("Confirm password...")),
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: "Field is required"),
-            ]),
+                          prefixIcon: Icon(Icons.person_pin, color: Colors.black),
+                        enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                          disabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                          contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                        ),
+                        name: "gender",
+                        items: [
+                          DropdownMenuItem(
+                            value: "Male",
+                            child: Text("Male", style: TextStyle(color: Colors.black, fontSize: 16)),
+                          ),
+                          DropdownMenuItem(
+                            value: "Female",
+                            child: Text("Female", style: TextStyle(color: Colors.black, fontSize: 16)),
+                          ),
+                        ],
+                        style: TextStyle(
+                          color: const Color.fromARGB(145, 254, 225, 189),
+                          fontSize: 16,
+                        ),
+                      ),
+          
+          SizedBox(height: 30),
+          
+          InkWell(
+            onTap: () => _showChangePasswordDialog(context),
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: 15),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.grey),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.lock_reset, color: Colors.black87),
+                  SizedBox(width: 10),
+                  Text(
+                    "Change Password",
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

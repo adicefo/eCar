@@ -64,90 +64,24 @@ class MyApp extends StatelessWidget {
       title: 'eCar Mobile',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFFFFFF00),
-          primary: const Color(0xFFFFFF00),
-          surface: Colors.white,
-          background: Colors.grey.shade50, 
-          error: Colors.redAccent.shade700,
-          brightness: Brightness.light,
-        ),
+        // This is the theme of your application.
+        //
+        // TRY THIS: Try running your application with "flutter run". You'll see
+        // the application has a purple toolbar. Then, without quitting the app,
+        // try changing the seedColor in the colorScheme below to Colors.green
+        // and then invoke "hot reload" (save your changes or press the "hot
+        // reload" button in a Flutter-supported IDE, or press "r" if you used
+        // the command line to start the app).
+        //
+        // Notice that the counter didn't reset back to zero; the application
+        // state is not lost during the reload. To reset the state, use hot
+        // restart instead.
+        //
+        // This works for code too, not just values: Most code changes can be
+        // tested with just a hot reload.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellowAccent),
         useMaterial3: true,
-        textTheme: TextTheme(
-          displayLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.black87),
-          displayMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black87),
-          displaySmall: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black87),
-          headlineLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.w600, color: Colors.black87),
-          headlineMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black87),
-          headlineSmall: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black87),
-          titleLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black87),
-          titleMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
-          titleSmall: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black87),
-          bodyLarge: TextStyle(fontSize: 16, color: Colors.black87),
-          bodyMedium: TextStyle(fontSize: 14, color: Colors.black87),
-          bodySmall: TextStyle(fontSize: 12, color: Colors.black54),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          labelStyle: TextStyle(
-            color: Colors.black87,
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
-          ),
-          floatingLabelStyle: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.shade400, width: 1.5),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.black, width: 2),
-          ),
-          filled: true,
-          fillColor: Colors.grey.shade200,
-          contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFFFFF00),
-            foregroundColor: Colors.black87,
-            elevation: 2,
-            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            textStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          ),
-        ),
-        cardTheme: CardTheme(
-          elevation: 3,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          color: Colors.white,
-          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-        ),
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black87,
-          elevation: 0,
-          centerTitle: true,
-          titleTextStyle: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 20),
-          iconTheme: IconThemeData(color: Colors.black87),
-        ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: Colors.white,
-          selectedItemColor: const Color(0xFFFFFF00),
-          unselectedItemColor: Colors.grey.shade600,
-          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-          type: BottomNavigationBarType.fixed,
-          elevation: 8,
-        ),
+       
       ),
       home: LoginPage(),
     );
@@ -238,6 +172,8 @@ class _LoginPageState extends State<LoginPage> {
                         enabled: true,
                         controller: _emailController,
                         decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
                           labelText: "Email",
                           hintText: "Enter your email",
                           prefixIcon: Icon(Icons.email_sharp),
@@ -245,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderSide: BorderSide(color: Colors.yellowAccent),
                           ),
                         ),
-                        style: TextStyle(color: Colors.black),
+                                                style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 10),
                       TextField(
@@ -254,12 +190,14 @@ class _LoginPageState extends State<LoginPage> {
                         decoration: InputDecoration(
                           labelText: "Password",
                           hintText: "Enter your password",
+                          filled: true,
+                          fillColor: Colors.white,
                           prefixIcon: Icon(Icons.password),
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.yellowAccent),
                           ),
                         ),
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 50),
                       Padding(
@@ -341,8 +279,8 @@ class _LoginPageState extends State<LoginPage> {
                               "Credentials: ${_emailController.text} : ${_passwordController.text}");
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFFFFF00),
-                          foregroundColor: Colors.black87,
+                              backgroundColor: Colors.yellowAccent,
+                          foregroundColor: Colors.black,
                           minimumSize: Size(300, 50),
                           elevation: 3,
                           shape: RoundedRectangleBorder(
