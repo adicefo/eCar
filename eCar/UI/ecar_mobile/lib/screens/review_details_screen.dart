@@ -217,9 +217,9 @@ try {
       AlertHelpers.showAlert(context, "Error", "Please enter required fields");
       return;
     }
-    bool? confirmEdit = await AlertHelpers.editConfirmation(context,
+    bool? confirmEdit = await AlertHelpers.reviewSaveConfirmation(context,
         text:
-            "Do you want to review ${_selectedDriver?.user?.name} ${_selectedDriver?.user?.surname}");
+            "Do you want to review ${_selectedDriver?.user?.name} ${_selectedDriver?.user?.surname}?");
     if (confirmEdit == true) {
       var request = {
         "value": _rateValue!.toInt(),

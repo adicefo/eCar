@@ -180,10 +180,8 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                             "Form is not valid. Please fix the values");
                         return;
                       }
-                      bool? confirmEdit = await AlertHelpers.editConfirmation(
-                          context,
-                          text:
-                              "Are you sure that you have not already assigned a vehicle?");
+                      bool? confirmEdit = await AlertHelpers.vehicelAssignmentConfirmation(
+                          context);
                       if (confirmEdit == true) {
                         _formKey.currentState?.save();
                         var formData = _formKey.currentState?.value;
@@ -208,10 +206,8 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                   ),
                   ElevatedButton(
                     onPressed: () async {
-                      bool? confirmEdit = await AlertHelpers.editConfirmation(
-                          context,
-                          text:
-                              "Are you sure that you want to return your vehicle?");
+                      bool? confirmEdit = await AlertHelpers.vehicelReturnConfirmation(
+                          context);
                       if (confirmEdit == true) {
                         var request = {
                           "driverId": driverInstance?.id,

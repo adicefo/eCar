@@ -76,6 +76,7 @@ abstract class ExamplePageState<T extends ExamplePage> extends State<T>
       children: <Widget>[
         Scaffold(
           appBar: AppBar(
+            automaticallyImplyLeading: false,
             title: Text(widget.title),
           ),
           body: Builder(builder: (BuildContext context) => builder(context)),

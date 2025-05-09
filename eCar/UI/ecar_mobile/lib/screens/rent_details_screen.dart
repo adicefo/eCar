@@ -143,8 +143,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
           context, "Error", "You must set both start and end date");
       return;
     }
-    bool? confirmEdit = await AlertHelpers.editConfirmation(context,
-        text: "Do you want to send rent request?");
+    bool? confirmEdit = await AlertHelpers.rentRequestConfirmation(context);
     if (confirmEdit == true) {
       var request = {
         "rentingDate": _startDate.toIso8601String(),

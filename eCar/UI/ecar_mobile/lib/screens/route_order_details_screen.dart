@@ -802,8 +802,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
           context, "Error", "You must set both source and destination point");
       return;
     }
-    bool? confirmEdit = await AlertHelpers.editConfirmation(context,
-        text: "Do you want to send drive request?");
+    bool? confirmEdit = await AlertHelpers.routeSendConfirmation(context);
     if (confirmEdit == true) {
       var request = {
         "sourcePoint": {

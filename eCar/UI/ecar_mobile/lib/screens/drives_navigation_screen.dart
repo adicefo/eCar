@@ -18,7 +18,7 @@ import 'package:provider/provider.dart';
 class DrivesNavigationScreen extends ExamplePage {
   Model.Route? object;
   DrivesNavigationScreen({super.key, this.object})
-      : super(leading: const Icon(Icons.navigation), title: 'Navigation');
+      : super(leading:const Icon(Icons.navigation), title: 'Navigation');
 
   @override
   ExamplePageState<DrivesNavigationScreen> createState() =>
@@ -888,41 +888,49 @@ class _DrivesNavigationScreenState
               spacing: 10,
               children: <Widget>[
                 if (!_guidanceRunning)
-                  ElevatedButton(
+                  ElevatedButton.icon(
                     onPressed: _validRoute ? _startGuidedNavigation : null,
-                    child: const Text('Start Guidance'),
+                    icon: Icon(Icons.play_arrow),
+                    label: const Text('Start Guidance'),
                   ),
                 if (_guidanceRunning)
-                  ElevatedButton(
+                  ElevatedButton.icon(
                     onPressed: _validRoute ? _stopGuidedNavigation : null,
-                    child: const Text('Stop Guidance'),
+                    icon: Icon(Icons.stop),
+                    label: const Text('Stop Guidance'),
                   ),
               ],
             ),
           if (_waypoints.isEmpty)
             const Padding(
               padding: EdgeInsets.all(15),
-              child:
-                  Text('Click on buttons to add source and destination points'),
+              child: Text(
+                'Click on buttons to add source and destination points or you can go back to the previous screen',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16),
+              ),
             ),
           Wrap(
             alignment: WrapAlignment.center,
             spacing: 10,
             children: <Widget>[
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: _sourcePointEnabled ? _addSourcePoint : null,
-                child: const Text('Add source point'),
+                icon: Icon(Icons.add),
+                label: const Text('Add source point'),
               ),
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed:
                     _destinationPointEnabled ? _addDestinationPoint : null,
-                child: const Text('Add destination point'),
+                icon: Icon(Icons.add),
+                label: const Text('Add destination point'),
               ),
-              ElevatedButton(
+              ElevatedButton.icon(
                 onPressed: _waypoints.isNotEmpty && !_guidanceRunning
                     ? () => _clearNavigationWaypoints()
                     : null,
-                child: const Text('Clear waypoints'),
+                icon: Icon(Icons.clear),
+                label: const Text('Clear waypoints'),
               ),
               getOptionsButton(context, onPressed: () => toggleOverlay())
             ],
@@ -936,19 +944,32 @@ class _DrivesNavigationScreenState
     return SafeArea(
         minimum: const EdgeInsets.all(8.0),
         child: Align(
-            alignment: Alignment.topRight,
+            alignment: Alignment.bottomRight,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DrivesScreen(),
-                        ),
-                      );
-                    },
-                    child: Text("Go back")),
+                ElevatedButton.icon(
+            onPressed: () async {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (context) => DrivesScreen(),
+                ),
+              );
+            },
+            icon: Icon(Icons.arrow_back),
+            label: Text(
+              "Go back",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellowAccent,
+              foregroundColor: Colors.black,
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
               ],
             )));
   }
@@ -957,23 +978,25 @@ class _DrivesNavigationScreenState
     return SafeArea(
         minimum: const EdgeInsets.all(8.0),
         child: Align(
-            alignment: Alignment.topLeft,
+            alignment: Alignment.topCenter,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Card(
+                  color: const Color.fromARGB(255, 252, 236, 204),
                     child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       Text(
                         'Remaining time: ${formatRemainingDuration(Duration(seconds: _remainingTime))}',
-                        style: const TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Remaining distance: ${formatRemainingDistance(_remainingDistance)}',
-                        style: const TextStyle(fontSize: 15),
+                        style: const TextStyle(fontSize: 15,fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -990,6 +1013,7 @@ class _DrivesNavigationScreenState
             child: Row(
               children: [
                 Card(
+                  color: const Color.fromARGB(255, 181, 208, 255),
                     child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -1027,6 +1051,11 @@ class _DrivesNavigationScreenState
                         ),
                       );
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      foregroundColor: Colors.white,
+                      minimumSize: Size(100, 50),
+                    ),
                     child: Text("Finish")),
               ],
             )));

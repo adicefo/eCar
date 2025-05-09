@@ -120,7 +120,7 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                widget.role == "client"
+                                widget.role == "driver"
                                     ? x?.client?.image != null
                                         ? Container(
                                             width: 80,

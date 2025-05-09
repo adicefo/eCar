@@ -193,6 +193,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         "password": _formKeyPassword.currentState?.value['password'],
                         "passwordConfirm": _formKeyPassword.currentState?.value['passwordConfirm'],
                       };
+                      bool? editConfirmation=await AlertHelpers.changePasswordConfirmation(context);
+                      if(editConfirmation==false)
+                      {
+                        return;
+                      }
                       try {
                         provider.updatePassword(widget?.user?.id, request);
                         ScaffoldHelpers.showScaffold(context, "Password has been changed");
@@ -509,7 +514,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             context, "Invalid form", "Form is not valid. Please fix values");
         return;
       }
-
+      bool? editConfirmation=await AlertHelpers.editConfirmation(context,text: "Are you sure you want to edit this profile data?");
+      if(editConfirmation==false)
+      {
+        return;
+      }
+      
       var request = _formKey.currentState?.value;
       try {
         provider.update(widget?.user?.id, request);
