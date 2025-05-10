@@ -70,9 +70,23 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          buildHeader("Archive"),
+          Row(children: [
+            Padding(padding: EdgeInsets.only(left: 10),
+              child: IconButton(onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(),
+                  ),
+                );
+              }, icon: Icon(Icons.arrow_back,size: 30, color: Colors.black87)),
+              ),
+              SizedBox(width: 75,), 
+              buildHeader("Archive")
+          ],),
+          
           Container(
-            height: 500,
+            height: widget.role=="driver"?620:500,
             child: GridView(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 1,
@@ -86,7 +100,7 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
             height: 50,
           ),
           if (widget?.role == "client") _buildFooter(),
-          if (widget?.role == "driver") _buildBackBtn()
+          
         ],
       ),
     );
@@ -335,20 +349,7 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
         padding: EdgeInsets.only(left: 30.0),
         child: Row(
           children: [
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProfileScreen(),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(minimumSize: Size(75, 50)),
-                child: Text("Go back")),
-            SizedBox(
-              width: 30,
-            ),
+            SizedBox(width: 70,),
             InkWell(
               onTap: () {
                 setState(() {

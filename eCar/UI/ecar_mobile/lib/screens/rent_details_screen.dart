@@ -258,7 +258,6 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               ),
             ),
             Divider(height: 24),
-            // Duration info with icon
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Container(
@@ -310,7 +309,6 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               ),
             ),
             
-            // Price with icon
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Container(
@@ -330,7 +328,6 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
             
             SizedBox(height: 24),
             
-            // Action buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -449,7 +446,25 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   Widget _buildListRents() {
     return Column(
       children: [
-        buildHeader("My rents"),
+        Row(
+          children: [
+            Padding(padding: EdgeInsets.only(left: 10),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => RentScreen()),
+                  );
+                },
+                icon: Icon(Icons.arrow_back, size: 30, color: Colors.black87),
+                tooltip: "Back",
+              ),),
+           Padding(
+            padding: EdgeInsets.only(left: 70),
+            child:  buildHeader("My rents"),
+           )
+          ], 
+        ),
         SizedBox(height: 16),
         Expanded(
           child: data?.result == null || data!.result.isEmpty
@@ -476,24 +491,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 itemBuilder: (context, index) => _buildRentItem(data!.result[index]),
               ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RentScreen(),
-                ),
-              );
-            },
-            child: Text("Go back"),
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(76, 255, 255, 255),
-                foregroundColor: Colors.black,
-                minimumSize: Size(200, 50)),
-          ),
-        )
+        
       ],
     );
   }

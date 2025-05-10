@@ -75,10 +75,23 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
                       children: _buildGridView(),
                     ),
                   ),
-                  _buildButton()
+                  
                 ],
               ),
             ),
+            floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RouteOrderDetailsScreen(false),
+                ),
+              );
+            },
+            backgroundColor: Colors.amber,
+            icon: Icon(Icons.assignment_turned_in),
+            label: Text("My Orders"),
+          ),
           );
   }
 
@@ -247,28 +260,5 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
     return listWidget;
   }
 
-  Widget _buildButton() {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.only(top: 50.0),
-        child: ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RouteOrderDetailsScreen(false),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(79, 255, 255, 255),
-                foregroundColor: Colors.black,
-                minimumSize: Size(300, 50)),
-            child: Text(
-              "My orders",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            )),
-      ),
-    );
-  }
+ 
 }

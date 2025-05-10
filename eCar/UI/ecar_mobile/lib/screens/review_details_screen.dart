@@ -84,10 +84,25 @@ try {
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
-          buildHeader("Review your drive"),
-          _buildContent(),
-          _buildButton(),
-        ],
+          Row(
+            children: [
+              Padding(padding: EdgeInsets.only(left: 10),
+              child: IconButton(onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ReviewScreen(),
+                  ),
+                );
+              }, icon: Icon(Icons.arrow_back,size: 30, color: Colors.black87)),
+              ),
+            Padding(padding: EdgeInsets.only(left: 10),
+            child: buildHeader("Review your drive"),),
+            ],
+          ),
+          _buildContent(), 
+          _buildButton(),  
+        ], 
       ),
     ));
   }
@@ -174,26 +189,7 @@ try {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ReviewScreen(),
-                      ),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(79, 255, 255, 255),
-                      foregroundColor: Colors.black,
-                      minimumSize: Size(150, 50)),
-                  child: Text(
-                    "Go back",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )),
-              SizedBox(
-                width: 30,
-              ),
+              
               ElevatedButton(
                   onPressed: () {
                     _sendReviewRequest();

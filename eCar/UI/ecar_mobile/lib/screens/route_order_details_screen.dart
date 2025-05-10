@@ -435,34 +435,44 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RouteOrderScreen(),
+           ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RouteOrderScreen(),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.arrow_back),
+                  label: Text("Go back"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey.shade200,
+                    foregroundColor: Colors.black87,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
-                );
-              },
-              child: Text("Go back"),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(76, 255, 255, 255),
-                  foregroundColor: Colors.black,
-                  minimumSize: Size(150, 50)),
-            ),
-            SizedBox(
-              width: 30,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _sendRouteAndRequest();
-              },
-              child: Text("Send"),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(76, 255, 255, 255),
-                  foregroundColor: Colors.black,
-                  minimumSize: Size(150, 50)),
-            )
+                ),
+                SizedBox(
+                  width: 50,
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    _sendRouteAndRequest();
+                  },
+                  icon: Icon(Icons.send),
+                  label: Text("Send request"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber.shade300,
+                    foregroundColor: Colors.black87,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
           ],
         )
       ],
@@ -472,7 +482,25 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
   Widget _buildListOrders() {
     return Column(
       children: [
-        buildHeader("My orders"),
+       Row(
+        children: [
+           Padding(padding: EdgeInsets.only(left: 10),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => RouteOrderScreen()),
+                  );
+                },
+                icon: Icon(Icons.arrow_back, size: 30, color: Colors.black87),
+                tooltip: "Back",
+              ),),
+           Padding(
+            padding: EdgeInsets.only(left: 55),
+            child: buildHeader("My orders"),
+           ),
+        ],
+       ),
         SizedBox(height: 16),
         Expanded(
           child: routes?.result == null || routes!.result.isEmpty
@@ -499,24 +527,7 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                 itemBuilder: (context, index) => _buildRouteItem(routes!.result[index]),
               ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RouteOrderScreen(),
-                ),
-              );
-            },
-            child: Text("Go back"),
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(76, 255, 255, 255),
-                foregroundColor: Colors.black,
-                minimumSize: Size(200, 50)),
-          ),
-        )
+       
       ],
     );
   }

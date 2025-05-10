@@ -120,7 +120,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 children: [
                   buildHeader("Welcome!\n${user?.userName}"),
                   Container(
-                    height: 400,
+                    height: _role=="driver"?400:600,
                     child: GridView(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
@@ -149,7 +149,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 _showCustomModal(x);
               },
               child: Container(
-                height: 400,
+                height: _role=="driver"?400:600,
                 width: 400,
                 decoration: BoxDecoration(
                   color: Colors.white,

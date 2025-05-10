@@ -23,8 +23,32 @@ class RecommendationScreen extends StatelessWidget {
         child: Column(
       children: [
         Padding(
-            padding: EdgeInsets.only(left: 40),
-            child: Center(child: buildHeader("Recommended\n    vehicels..."))),
+  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      IconButton(
+  onPressed: () {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => RentScreen()),
+    );
+  },
+  icon: Icon(Icons.arrow_back, size: 30, color: Colors.black87),
+  tooltip: "Back",
+),
+
+    Padding(
+  padding: EdgeInsets.only(right: 50), 
+  child: Center(child: Align(
+            alignment: Alignment.center, 
+            child: Text(
+              "Recommended\n   vehicles...",
+              style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
+            ))))
+    ],
+  ),
+),
         if (recommendationList!.isEmpty)
           Padding(
             padding: EdgeInsets.only(top: 50),
@@ -42,7 +66,7 @@ class RecommendationScreen extends StatelessWidget {
           ),
         if (recommendationList!.isNotEmpty)
           Container(
-            height: 530,
+            height: 800, 
             width: 400,
             child: GridView(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -53,11 +77,7 @@ class RecommendationScreen extends StatelessWidget {
               children: _buildGridView(context),
             ),
           ),
-        if (recommendationList!.isEmpty)
-          SizedBox(
-            height: 350,
-          ),
-        _buildBtnBack(context),
+        
       ],
     ));
   }
@@ -264,21 +284,5 @@ class RecommendationScreen extends StatelessWidget {
     return list;
   }
 
-  Widget _buildBtnBack(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RentScreen(),
-          ),
-        );
-      },
-      child: Text("Go back"),
-      style: ElevatedButton.styleFrom(
-          backgroundColor: const Color.fromARGB(76, 255, 255, 255),
-          foregroundColor: Colors.black,
-          minimumSize: Size(200, 50)),
-    );
-  }
+ 
 }

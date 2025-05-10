@@ -80,10 +80,22 @@ class _RentScreenState extends State<RentScreen> {
                       children: _buildGridView(),
                     ),
                   ),
-                  _buildButton()
                 ],
               ),
             ),
+            floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RentDetailsScreen(false),
+                ),
+              );
+            },
+            backgroundColor: Colors.blueAccent,
+            icon: Icon(Icons.car_rental),
+            label: Text("My rents"),
+          ),
           );
   }
 
@@ -262,28 +274,5 @@ class _RentScreenState extends State<RentScreen> {
     return list;
   }
 
-  Widget _buildButton() {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.only(top: 30.0),
-        child: ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RentDetailsScreen(false),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(79, 255, 255, 255),
-                foregroundColor: Colors.black,
-                minimumSize: Size(300, 50)),
-            child: Text(
-              "My rents",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            )),
-      ),
-    );
-  }
+ 
 }

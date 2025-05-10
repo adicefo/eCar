@@ -103,14 +103,25 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (vehicles != null && vehicles!.result.isNotEmpty) ...[
-              Text(
+              Row(children: [
+                IconButton(onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationScreen(false),
+                  ),
+                );
+              }, icon: Icon(Icons.arrow_back,size: 30, color: Colors.black87)),
+                Padding(padding: EdgeInsets.only(left: 20),
+                child: Text(
                 "Choose the vehicle: ",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.black, 
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                ),
+                ),),
               ),
+              ],),
               SizedBox(height: 20),
               FormBuilderDropdown(
                 name: 'vehicleId',
@@ -235,17 +246,7 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                   SizedBox(
                     width: 10,
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NotificationScreen(false),
-                        ),
-                      );
-                    },
-                    child: Text("Go back"),
-                  ),
+                 
                 ],
               ),
             ] else ...[
@@ -295,17 +296,7 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                 },
                 child: Text("Return"),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => NotificationScreen(false),
-                    ),
-                  );
-                },
-                child: Text("Go back"),
-              ),
+             
             ],
             SizedBox(height: 20),
           ],

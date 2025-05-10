@@ -65,7 +65,24 @@ class _ReviewScreenState extends State<ReviewScreen> {
   Widget build(BuildContext context) {
     return isLoading
         ? getisLoadingHelper()
-        : MasterScreen("Review", _buildScreen());
+        : MasterScreen("Review", _buildScreen(),floatingActionButton: FloatingActionButton.extended(
+  onPressed: () {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReviewDetailsScreen(),
+      ),
+    );
+  },
+  label: Text('Write a Review'),
+    tooltip: 'Tap to write your own review',
+
+  icon: Icon(Icons.rate_review),
+  backgroundColor: const Color.fromARGB(255, 7, 255, 52),
+  foregroundColor: Colors.black,
+ 
+),
+);
   }
 
   Widget _buildScreen() {
@@ -90,8 +107,14 @@ class _ReviewScreenState extends State<ReviewScreen> {
     children: _buildOrderGrid(),
   ),
 ),
+SizedBox(height: 10,),
+Center(
+      child: Text(
+        'Want to share your experience? Tap below!',
+        style: TextStyle(fontSize: 16, color: Colors.grey),
+      ),
+    ),
 
-          _buildButton(),
         ],
       ),
     );
@@ -189,93 +212,253 @@ class _ReviewScreenState extends State<ReviewScreen> {
   void _showCustomModal(Review object) {
     showGeneralDialog(
       context: context,
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.yellowAccent,
-              borderRadius: BorderRadius.circular(16),
+      barrierDismissible: true,
+      barrierLabel: 'Review Details',
+      transitionDuration: Duration(milliseconds: 300),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return ScaleTransition(
+          scale: CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOutQuint,
+          ),
+          child: FadeTransition(
+            opacity: CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeInOutCubic,
             ),
-            width: MediaQuery.of(context).size.width * 0.75,
-            height: 350,
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Text(
-                      "Description for\n ${object.reviewed?.user?.name} ${object?.reviewed?.user?.surname} from\n ${object.reviews?.user?.userName}",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center),
-                ),
-                Expanded(
-                    child: SingleChildScrollView(
-                  padding: EdgeInsets.only(top: 30.0),
-                  child: Center(
-                    child: Text(
-                      object.description!,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          letterSpacing: 1.1),
-                      textAlign: TextAlign.center,
+            child: child,
+          ),
+        );
+      },
+      pageBuilder: (context, animation, secondaryAnimation) {
+        final DateTime reviewDate = object.addedDate ?? DateTime.now();
+        final String formattedDate = "${reviewDate.day} ${_getMonthName(reviewDate.month)} ${reviewDate.year}";
+        
+        return Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.85,
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.7,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 20,
+                    offset: Offset(0, 10),
+                  ),
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.amber.shade300, Colors.amber.shade500],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            right: 8,
+                            top: 0,
+                            child: IconButton(
+                              icon: Icon(Icons.close, color: Colors.black87),
+                              onPressed: () => Navigator.pop(context),
+                              splashRadius: 20,
+                            ),
+                          ),
+                          Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Review",
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  "${object.reviewed?.user?.name ?? ""} ${object.reviewed?.user?.surname ?? ""}",
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                )),
-                Positioned(
-                  bottom: 20,
-                  left: 0,
-                  child: Text(
-                    "${object!.addedDate.toString().substring(0, 10)}",
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.red,
-                        letterSpacing: 1.1,
-                        decoration: TextDecoration.underline),
-                  ),
+                    Flexible(
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.grey.shade200,
+                                  radius: 24,
+                                  child: Icon(
+                                    Icons.person,
+                                    size: 30,
+                                    color: Colors.amber.shade700,
+                                  ),
+                                ),
+                                SizedBox(width: 12),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${object.reviews?.user?.userName ?? ""}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    SizedBox(height: 2),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.calendar_today,
+                                          size: 14,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          formattedDate,
+                                          style: TextStyle(
+                                            color: Colors.grey.shade600,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 16),
+                              child: Row(
+                                children: [
+                                  RatingBarIndicator(
+                                    rating: double.tryParse(object.value?.toString() ?? '0') ?? 0,
+                                    itemBuilder: (context, index) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    itemCount: 5,
+                                    itemSize: 24.0,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    "${double.tryParse(object.value?.toString() ?? '0')?.toStringAsFixed(1) ?? '0.0'}",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.amber.shade800,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            
+                            Divider(thickness: 1),
+                            
+                            Padding(
+                              padding: EdgeInsets.only(top: 8, bottom: 4),
+                              child: Text(
+                                "Review",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey.shade800,
+                                ),
+                              ),
+                            ),
+                            
+                            Container(
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade50,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey.shade200),
+                              ),
+                              child: Text(
+                                object.description ?? "",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  height: 1.5,
+                                  color: Colors.grey.shade800,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        border: Border(
+                          top: BorderSide(color: Colors.grey.shade200),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.amber,
+                              foregroundColor: Colors.black87,
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: Text("Close"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text("Close")),
-                )
-              ],
+              ),
             ),
           ),
         );
       },
     );
   }
-
-  Widget _buildButton() {
-    return Center(
-      child: Padding(
-        padding: EdgeInsets.only(top: 30.0),
-        child: ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ReviewDetailsScreen(),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(79, 255, 255, 255),
-                foregroundColor: Colors.black,
-                minimumSize: Size(300, 50)),
-            child: Text(
-              "Review",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            )),
-      ),
-    );
+  
+  String _getMonthName(int month) {
+    const monthNames = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return monthNames[month - 1];
   }
+
+  
 }

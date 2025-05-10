@@ -161,12 +161,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       return null;
     },
   ]),
-                    ),
+                 ),
                     if (_isSubmitting) ...[
                       SizedBox(height: 20), 
                       Center(
                         child: CircularProgressIndicator(),
-                      ),
+                      ), 
                     ],
                   ],
                 ),
@@ -248,9 +248,26 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     return SingleChildScrollView(
         child: Column(
       children: [
-        buildHeader("Edit your\n   data!"),
+        Row(
+          children: [
+ Padding(padding: EdgeInsets.only(left: 10),
+              child: IconButton(onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(),
+                  ),
+                );
+              }, icon: Icon(Icons.arrow_back,size: 30, color: Colors.black87)),
+              ),
+            Padding(
+              padding: EdgeInsets.only(left:30),
+              child:buildHeader("Edit your data!") ,
+            ) ,
+          ],
+        ),
         SizedBox(
-          height: 15,
+          height: 45, 
         ),
         _buildForm(),
         SizedBox(
@@ -468,26 +485,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ElevatedButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfileScreen(),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(79, 255, 255, 255),
-                foregroundColor: Colors.black,
-                minimumSize: Size(150, 50)),
-            child: Text(
-              "Go back",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            )),
-        SizedBox(
-          width: 30,
-        ),
+        
         ElevatedButton(
             onPressed: () {
               _saveAndEdit();

@@ -23,7 +23,8 @@ import 'package:provider/provider.dart';
 class MasterScreen extends StatefulWidget {
   String title;
   Widget child;
-  MasterScreen(this.title, this.child, {super.key});
+  final Widget? floatingActionButton;
+  MasterScreen(this.title, this.child, {super.key, this.floatingActionButton});
 
   @override
   State<MasterScreen> createState() => _MasterScreenState();
@@ -186,6 +187,8 @@ if (statistics != null) {
       backgroundColor: Colors.white,
       bottomNavigationBar: isClient! ? _buildNavClient() : _buildNavDriver(),
       body: widget.child,
+      floatingActionButton: widget.floatingActionButton,
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
     );
   }
 
