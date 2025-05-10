@@ -123,14 +123,17 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   Widget _buildScreen() {
     return Column(
       children: [
-        buildHeader("Choose your rent\n         period"),
+        Align(
+          alignment: Alignment.center,
+          child: buildHeader("Choose your \n rent period"),
+        ),
         _buildButtonPick(),
         SizedBox(
-          height: 30,
+          height: 20,
         ),
         _buildContent(),
         SizedBox(
-          height: 10,
+          height: 20,
         ),
         _buildRecommenderContent(),
       ],
@@ -169,253 +172,279 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
 
   Widget _buildButtonPick() {
     return Padding(
-      padding: EdgeInsets.only(top: 30),
-      child: IconButton(
-        onPressed: _selectDateRange,
-        icon: Icon(Icons.date_range),
-        iconSize: 50,
-        color: Colors.amber,
+      padding: EdgeInsets.only(top: 20),
+      child: Column(
+        children: [
+          Text(
+            "Tap to select rental dates",
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.grey.shade700,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          SizedBox(height: 8),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.amber.shade50,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.amber.shade200, width: 2),
+            ),
+            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.calendar_today,
+                  size: 28,
+                  color: Colors.amber.shade700,
+                ),
+                SizedBox(width: 12),
+                Text(
+                  "${_startDate.toString().substring(0, 10)} - ${_endDate.toString().substring(0, 10)}",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Colors.amber.shade700,
+                ),
+              ],
+            ),
+          ),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: _selectDateRange,
+              borderRadius: BorderRadius.circular(12),
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "Change dates",
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.w500,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildContent() {
-    return Column(
-      children: [
-        Row(
+    return Card(
+      elevation: 2,
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                "Start date:",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+            Text(
+              "Rental Details",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
               ),
             ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  "${_startDate.toString().substring(0, 10)}",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black),
-                )),
-          ],
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                "End date:",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+            Divider(height: 24),
+            // Duration info with icon
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(Icons.timelapse, color: Colors.blue.shade700),
+              ),
+              title: Text("Duration", style: TextStyle(color: Colors.grey.shade700)),
+              subtitle: Text(
+                "${_duration} days",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  "${_endDate.toString().substring(0, 10)}",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black),
-                )),
-          ],
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                "Duration:",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+            
+            // Car name with icon
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.green.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(Icons.directions_car, color: Colors.green.shade700),
+              ),
+              title: Text("Vehicle", style: TextStyle(color: Colors.grey.shade700)),
+              subtitle: Text(
+                "${widget?.object?.name}",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  "${_duration} days",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black),
-                )),
-          ],
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                "Car name: ",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+            
+            // Consumption with icon
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(Icons.local_gas_station, color: Colors.orange.shade700),
+              ),
+              title: Text("Consumption", style: TextStyle(color: Colors.grey.shade700)),
+              subtitle: Text(
+                "${widget?.object?.averageConsumption} l/100km",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  "${widget?.object?.name}",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black),
-                )),
-          ],
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                "Consumption: ",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+            
+            // Price with icon
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.purple.shade50,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(Icons.attach_money, color: Colors.purple.shade700),
+              ),
+              title: Text("Total Price", style: TextStyle(color: Colors.grey.shade700)),
+              subtitle: Text(
+                "${_fullPrice?.toStringAsFixed(2) ?? '0.00'} KM",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  "${widget?.object?.averageConsumption} l/100km",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black),
-                )),
-          ],
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                "Price: ",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: Text(
-                  "${_fullPrice.toString()} KM",
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                      color: Colors.black),
-                )),
-          ],
-        ),
-        SizedBox(
-          height: 35,
-        ),
-        SizedBox(
-          width: 350,
-          child: Row(
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RentScreen(),
+            
+            SizedBox(height: 24),
+            
+            // Action buttons
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RentScreen(),
+                      ),
+                    );
+                  },
+                  icon: Icon(Icons.arrow_back),
+                  label: Text("Go back"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.grey.shade200,
+                    foregroundColor: Colors.black87,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
-                  );
-                },
-                child: Text("Go back"),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(76, 255, 255, 255),
-                    foregroundColor: Colors.black,
-                    minimumSize: Size(150, 50)),
-              ),
-              SizedBox(
-                width: 50,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  _sendRentRequest();
-                },
-                child: Text("Send"),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(76, 255, 255, 255),
-                    foregroundColor: Colors.black,
-                    minimumSize: Size(150, 50)),
-              )
-            ],
-          ),
-        )
-      ],
+                  ),
+                ),
+                SizedBox(
+                  width: 50,
+                ),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    _sendRentRequest();
+                  },
+                  icon: Icon(Icons.send),
+                  label: Text("Send request"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.amber.shade300,
+                    foregroundColor: Colors.black87,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _buildRecommenderContent() {
-    return Column(
-      children: [
-        Center(
-          child: Text(
-            "Others are also looking...See recomendation",
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        ElevatedButton(
-            onPressed: () async {
-              try {
-                _recommenderObj =
-                    await rentProvider.recommend(widget?.object?.id);
-                print("Lenght of list: ${_recommenderObj!.length}");
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => RecommendationScreen(
-                      recommendationList: _recommenderObj,
+    return Card(
+      elevation: 2,
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      color: Colors.orange.shade50,
+      child: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.lightbulb, color: Colors.orange.shade700),
+                SizedBox(width: 8),
+                Flexible(
+                  child: Text(
+                    "Others are also looking at these vehicles",
+                    style: TextStyle(
+                      fontSize: 16, 
+                      fontWeight: FontWeight.bold,
+                      color: Colors.orange.shade900,
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                );
-              } catch (e) {
-                ScaffoldHelpers.showScaffold(context, "${e.toString()}");
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepOrange,
-              minimumSize: Size(50, 50),
+                ),
+              ],
             ),
-            child: Text(
-              "Recommendation",
-              style: TextStyle(color: Colors.white),
-            ))
-      ],
+            SizedBox(height: 16),
+            ElevatedButton.icon(
+              onPressed: () async {
+                try {
+                  _recommenderObj = await rentProvider.recommend(widget?.object?.id);
+                  print("Lenght of list: ${_recommenderObj!.length}");
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RecommendationScreen(
+                        recommendationList: _recommenderObj,
+                      ),
+                    ),
+                  );
+                } catch (e) {
+                  ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                }
+              },
+              icon: Icon(Icons.recommend),
+              label: Text(
+                "View Recommendations",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepOrange,
+                foregroundColor: Colors.white,
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

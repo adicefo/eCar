@@ -962,7 +962,7 @@ class _DrivesNavigationScreenState
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.yellowAccent,
+            
               foregroundColor: Colors.black,
               padding: EdgeInsets.symmetric(vertical: 16, horizontal: 24),
               shape: RoundedRectangleBorder(
@@ -1013,7 +1013,7 @@ class _DrivesNavigationScreenState
             child: Row(
               children: [
                 Card(
-                  color: const Color.fromARGB(255, 181, 208, 255),
+                  color: const Color.fromARGB(255, 202, 222, 255),
                     child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

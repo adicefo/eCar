@@ -59,7 +59,7 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  buildHeader("Choose your\n    vehicle!"),
+                  Align(alignment: Alignment.center, child: buildHeader("Choose your vehicle!")),
                   SizedBox(
                     height: 20,
                   ),
@@ -83,7 +83,7 @@ class _RouteOrderScreenState extends State<RouteOrderScreen> {
   }
 
   List<Widget> _buildGridView() {
-    if (list == null) {
+    if (list?.isEmpty ?? true) {
       return [
         Center(
             child: Text(

@@ -62,7 +62,9 @@ class _RentScreenState extends State<RentScreen> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  buildHeader("Choose your\n    vehicle!"),
+                  Align(
+                      alignment: Alignment.center,
+                      child: buildHeader("Choose your vehicle!")),
                   SizedBox(
                     height: 20,
                   ),
