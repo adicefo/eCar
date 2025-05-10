@@ -276,7 +276,6 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               ),
             ),
             
-            // Car name with icon
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Container(
@@ -294,7 +293,6 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               ),
             ),
             
-            // Consumption with icon
             ListTile(
               contentPadding: EdgeInsets.zero,
               leading: Container(

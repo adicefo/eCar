@@ -78,7 +78,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
     clientProvider = context.read<ClientProvider>();
     super.initState();
     _initForm();
-    _getUserLocation();
   }
 
   Future<void> _initForm() async {
@@ -104,34 +103,8 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
     }
   }
 
-  Future<void> _getUserLocation() async {
-    try {
-      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
-        ScaffoldHelpers.showScaffold(context,
-            "Location service is not enabled. Please enable it in settings.");
-        return;
-      }
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-      }
 
-      if (permission == LocationPermission.deniedForever) {
-        ScaffoldHelpers.showScaffold(context,
-            "Location permission is permanently denied. Please enable it in app settings.");
-        return;
-      }
 
-      Position position = await Geolocator.getCurrentPosition();
-      setState(() {
-        
-      });
-    } catch (e) {
-      ScaffoldHelpers.showScaffold(
-          context, "Error retrieving location: ${e.toString()}");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
