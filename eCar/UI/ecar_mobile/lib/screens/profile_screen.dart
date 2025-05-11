@@ -267,12 +267,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         icon: Icon(Icons.edit),
         label: Text('Edit'),
         style: FilledButton.styleFrom(
-          backgroundColor: Colors.indigoAccent,
+          backgroundColor: Colors.blueAccent,
           foregroundColor: Colors.white,
           disabledBackgroundColor: Colors.grey[300],
           disabledForegroundColor: Colors.grey[600],
           shadowColor: Colors.black,
-          surfaceTintColor: Colors.indigoAccent,
+          surfaceTintColor: Colors.blueAccent,
           elevation: 3,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
@@ -301,12 +301,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         icon: Icon(Icons.archive),
         label: Text("Archive"),
         style: FilledButton.styleFrom(
-          backgroundColor: Colors.deepOrange,
+          backgroundColor: Colors.amber,
           foregroundColor: Colors.white,
           disabledBackgroundColor: Colors.grey[300],
           disabledForegroundColor: Colors.grey[600],
           shadowColor: Colors.black,
-          surfaceTintColor: Colors.deepOrangeAccent,
+          surfaceTintColor: Colors.amber,
           elevation: 3,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(

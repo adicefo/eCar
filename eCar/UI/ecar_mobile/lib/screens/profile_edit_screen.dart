@@ -495,7 +495,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             style: ElevatedButton.styleFrom(
                 backgroundColor:  Colors.amber,
                 foregroundColor: Colors.black,
-                minimumSize: Size(150, 50)),)
+                minimumSize: Size(250, 50)),)
             
       ],
     );

@@ -93,6 +93,7 @@ class _RentScreenState extends State<RentScreen> {
               );
             },
             backgroundColor: Colors.blueAccent,
+            foregroundColor: Colors.white,
             icon: Icon(Icons.car_rental),
             label: Text("My rents"),
           ),

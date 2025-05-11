@@ -78,8 +78,8 @@ class _ReviewScreenState extends State<ReviewScreen> {
     tooltip: 'Tap to write your own review',
 
   icon: Icon(Icons.rate_review),
-  backgroundColor: const Color.fromARGB(255, 7, 255, 52),
-  foregroundColor: Colors.black,
+  backgroundColor: Colors.blueAccent,
+  foregroundColor: Colors.white,
  
 ),
 );
@@ -111,7 +111,7 @@ SizedBox(height: 10,),
 Center(
       child: Text(
         'Want to share your experience? Tap below!',
-        style: TextStyle(fontSize: 16, color: Colors.grey),
+        style: TextStyle(fontSize: 16, color: Colors.blueGrey,decoration: TextDecoration.underline),
       ),
     ),
 
@@ -134,7 +134,7 @@ Center(
               height: 500,
               width: 500,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.amberAccent,
                 border: Border.all(color: Colors.black),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -173,7 +173,7 @@ Center(
                               double.tryParse(x.value!.toString()) ?? 0.0,
                           allowHalfRating: false,
                           ratingWidget: RatingWidget(
-                            full: Icon(Icons.star, color: Colors.amber),
+                            full: Icon(Icons.star, color: Colors.blueAccent),
                             half: Icon(Icons.star, color: Colors.grey),
                             empty: Icon(Icons.star, color: Colors.grey),
                           ),

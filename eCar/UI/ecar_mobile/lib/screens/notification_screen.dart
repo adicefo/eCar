@@ -244,8 +244,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            _role == "driver" ? Colors.blue.shade300 : Colors.amber.shade300, 
-                            _role == "driver" ? Colors.blue.shade500 : Colors.amber.shade500
+                            _role == "driver" ? Colors.blueAccent : Colors.amber.shade300, 
+                            _role == "driver" ? Colors.blueAccent : Colors.amber.shade500
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
