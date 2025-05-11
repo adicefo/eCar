@@ -36,7 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController _telephoneNumberController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _genderController = TextEditingController();
-
+  TextEditingController _userNameController = TextEditingController();
   late AuthProvider authProvider;
   late UserProvider userProvider;
   late DriverProvider driverProvider;
@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _telephoneNumberController.text = "${user?.telephoneNumber}";
       _emailController.text = "${user?.email}";
       _genderController.text="${user?.gender}";
-
+      _userNameController.text="${user?.userName}";
       setState(() {
         isLoading = false;
       });
@@ -167,9 +167,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 15,
             ),
             Padding(
-              padding: EdgeInsets.only(right: 240.0),
+              padding: EdgeInsets.only(right: 300.0),
               child: Text(
-                "Telephone number: ",
+                "User name: ",
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -178,7 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             TextField(
               enabled: false,
-              controller: _telephoneNumberController,
+              controller: _userNameController,
               decoration: InputDecoration(
                 disabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey),
@@ -235,6 +235,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
             TextField(
               enabled: false,
               controller: _genderController,
+              decoration: InputDecoration(
+                disabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
+              ),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            
+            Padding(
+              padding: EdgeInsets.only(right: 240.0),
+              child: Text(
+                "Telephone number: ",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+            ),
+            TextField(
+              enabled: false,
+              controller: _telephoneNumberController,
               decoration: InputDecoration(
                 disabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.grey),

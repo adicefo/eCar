@@ -103,9 +103,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
     }
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return isLoading
@@ -154,7 +151,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
             ),
           ),
         ),
-        
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -162,10 +158,10 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
               margin: EdgeInsets.only(bottom: 8),
               padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
               decoration: BoxDecoration(
-                color: sourcePoint == null 
-                    ? Colors.orange.shade100 
-                    : destinationPoint == null 
-                        ? Colors.blue.shade100 
+                color: sourcePoint == null
+                    ? Colors.orange.shade100
+                    : destinationPoint == null
+                        ? Colors.blue.shade100
                         : Colors.green.shade100,
                 borderRadius: BorderRadius.circular(20),
               ),
@@ -173,39 +169,38 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
-                    sourcePoint == null 
-                        ? Icons.location_searching 
-                        : destinationPoint == null 
-                            ? Icons.location_on 
+                    sourcePoint == null
+                        ? Icons.location_searching
+                        : destinationPoint == null
+                            ? Icons.location_on
                             : Icons.check_circle,
                     size: 16,
-                    color: sourcePoint == null 
-                        ? Colors.orange.shade800 
-                        : destinationPoint == null 
-                            ? Colors.blue.shade800 
+                    color: sourcePoint == null
+                        ? Colors.orange.shade800
+                        : destinationPoint == null
+                            ? Colors.blue.shade800
                             : Colors.green.shade800,
                   ),
                   SizedBox(width: 8),
                   Text(
-                    sourcePoint == null 
-                        ? "Set source point" 
-                        : destinationPoint == null 
-                            ? "Now set destination point" 
+                    sourcePoint == null
+                        ? "Set source point"
+                        : destinationPoint == null
+                            ? "Now set destination point"
                             : "Route points set!",
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
-                      color: sourcePoint == null 
-                          ? Colors.orange.shade800 
-                          : destinationPoint == null 
-                              ? Colors.blue.shade800 
+                      color: sourcePoint == null
+                          ? Colors.orange.shade800
+                          : destinationPoint == null
+                              ? Colors.blue.shade800
                               : Colors.green.shade800,
                     ),
                   ),
                 ],
               ),
             ),
-            
             if (sourcePoint != null)
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
@@ -231,7 +226,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
               ),
           ],
         ),
-        
         Container(
             height: 350,
             decoration: BoxDecoration(
@@ -258,14 +252,16 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                     right: 0,
                     child: Center(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.7),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           "Tap and hold to set source point",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -277,14 +273,16 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                     right: 0,
                     child: Center(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
                           color: Colors.black.withOpacity(0.7),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           "Now tap and hold to set destination",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -292,11 +290,11 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
               ],
             )),
         SizedBox(height: 20),
-        
         Card(
           margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           elevation: 2,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -304,7 +302,8 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                 CircleAvatar(
                   backgroundColor: Colors.blue.shade100,
                   radius: 24,
-                  child: Icon(Icons.person, size: 28, color: Colors.blue.shade800),
+                  child:
+                      Icon(Icons.person, size: 28, color: Colors.blue.shade800),
                 ),
                 SizedBox(width: 16),
                 Expanded(
@@ -332,11 +331,11 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
             ),
           ),
         ),
-        
         Card(
           margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           elevation: 2,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -347,12 +346,16 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: sourcePoint == null ? Colors.grey.shade200 : Colors.green.shade100,
+                        color: sourcePoint == null
+                            ? Colors.grey.shade200
+                            : Colors.green.shade100,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
                         Icons.location_on,
-                        color: sourcePoint == null ? Colors.grey.shade600 : Colors.green.shade800,
+                        color: sourcePoint == null
+                            ? Colors.grey.shade600
+                            : Colors.green.shade800,
                         size: 20,
                       ),
                     ),
@@ -371,10 +374,14 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            _sourceAddress == null ? "Not set yet" : _sourceAddress!,
+                            _sourceAddress == null
+                                ? "Not set yet"
+                                : _sourceAddress!,
                             style: TextStyle(
                               fontSize: 13,
-                              color: _sourceAddress == null ? Colors.grey.shade500 : Colors.black87,
+                              color: _sourceAddress == null
+                                  ? Colors.grey.shade500
+                                  : Colors.black87,
                             ),
                           ),
                         ],
@@ -382,21 +389,23 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                     ),
                   ],
                 ),
-                
                 Divider(height: 24),
-                
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: destinationPoint == null ? Colors.grey.shade200 : Colors.blue.shade100,
+                        color: destinationPoint == null
+                            ? Colors.grey.shade200
+                            : Colors.blue.shade100,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Icon(
                         Icons.flag,
-                        color: destinationPoint == null ? Colors.grey.shade600 : Colors.blue.shade800,
+                        color: destinationPoint == null
+                            ? Colors.grey.shade600
+                            : Colors.blue.shade800,
                         size: 20,
                       ),
                     ),
@@ -415,10 +424,14 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                           ),
                           SizedBox(height: 4),
                           Text(
-                            _destinationAddress == null ? "Not set yet" : _destinationAddress!,
+                            _destinationAddress == null
+                                ? "Not set yet"
+                                : _destinationAddress!,
                             style: TextStyle(
                               fontSize: 13,
-                              color: _destinationAddress == null ? Colors.grey.shade500 : Colors.black87,
+                              color: _destinationAddress == null
+                                  ? Colors.grey.shade500
+                                  : Colors.black87,
                             ),
                           ),
                         ],
@@ -430,49 +443,48 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
             ),
           ),
         ),
-        
         SizedBox(height: 16),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-           ElevatedButton.icon(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RouteOrderScreen(),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.arrow_back),
-                  label: Text("Go back"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey.shade200,
-                    foregroundColor: Colors.black87,
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RouteOrderScreen(),
                   ),
+                );
+              },
+              icon: Icon(Icons.arrow_back),
+              label: Text("Go back"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.grey.shade200,
+                foregroundColor: Colors.black87,
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                SizedBox(
-                  width: 50,
+              ),
+            ),
+            SizedBox(
+              width: 50,
+            ),
+            ElevatedButton.icon(
+              onPressed: () {
+                _sendRouteAndRequest();
+              },
+              icon: Icon(Icons.send),
+              label: Text("Send request"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.amber.shade300,
+                foregroundColor: Colors.black87,
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
                 ),
-                ElevatedButton.icon(
-                  onPressed: () {
-                    _sendRouteAndRequest();
-                  },
-                  icon: Icon(Icons.send),
-                  label: Text("Send request"),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.amber.shade300,
-                    foregroundColor: Colors.black87,
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
+              ),
+            ),
           ],
         )
       ],
@@ -482,10 +494,11 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
   Widget _buildListOrders() {
     return Column(
       children: [
-       Row(
-        children: [
-           Padding(padding: EdgeInsets.only(left: 10),
-            child: IconButton(
+        Row(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: IconButton(
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
@@ -494,45 +507,57 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                 },
                 icon: Icon(Icons.arrow_back, size: 30, color: Colors.black87),
                 tooltip: "Back",
-              ),),
-           Padding(
-            padding: EdgeInsets.only(left: 55),
-            child: buildHeader("My orders"),
-           ),
-        ],
-       ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 55),
+              child: buildHeader("My orders"),
+            ),
+          ],
+        ),
         SizedBox(height: 16),
         Expanded(
           child: routes?.result == null || routes!.result.isEmpty
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.route_outlined, size: 64, color: Colors.grey),
-                    SizedBox(height: 16),
-                    Text(
-                      "No routes available",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade700,
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.route_outlined, size: 64, color: Colors.grey),
+                      SizedBox(height: 16),
+                      Text(
+                        "No routes available",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade700,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  itemCount: routes!.result.length,
+                  itemBuilder: (context, index) => _buildRouteItem(
+                    routes!.result[index],
+                    getAddressFromLatLng(LatLng(
+                        latitude: routes!.result[index].sourcePoint!.latitude!,
+                        longitude:
+                            routes!.result[index].sourcePoint!.longitude!)),
+                    getAddressFromLatLng(LatLng(
+                        latitude:
+                            routes!.result[index].destinationPoint!.latitude!,
+                        longitude: routes!
+                            .result[index].destinationPoint!.longitude!)),
+                  ),
                 ),
-              )
-            : ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                itemCount: routes!.result.length,
-                itemBuilder: (context, index) => _buildRouteItem(routes!.result[index]),
-              ),
-        ),
-       
+        )
       ],
     );
   }
 
-  Widget _buildRouteItem(Model.Route route) {
+  Widget _buildRouteItem(Model.Route route, Future<String>? sourceAddress,
+      Future<String>? destinationAddress) {
     return Card(
       margin: EdgeInsets.only(bottom: 16),
       elevation: 4,
@@ -544,11 +569,11 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: route.status == "wait" 
-                ? Colors.orange.shade100 
-                : route.status == "active" 
-                  ? Colors.blue.shade100 
-                  : Colors.green.shade100,
+              color: route.status == "wait"
+                  ? Colors.orange.shade100
+                  : route.status == "active"
+                      ? Colors.blue.shade100
+                      : Colors.green.shade100,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
@@ -558,16 +583,16 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  route.status == "wait" 
-                    ? Icons.hourglass_top 
-                    : route.status == "active" 
-                      ? Icons.directions_car 
-                      : Icons.check_circle,
-                  color: route.status == "wait" 
-                    ? Colors.orange.shade800 
-                    : route.status == "active" 
-                      ? Colors.blue.shade800 
-                      : Colors.green.shade800,
+                  route.status == "wait"
+                      ? Icons.hourglass_top
+                      : route.status == "active"
+                          ? Icons.directions_car
+                          : Icons.check_circle,
+                  color: route.status == "wait"
+                      ? Colors.orange.shade800
+                      : route.status == "active"
+                          ? Colors.blue.shade800
+                          : Colors.green.shade800,
                   size: 16,
                 ),
                 SizedBox(width: 4),
@@ -577,11 +602,11 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
-                      color: route.status == "wait" 
-                        ? Colors.orange.shade800 
-                        : route.status == "active" 
-                          ? Colors.blue.shade800 
-                          : Colors.green.shade800,
+                      color: route.status == "wait"
+                          ? Colors.orange.shade800
+                          : route.status == "active"
+                              ? Colors.blue.shade800
+                              : Colors.green.shade800,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -589,7 +614,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
               ],
             ),
           ),
-          
           Padding(
             padding: EdgeInsets.all(10),
             child: Column(
@@ -601,7 +625,8 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                     CircleAvatar(
                       radius: 14,
                       backgroundColor: Colors.grey.shade200,
-                      child: Icon(Icons.person, size: 16, color: Colors.black87),
+                      child:
+                          Icon(Icons.person, size: 16, color: Colors.black87),
                     ),
                     SizedBox(width: 8),
                     Expanded(
@@ -626,11 +651,89 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                         ],
                       ),
                     ),
+                      Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Source point",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          FutureBuilder<String>(
+                            future: sourceAddress,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Text("Loading...",
+                                    style: TextStyle(fontSize: 14));
+                              } else if (snapshot.hasError) {
+                                return Text("Error",
+                                    style: TextStyle(fontSize: 14));
+                              } else {
+                                return Text(
+                                  snapshot.data ?? "Unknown",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-                
+                Row(
+                  children: [
+                  
+                  ],
+                ),
                 Divider(height: 16),
-                
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Destination point",
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey.shade600,
+                            ),
+                          ),
+                          FutureBuilder<String>(
+                            future: destinationAddress,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Text("Loading...",
+                                    style: TextStyle(fontSize: 14));
+                              } else if (snapshot.hasError) {
+                                return Text("Error",
+                                    style: TextStyle(fontSize: 14));
+                              } else {
+                                return Text(
+                                  snapshot.data ?? "Unknown",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Divider(height: 16),
                 Row(
                   children: [
                     Expanded(
@@ -654,7 +757,6 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
                         ],
                       ),
                     ),
-                    
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -681,12 +783,11 @@ class _RouteOrderDetailsScreenState extends State<RouteOrderDetailsScreen> {
               ],
             ),
           ),
-          
           InkWell(
             onTap: () async {
               if (route.paid == true) {
-                AlertHelpers.showAlert(
-                    context, "Already Paid", "You have already paid for this route");
+                AlertHelpers.showAlert(context, "Already Paid",
+                    "You have already paid for this route");
                 return;
               }
               await makePayment(route);

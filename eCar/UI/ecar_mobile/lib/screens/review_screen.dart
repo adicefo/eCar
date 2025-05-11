@@ -134,7 +134,7 @@ Center(
               height: 500,
               width: 500,
               decoration: BoxDecoration(
-                color: Colors.amberAccent,
+                color: const Color.fromARGB(255, 255, 249, 231),
                 border: Border.all(color: Colors.black),
                 borderRadius: BorderRadius.circular(10),
               ),

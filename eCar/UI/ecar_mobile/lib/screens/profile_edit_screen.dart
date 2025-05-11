@@ -415,7 +415,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
             height: 15,
           ),
            FormBuilderDropdown<String>(
-                        dropdownColor: const Color.fromARGB(255, 254, 225, 189),
+                        dropdownColor: const Color.fromARGB(255, 255, 249, 231),
                         decoration: InputDecoration(
                           labelText: "Gender",
                           labelStyle: TextStyle(color: Colors.black, fontSize: 18),
