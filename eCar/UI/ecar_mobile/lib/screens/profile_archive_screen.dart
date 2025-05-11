@@ -84,13 +84,13 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
               SizedBox(width: 75,), 
               buildHeader("Archive")
           ],),
-          
           Container(
             height: widget.role=="driver"?620:500,
             child: GridView(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 1,
                   crossAxisSpacing: 10,
+                  mainAxisSpacing: 5,
                   childAspectRatio: 2.5),
               scrollDirection: Axis.vertical,
               children: _buildGridView(),
@@ -115,11 +115,13 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
           .map(
             (x) => GestureDetector(
                 onTap: () {},
-                child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
                   height: 300,
                   width: 300,
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 255, 255),
+                    color: const Color.fromARGB(255, 255, 249, 231),
                     border: Border.all(color: Colors.black, strokeAlign: 1),
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -239,7 +241,7 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
                       Padding(
                         padding: EdgeInsets.only(left: 30.0),
                         child: Text(
-                          "${x?.fullPrice} KM" ?? "",
+                          "${x?.fullPrice?.toStringAsFixed(2)} KM" ?? "",
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
@@ -247,7 +249,7 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
                       ),
                     ],
                   ),
-                )),
+                ),)),
           )
           .cast<Widget>()
           .toList();
@@ -260,11 +262,14 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
           .map(
             (x) => GestureDetector(
                 onTap: () {},
-                child: Container(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: 
+                Container(
                   height: 300,
                   width: 300,
                   decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 255, 255, 255),
+                    color: const Color.fromARGB(255, 255, 249, 231),
                     border: Border.all(color: Colors.black, strokeAlign: 1),
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -327,7 +332,7 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
                       Padding(
                         padding: EdgeInsets.only(left: 30.0),
                         child: Text(
-                          "${x?.fullPrice} KM" ?? "",
+                          "${x?.fullPrice?.toStringAsFixed(2)} KM" ?? "",
                           style: TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
@@ -335,7 +340,7 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
                       ),
                     ],
                   ),
-                )),
+                ),)),
           )
           .cast<Widget>()
           .toList();

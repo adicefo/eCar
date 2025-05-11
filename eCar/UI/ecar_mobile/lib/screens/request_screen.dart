@@ -6,15 +6,11 @@ import 'package:ecar_mobile/providers/driver_provider.dart';
 import 'package:ecar_mobile/providers/request_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
-import 'package:ecar_mobile/utils/PointDTO/point_dto.dart';
-import 'package:ecar_mobile/utils/alert_helpers.dart';
 import 'package:ecar_mobile/utils/buildHeader_helpers.dart';
-import 'package:ecar_mobile/utils/getAddresLatLng_helpers.dart';
 import 'package:ecar_mobile/utils/isLoading_helpers.dart';
 import 'package:ecar_mobile/utils/scaffold_helpers.dart';
+import 'package:ecar_mobile/utils/getAddresLatLng_helpers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:google_navigation_flutter/google_navigation_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -74,19 +70,19 @@ class _RequestScreenState extends State<RequestScreen> {
             "Request",
             SingleChildScrollView(
               child: Container(
-                  height: MediaQuery.of(context).size.height * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.9,
                   child: Column(
                     children: [
                       buildHeader("Your requests!"),
                       buildHeader("${user?.userName}"),
                       Container(
-                        height: 500,
+                        height: MediaQuery.of(context).size.height * 0.7,
                         child: GridView(
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                                   crossAxisCount: 1,
                                   crossAxisSpacing: 10,
-                                  childAspectRatio: 2.5),
+                                  childAspectRatio: 1.0), 
                           scrollDirection: Axis.vertical,
                           children: _buildGridView(),
                         ),
@@ -100,164 +96,269 @@ class _RequestScreenState extends State<RequestScreen> {
     if (data?.result?.length == 0) {
       return [
         Center(
-            child: Text(
-          "You do not have any requests now...",
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ))
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.assignment_late_outlined, size: 64, color: Colors.grey),
+              SizedBox(height: 16),
+              Text(
+                "You do not have any requests now...",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+            ],
+          ),
+        )
       ];
     }
-    List<Widget> list = data!.result
-        .map((x) => Container(
-              height: 300,
-              width: 300,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.black, strokeAlign: 1),
-                borderRadius: BorderRadius.zero,
+    
+    List<Widget> list = data!.result.map<Widget>((x) => Container(
+      height: 380,
+      width: 300,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 20,
+                  child: Icon(Icons.person, color: Colors.amber),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    "${x.route?.client?.user?.userName ?? 'Unknown User'}",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  height: 40,
+                  width: 40,
+                  child: Image.asset(
+                    "assets/images/no_image_placeholder.png",
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          
+          Container(
+            height: 220,
+            padding: EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: 12),
+                  child: Text(
+                    "ROUTE INFORMATION",
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey.shade600,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade100,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.trip_origin,
+                        color: Colors.green.shade800,
+                        size: 16,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "User: ${x?.route?.client?.user?.userName}" ?? "",
+                            "From",
                             style: TextStyle(
-                                fontSize: 12, fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                            ),
                           ),
                           FutureBuilder<String>(
                             future: getAddressFromLatLng(LatLng(
-                                latitude:
-                                    x?.route?.sourcePoint?.latitude ?? 0.0,
-                                longitude:
-                                    x?.route?.sourcePoint?.longitude ?? 0.0)),
+                                latitude: x.route?.sourcePoint?.latitude ?? 0.0,
+                                longitude: x.route?.sourcePoint?.longitude ?? 0.0)),
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Text("Start point: Loading...");
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Text("Loading...", style: TextStyle(fontSize: 12));
                               } else if (snapshot.hasError) {
-                                return Text("Start point: Error");
+                                return Text("Error loading address", style: TextStyle(fontSize: 12, color: Colors.red));
                               } else {
                                 return Text(
-                                  "Start point: ${snapshot.data}",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center,
-                                );
-                              }
-                            },
-                          ),
-                          FutureBuilder<String>(
-                            future: getAddressFromLatLng(LatLng(
-                                latitude:
-                                    x?.route?.destinationPoint?.latitude ?? 0.0,
-                                longitude:
-                                    x?.route?.destinationPoint?.longitude ??
-                                        0.0)),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Text("End point: Loading...");
-                              } else if (snapshot.hasError) {
-                                return Text("End point: Error");
-                              } else {
-                                return Text(
-                                  "End point: ${snapshot.data}",
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
-                                  textAlign: TextAlign.center,
+                                  "${snapshot.data ?? 'Unknown location'}",
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 );
                               }
                             },
                           ),
                         ],
                       ),
-                      Container(
-                        height: 100,
-                        width: 100,
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          child: Image.asset(
-                            "assets/images/no_image_placeholder.png",
-                            height: 100,
-                            width: 100,
+                    ),
+                  ],
+                ),
+                 // Vertical line connector
+                Padding(
+                  padding: EdgeInsets.only(left: 18),
+                  child: Container(height: 16, width: 2, color: Colors.grey.shade300),
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade100,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.location_on,
+                        color: Colors.red.shade800,
+                        size: 16,
+                      ),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "To",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey.shade600,
+                            ),
                           ),
-                        ),
+                          FutureBuilder<String>(
+                            future: getAddressFromLatLng(LatLng(
+                                latitude: x.route?.destinationPoint?.latitude ?? 0.0,
+                                longitude: x.route?.destinationPoint?.longitude ?? 0.0)),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return Text("Loading...", style: TextStyle(fontSize: 12));
+                              } else if (snapshot.hasError) {
+                                return Text("Error loading address", style: TextStyle(fontSize: 12, color: Colors.red));
+                              } else {
+                                return Text(
+                                  "${snapshot.data ?? 'Unknown location'}",
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                );
+                              }
+                            },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton.icon(
-                        label: const Text("Reject"),
-                        icon: const Icon(Icons.close),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.black,
-                          minimumSize: Size(50, 50),
-                        ),
-                        onPressed: () async {
-                          try {
-                            var request = {"isAccepted": false};
-                            await requestProvider.update(x.id, request);
-                            ScaffoldHelpers.showScaffold(
-                                context, "Request rejected");
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RequestScreen(),
-                              ),
-                            );
-                          } catch (e) {
-                            ScaffoldHelpers.showScaffold(
-                                context, "${e.toString()}");
-                          }
-                        }
-                        ,
-                      ),
-                      ElevatedButton.icon(
-                        label: const Text("Accept"),
-                        icon: const Icon(Icons.check),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.black,
-                          minimumSize: Size(30, 50),
-                        ),
-                        onPressed: () async {
-                          try {
-                            var request = {"isAccepted": true};
-                            await requestProvider.update(x.id, request);
-                            ScaffoldHelpers.showScaffold(
-                                context, "Request accepted");
-                            _fetchRequest();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => RequestScreen(),
-                              ),
-                            );
-                          } catch (e) {
-                            ScaffoldHelpers.showScaffold(
-                                context, "${e.toString()}");
-                          }
-                        },
-                        
-                      ),
-                    ],
-                  ),
-                ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          
+          Container(
+            padding: EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(12),
+                bottomRight: Radius.circular(12),
               ),
-            ))
-        .cast<Widget>()
-        .toList();
+              border: Border(top: BorderSide(color: Colors.grey.shade200)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton.icon(
+                  label: const Text("Reject"),
+                  icon: const Icon(Icons.close),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.black,
+                    minimumSize: Size(50, 50),
+                  ),
+                  onPressed: () async {
+                    try {
+                      var request = {"isAccepted": false};
+                      await requestProvider.update(x.id, request);
+                      ScaffoldHelpers.showScaffold(context, "Request rejected");
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RequestScreen()));
+                    } catch (e) {
+                      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                    }
+                  },
+                ),
+                SizedBox(width: 8),
+                ElevatedButton.icon(
+                  label: const Text("Accept"),
+                  icon: const Icon(Icons.check),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.black,
+                    minimumSize: Size(30, 50),
+                  ),
+                  onPressed: () async {
+                    try {
+                      var request = {"isAccepted": true};
+                      await requestProvider.update(x.id, request);
+                      ScaffoldHelpers.showScaffold(context, "Request accepted");
+                      _fetchRequest();
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => RequestScreen()));
+                    } catch (e) {
+                      ScaffoldHelpers.showScaffold(context, "${e.toString()}");
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    )).toList();
+    
     return list;
   }
 

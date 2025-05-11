@@ -92,20 +92,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       children: [
         buildHeader("Profile"),
-        SizedBox(
-          height: 10,
+        SizedBox(height: 20),
+        CircleAvatar(
+          radius: 50,
+          backgroundColor: Colors.amber.shade100,
+          child: Icon(Icons.person, size: 60, color: Colors.amber.shade800),
         ),
-        Icon(Icons.person, size: 50),
-        SizedBox(height: 8),
+        SizedBox(height: 16),
         Text(
           user?.userName ?? "",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 26, 
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
           textAlign: TextAlign.center,
         ),
-        _buildContent(),
-        SizedBox(
-          height: 40,
+        SizedBox(height: 6),
+        Text(
+          user?.email ?? "",
+          style: TextStyle(
+            fontSize: 16, 
+            color: Colors.grey.shade600,
+            fontStyle: FontStyle.italic,
+          ),
+          textAlign: TextAlign.center,
         ),
+        SizedBox(height: 24),
+        _buildContent(),
+        SizedBox(height: 30),
         _buildButtons(),
       ],
     );
@@ -113,244 +128,227 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _buildContent() {
     return Padding(
-        padding: EdgeInsets.only(top: 10.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.amber.shade200, width: 2),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.amber.withOpacity(0.1),
+              blurRadius: 10,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
         child: Column(
           children: [
-            Padding(
-              padding: EdgeInsets.only(right: 340.0),
-              child: Text(
-                "Name: ",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            TextField(
-              enabled: false,
-              controller: _nameController,
-              decoration: InputDecoration(
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              decoration: BoxDecoration(
+                color: Colors.amber.shade50,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(14),
+                  topRight: Radius.circular(14),
                 ),
-                filled: true,
-                fillColor: Colors.grey[200],
               ),
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 320.0),
-              child: Text(
-                "Surname: ",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-            ),
-            TextField(
-              enabled: false,
-              controller: _surnameController,
-              decoration: InputDecoration(
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.info_outline, color: Colors.amber.shade800),
+                    SizedBox(width: 10),
+                    Text(
+                      'Personal Information',
+                      style: TextStyle(
+                        fontSize: 18, 
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                  ],
                 ),
-                filled: true,
-                fillColor: Colors.grey[200],
               ),
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 300.0),
-              child: Text(
-                "User name: ",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
-            TextField(
-              enabled: false,
-              controller: _userNameController,
-              decoration: InputDecoration(
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 340.0),
-              child: Text(
-                "Email: ",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
-            TextField(
-              enabled: false,
-              controller: _emailController,
-              decoration: InputDecoration(
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-             SizedBox(
-              height: 15,
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 340.0),
-              child: Text(
-                "Gender: ",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
-              ),
-            ),
-            TextField(
-              enabled: false,
-              controller: _genderController,
-              decoration: InputDecoration(
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-            SizedBox(
-              height: 15,
             ),
             
             Padding(
-              padding: EdgeInsets.only(right: 240.0),
-              child: Text(
-                "Telephone number: ",
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+              padding: EdgeInsets.all(20.0),
+              child: Column(
+                children: [
+                  _buildProfileField(
+                    icon: Icons.person,
+                    label: "Name",
+                    controller: _nameController,
+                  ),
+                  SizedBox(height: 16),
+                  
+                  _buildProfileField(
+                    icon: Icons.person_outline,
+                    label: "Surname",
+                    controller: _surnameController,
+                  ),
+                  SizedBox(height: 16),
+                  
+                  _buildProfileField(
+                    icon: Icons.account_circle,
+                    label: "Username",
+                    controller: _userNameController,
+                  ),
+                  SizedBox(height: 16),
+                  
+                  _buildProfileField(
+                    icon: Icons.email,
+                    label: "Email",
+                    controller: _emailController,
+                  ),
+                  SizedBox(height: 16),
+                  
+                  _buildProfileField(
+                    icon: Icons.people,
+                    label: "Gender",
+                    controller: _genderController,
+                  ),
+                  SizedBox(height: 16),
+                  
+                  _buildProfileField(
+                    icon: Icons.phone,
+                    label: "Phone Number",
+                    controller: _telephoneNumberController, 
+                  ),
+                ],
               ),
-            ),
-            TextField(
-              enabled: false,
-              controller: _telephoneNumberController,
-              decoration: InputDecoration(
-                disabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey),
-                ),
-                filled: true,
-                fillColor: Colors.grey[200],
-              ),
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
             ),
           ],
-        ));
+        ),
+      ),
+    );
   }
 
-  Widget _buildButtons() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      FilledButton.icon(
-        onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProfileEditScreen(user: user),
-            ),
-          );
-        },
-        icon: Icon(Icons.edit),
-        label: Text('Edit'),
-        style: FilledButton.styleFrom(
-          backgroundColor: Colors.blueAccent,
-          foregroundColor: Colors.white,
-          disabledBackgroundColor: Colors.grey[300],
-          disabledForegroundColor: Colors.grey[600],
-          shadowColor: Colors.black,
-          surfaceTintColor: Colors.blueAccent,
-          elevation: 3,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          minimumSize: Size(150, 50),
-          textStyle: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-      SizedBox(width: 30),
-      FilledButton.icon(
-        onPressed: () async {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProfileArchiveScreen(
-                user: user,
-                role: _role,
+  // Helper method to build consistent profile fields
+  Widget _buildProfileField({
+    required IconData icon,
+    required String label,
+    required TextEditingController controller,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 20, color: Colors.amber.shade700),
+            SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade700,
               ),
             ),
-          );
-        },
-        icon: Icon(Icons.archive),
-        label: Text("Archive"),
-        style: FilledButton.styleFrom(
-          backgroundColor: Colors.amber,
-          foregroundColor: Colors.white,
-          disabledBackgroundColor: Colors.grey[300],
-          disabledForegroundColor: Colors.grey[600],
-          shadowColor: Colors.black,
-          surfaceTintColor: Colors.amber,
-          elevation: 3,
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+          ],
+        ),
+        SizedBox(height: 8),
+          TextField(
+          enabled: false,
+          controller: controller,
+          decoration: InputDecoration(
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            filled: true,
+            fillColor: const Color.fromARGB(255, 255, 249, 231),
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           ),
-          minimumSize: Size(150, 50),
-
-          textStyle: TextStyle(
+          style: TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
           ),
         ),
+      ],
+    );
+  }
+  
+  Widget _buildButtons() {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: FilledButton.icon(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileEditScreen(user: user),
+                  ),
+                );
+              },
+              icon: Icon(Icons.edit),
+              label: Text('Edit Profile'),
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.blueAccent,
+                foregroundColor: Colors.white,
+                disabledBackgroundColor: Colors.grey[300],
+                disabledForegroundColor: Colors.grey[600],
+                shadowColor: Colors.black,
+                surfaceTintColor: Colors.blueAccent,
+                elevation: 3,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                minimumSize: Size(0, 50),
+                textStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: FilledButton.icon(
+              onPressed: () async {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileArchiveScreen(
+                      user: user,
+                      role: _role,
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(Icons.archive),
+              label: Text("View Archive"),
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.amber,
+                foregroundColor: Colors.black87,
+                disabledBackgroundColor: Colors.grey[300],
+                disabledForegroundColor: Colors.grey[600],
+                shadowColor: Colors.black,
+                surfaceTintColor: Colors.amber,
+                elevation: 3,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                minimumSize: Size(0, 50),
+                textStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
-    ],
-  );
-}
+    );
+  }
 
 }

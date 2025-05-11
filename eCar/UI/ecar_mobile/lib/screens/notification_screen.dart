@@ -120,6 +120,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 children: [
                   buildHeader("Welcome!"),
                   buildHeader("${user?.userName}"),
+                  SizedBox(height: 10),
+                  Padding(padding: EdgeInsets.all(8.0),
+                  child:Container(
+                    decoration: BoxDecoration(
+                      color: Colors.amber.shade50,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.amber.shade200, width: 2),
+                    ),
+                    constraints: BoxConstraints(
+                      maxWidth:300,
+                      maxHeight: 200,
+                    ),
+                    child: Text("There are some notifications for you! Feel free to check them out!",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,fontStyle: FontStyle.italic),),
+                  ),),
+                  SizedBox(height: 10,),
                   Container(
                     height: _role=="driver"?450:600,
                     child: GridView(
@@ -149,7 +164,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
               onTap: () {
                 _showCustomModal(x);
               },
-              child: Container(
+              child: Padding(
+                padding: const EdgeInsets.only(left:8.0,right: 8.0,top:8.0),
+                child: Container(
                 height: _role=="driver"?400:600,
                 width: 400,
                 decoration: BoxDecoration(
@@ -178,11 +195,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     Text(
                       x.heading ?? "",
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
+              ),
               )),
         )
         .cast<Widget>()
