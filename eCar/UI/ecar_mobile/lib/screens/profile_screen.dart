@@ -35,6 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   TextEditingController _surnameController = TextEditingController();
   TextEditingController _telephoneNumberController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
+  TextEditingController _genderController = TextEditingController();
 
   late AuthProvider authProvider;
   late UserProvider userProvider;
@@ -66,6 +67,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _surnameController.text = "${user?.surname}";
       _telephoneNumberController.text = "${user?.telephoneNumber}";
       _emailController.text = "${user?.email}";
+      _genderController.text="${user?.gender}";
 
       setState(() {
         isLoading = false;
@@ -115,7 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(right: 300.0),
+              padding: EdgeInsets.only(right: 340.0),
               child: Text(
                 "Name: ",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -140,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 15,
             ),
             Padding(
-              padding: EdgeInsets.only(right: 300.0),
+              padding: EdgeInsets.only(right: 320.0),
               child: Text(
                 "Surname: ",
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -165,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 15,
             ),
             Padding(
-              padding: EdgeInsets.only(right: 210.0),
+              padding: EdgeInsets.only(right: 240.0),
               child: Text(
                 "Telephone number: ",
                 style: TextStyle(
@@ -193,7 +195,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               height: 15,
             ),
             Padding(
-              padding: EdgeInsets.only(right: 300.0),
+              padding: EdgeInsets.only(right: 340.0),
               child: Text(
                 "Email: ",
                 style: TextStyle(
@@ -217,60 +219,109 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
+             SizedBox(
+              height: 15,
+            ),
+            Padding(
+              padding: EdgeInsets.only(right: 340.0),
+              child: Text(
+                "Gender: ",
+                style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              ),
+            ),
+            TextField(
+              enabled: false,
+              controller: _genderController,
+              decoration: InputDecoration(
+                disabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey),
+                ),
+                filled: true,
+                fillColor: Colors.grey[200],
+              ),
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
           ],
         ));
   }
 
   Widget _buildButtons() {
-    return Row(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 20.0),
-          child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileEditScreen(user: user),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(79, 255, 255, 255),
-                  foregroundColor: Colors.black,
-                  minimumSize: Size(150, 50)),
-              child: Text(
-                "Edit",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              )),
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      FilledButton.icon(
+        onPressed: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfileEditScreen(user: user),
+            ),
+          );
+        },
+        icon: Icon(Icons.edit),
+        label: Text('Edit'),
+        style: FilledButton.styleFrom(
+          backgroundColor: Colors.indigoAccent,
+          foregroundColor: Colors.white,
+          disabledBackgroundColor: Colors.grey[300],
+          disabledForegroundColor: Colors.grey[600],
+          shadowColor: Colors.black,
+          surfaceTintColor: Colors.indigoAccent,
+          elevation: 3,
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          minimumSize: Size(150, 50),
+          textStyle: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        SizedBox(
-          width: 50,
+      ),
+      SizedBox(width: 30),
+      FilledButton.icon(
+        onPressed: () async {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProfileArchiveScreen(
+                user: user,
+                role: _role,
+              ),
+            ),
+          );
+        },
+        icon: Icon(Icons.archive),
+        label: Text("Archive"),
+        style: FilledButton.styleFrom(
+          backgroundColor: Colors.deepOrange,
+          foregroundColor: Colors.white,
+          disabledBackgroundColor: Colors.grey[300],
+          disabledForegroundColor: Colors.grey[600],
+          shadowColor: Colors.black,
+          surfaceTintColor: Colors.deepOrangeAccent,
+          elevation: 3,
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          minimumSize: Size(150, 50),
+
+          textStyle: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 20.0),
-          child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfileArchiveScreen(
-                      user: user,
-                      role: _role,
-                    ),
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(79, 255, 255, 255),
-                  foregroundColor: Colors.black,
-                  minimumSize: Size(150, 50)),
-              child: Text(
-                "Archive",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              )),
-        ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
+
 }

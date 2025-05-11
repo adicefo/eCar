@@ -118,9 +118,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  buildHeader("Welcome!\n${user?.userName}"),
+                  buildHeader("Welcome!"),
+                  buildHeader("${user?.userName}"),
                   Container(
-                    height: _role=="driver"?400:600,
+                    height: _role=="driver"?450:600,
                     child: GridView(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
@@ -130,7 +131,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       children: _buildGridView(),
                     ),
                   ),
-                  SizedBox(height: 50,),
+                  SizedBox(height: 20,),
                   _buildStatistics(),
                 ],
               ),
@@ -192,66 +193,226 @@ class _NotificationScreenState extends State<NotificationScreen> {
   void _showCustomModal(Model.Notification object) {
     showGeneralDialog(
       context: context,
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return Center(
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.yellowAccent,
-              borderRadius: BorderRadius.circular(16),
+      barrierDismissible: true,
+      barrierLabel: 'Notification Details',
+      transitionDuration: Duration(milliseconds: 300),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return ScaleTransition(
+          scale: CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOutQuint,
+          ),
+          child: FadeTransition(
+            opacity: CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeInOutCubic,
             ),
-            width: MediaQuery.of(context).size.width * 0.75,
-            height: 500,
-            padding: EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(object.heading!,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.center),
-                Padding(
-                  padding: EdgeInsets.only(top: 20.0),
-                  child: Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: Colors.yellowAccent,
-                        border:
-                            Border.all(color: Colors.black, strokeAlign: 1)),
-                    child: Text("Notification details :",
-                        style: TextStyle(color: Colors.black, fontSize: 14)),
+            child: child,
+          ),
+        );
+      },
+      pageBuilder: (context, animation, secondaryAnimation) {
+        final DateTime notificationDate = object.addingDate ?? DateTime.now();
+        final String formattedDate = "${notificationDate.day} ${_getMonthName(notificationDate.month)} ${notificationDate.year}";
+        
+        return Center(
+          child: Material(
+            color: Colors.transparent,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.85,
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height * 0.7,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 20,
+                    offset: Offset(0, 10),
                   ),
-                ),
-                Expanded(
-                    child: SingleChildScrollView(
-                  padding: EdgeInsets.only(top: 30.0),
-                  child: Center(
-                    child: Text(
-                      object.content_!,
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          letterSpacing: 1.1),
-                      textAlign: TextAlign.center,
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            _role == "driver" ? Colors.blue.shade300 : Colors.amber.shade300, 
+                            _role == "driver" ? Colors.blue.shade500 : Colors.amber.shade500
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            right: 8,
+                            top: 0,
+                            child: IconButton(
+                              icon: Icon(Icons.close, color: Colors.black87),
+                              onPressed: () => Navigator.pop(context),
+                              splashRadius: 20,
+                            ),
+                          ),
+                          Center(
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Notification",
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  formattedDate,
+                                  style: TextStyle(
+                                    color: Colors.black87,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                )),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text("Close")),
-                )
-              ],
+                    
+                    Flexible(
+                      child: SingleChildScrollView(
+                        padding: EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade50,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey.shade200),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: _role == "driver" ? Colors.blue.shade100 : Colors.amber.shade100,
+                                        radius: 24,
+                                        child: Icon(
+                                          Icons.notifications,
+                                          size: 30,
+                                          color: _role == "driver" ? Colors.blue.shade700 : Colors.amber.shade700,
+                                        ),
+                                      ),
+                                      SizedBox(width: 12),
+                                      Expanded(
+                                        child: Text(
+                                          object.heading ?? "",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            
+                            SizedBox(height: 16),
+                            
+                            Padding(
+                              padding: EdgeInsets.only(left: 4, bottom: 8),
+                              child: Text(
+                                "Message",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey.shade800,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade50,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.grey.shade200),
+                              ),
+                              child: Text(
+                                object.content_ ?? "",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  height: 1.5,
+                                  color: Colors.grey.shade800,
+                                ),
+                              ),
+                            ),
+                            
+                           
+                          ],
+                        ),
+                      ),
+                    ),
+                    
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        border: Border(
+                          top: BorderSide(color: Colors.grey.shade200),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () => Navigator.pop(context),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: _role == "driver" ? Colors.blue : Colors.amber,
+                              foregroundColor: Colors.black87,
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: Text("Close"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         );
       },
     );
+  }
+  
+  String _getMonthName(int month) {
+    const monthNames = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return monthNames[month - 1];
   }
 
   Widget _buildStatistics() {

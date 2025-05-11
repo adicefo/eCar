@@ -103,25 +103,32 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (vehicles != null && vehicles!.result.isNotEmpty) ...[
-              Row(children: [
-                IconButton(onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NotificationScreen(false),
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NotificationScreen(false),
+                          ),
+                        );
+                      },
+                      icon: Icon(Icons.arrow_back,
+                          size: 30, color: Colors.black87)),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: Text(
+                      "Choose the vehicle: ",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                );
-              }, icon: Icon(Icons.arrow_back,size: 30, color: Colors.black87)),
-                Padding(padding: EdgeInsets.only(left: 20),
-                child: Text(
-                "Choose the vehicle: ",
-                style: TextStyle(
-                  color: Colors.black, 
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),),
+                ],
               ),
-              ],),
               SizedBox(height: 20),
               FormBuilderDropdown(
                 name: 'vehicleId',
@@ -176,7 +183,18 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ElevatedButton(
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    icon: Icon(Icons.check_circle_outline, color: Colors.white),
+                    label: Text("Assign Vehicle",
+                        style: TextStyle(color: Colors.white)),
                     onPressed: () async {
                       bool? isAssignedAlready = await driverVehicleProvider
                           .checkIfAssigned(driverInstance?.id);
@@ -191,8 +209,9 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                             "Form is not valid. Please fix the values");
                         return;
                       }
-                      bool? confirmEdit = await AlertHelpers.vehicelAssignmentConfirmation(
-                          context);
+                      bool? confirmEdit =
+                          await AlertHelpers.vehicelAssignmentConfirmation(
+                              context);
                       if (confirmEdit == true) {
                         _formKey.currentState?.save();
                         var formData = _formKey.currentState?.value;
@@ -204,21 +223,37 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                           driverVehicleProvider.insert(request);
                           ScaffoldHelpers.showScaffold(
                               context, "Successful assigned vehicle");
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NotificationScreen(false),
+                                ),
+                              );
                         } catch (e) {
                           ScaffoldHelpers.showScaffold(context,
                               "You have already assign car for today.");
                         }
                       }
                     },
-                    child: Text("Assign"),
                   ),
                   SizedBox(
                     width: 10,
                   ),
-                  ElevatedButton(
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    icon: Icon(Icons.logout, color: Colors.white),
+                    label: Text("Return Vehicle",
+                        style: TextStyle(color: Colors.white)),
                     onPressed: () async {
-                      bool? confirmEdit = await AlertHelpers.vehicelReturnConfirmation(
-                          context);
+                      bool? confirmEdit =
+                          await AlertHelpers.vehicelReturnConfirmation(context);
                       if (confirmEdit == true) {
                         var request = {
                           "driverId": driverInstance?.id,
@@ -234,6 +269,12 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                           }
                           ScaffoldHelpers.showScaffold(
                               context, "Successfully returned vehicle.");
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NotificationScreen(false),
+                            ),
+                          );
                           //check if update is valid
                         } catch (e) {
                           ScaffoldHelpers.showScaffold(
@@ -241,12 +282,10 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                         }
                       }
                     },
-                    child: Text("Return"),
                   ),
                   SizedBox(
                     width: 10,
                   ),
-                 
                 ],
               ),
             ] else ...[
@@ -296,7 +335,6 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
                 },
                 child: Text("Return"),
               ),
-             
             ],
             SizedBox(height: 20),
           ],

@@ -77,7 +77,8 @@ class _RequestScreenState extends State<RequestScreen> {
                   height: MediaQuery.of(context).size.height * 0.8,
                   child: Column(
                     children: [
-                      buildHeader("Your requests!\n   ${user?.userName}"),
+                      buildHeader("Your requests!"),
+                      buildHeader("${user?.userName}"),
                       Container(
                         height: 500,
                         child: GridView(
@@ -195,7 +196,14 @@ class _RequestScreenState extends State<RequestScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      ElevatedButton(
+                      ElevatedButton.icon(
+                        label: const Text("Reject"),
+                        icon: const Icon(Icons.close),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          foregroundColor: Colors.black,
+                          minimumSize: Size(50, 50),
+                        ),
                         onPressed: () async {
                           try {
                             var request = {"isAccepted": false};
@@ -212,15 +220,17 @@ class _RequestScreenState extends State<RequestScreen> {
                             ScaffoldHelpers.showScaffold(
                                 context, "${e.toString()}");
                           }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.redAccent,
-                          foregroundColor: Colors.black,
-                          minimumSize: Size(50, 50),
-                        ),
-                        child: const Text("Reject"),
+                        }
+                        ,
                       ),
-                      ElevatedButton(
+                      ElevatedButton.icon(
+                        label: const Text("Accept"),
+                        icon: const Icon(Icons.check),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.black,
+                          minimumSize: Size(30, 50),
+                        ),
                         onPressed: () async {
                           try {
                             var request = {"isAccepted": true};
@@ -239,12 +249,7 @@ class _RequestScreenState extends State<RequestScreen> {
                                 context, "${e.toString()}");
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
-                          foregroundColor: Colors.black,
-                          minimumSize: Size(50, 50),
-                        ),
-                        child: const Text("Accept"),
+                        
                       ),
                     ],
                   ),

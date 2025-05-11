@@ -449,7 +449,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       SizedBox(
                         height: 10,
                       ),
-                      ElevatedButton(
+                      ElevatedButton.icon(
+                        icon: Icon(Icons.app_registration),
+                        label: Text("Register",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                         onPressed: () {
                           if (_formKey.currentState?.validate() ?? false) {
                             _formKey.currentState?.save();
@@ -476,17 +478,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 "Form is not valid. Please fix the values");
                           }
                         },
-                        child: Text(
-                          "Register",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
                         style: ElevatedButton.styleFrom(
                             backgroundColor:
                                 const Color.fromARGB(255, 255, 255, 255),
                             foregroundColor: Colors.black,
                             minimumSize: Size(300, 50)),
-                      )
+                      ),
+                      SizedBox(height: 20,),
                     ],
                   ),
                 )),

@@ -190,18 +190,17 @@ try {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               
-              ElevatedButton(
+              ElevatedButton.icon(
+                  icon: Icon(Icons.save),
+                  label: Text("Save"),
                   onPressed: () {
                     _sendReviewRequest();
                   },
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(79, 255, 255, 255),
+                      backgroundColor: Colors.amber,
                       foregroundColor: Colors.black,
-                      minimumSize: Size(150, 50)),
-                  child: Text(
-                    "Save",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )),
+                      minimumSize: Size(250, 50)),)
+                 
             ],
           )),
     );

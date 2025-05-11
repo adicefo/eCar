@@ -180,7 +180,9 @@ class _DrivesScreenState extends State<DrivesScreen> {
                     }
                   },
                 ),
-                ElevatedButton(
+                ElevatedButton.icon(
+                  icon: Icon(Icons.navigation),
+                  label: Text("Start drive"),
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
@@ -191,11 +193,10 @@ class _DrivesScreenState extends State<DrivesScreen> {
                       ),
                     );
                   },
-                  child: Text("Start drive"),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.yellowAccent,
                       foregroundColor: Colors.black,
-                      minimumSize: Size(300, 30)),
+                      minimumSize: Size(150, 50)),
                 )
               ],
             )))
