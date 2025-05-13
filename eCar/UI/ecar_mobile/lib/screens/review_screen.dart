@@ -94,7 +94,7 @@ class _ReviewScreenState extends State<ReviewScreen> {
             height: 30,
           ),
           Container(
-            height: 500,
+            height: MediaQuery.of(context).size.height*0.54,
             child: GridView(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -114,9 +114,10 @@ Center(
         style: TextStyle(fontSize: 16, color: Colors.blueGrey,decoration: TextDecoration.underline),
       ),
     ),
-
+SizedBox(height: 20),
         ],
       ),
+      
     );
   }
 

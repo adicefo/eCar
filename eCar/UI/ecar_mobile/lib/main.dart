@@ -168,38 +168,57 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         dropdownColor: Colors.black,
                       ),
-                      TextField(
-                        enabled: true,
-                        controller: _emailController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.white,
-                          labelText: "Email",
-                          hintText: "Enter your email",
-                          prefixIcon: Icon(Icons.email_sharp),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.yellowAccent),
-                          ),
-                        ),
-                                                style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-                      ),
                       SizedBox(height: 10),
-                      TextField(
-                        obscureText: true,
-                        controller: _passwordController,
-                        decoration: InputDecoration(
-                          labelText: "Password",
-                          hintText: "Enter your password",
-                          filled: true,
-                          fillColor: Colors.white,
-                          prefixIcon: Icon(Icons.password),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.yellowAccent),
-                          ),
-                        ),
-                        style: TextStyle(color:Colors.black,fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 50),
+                     Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+  child: TextField(
+    controller: _emailController,
+    keyboardType: TextInputType.emailAddress,
+    decoration: InputDecoration(
+      label: Text("Email",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+      hintText: "Enter your registered email here...",
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      prefixIcon: Icon(Icons.email),
+      filled: true,
+      fillColor: Colors.white,
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.yellowAccent),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.black),
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+  ),
+),
+                      SizedBox(height: 5),
+                      Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+  child: TextField(
+    controller: _passwordController,
+    obscureText: true,
+    decoration: InputDecoration(
+      label: Text("Password",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+      hintText: "Enter your password here...",
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      prefixIcon: Icon(Icons.lock),
+      filled: true,
+      fillColor: Colors.white,
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.yellowAccent),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.black),
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+    style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+  ),
+),
+                      SizedBox(height: 30),
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: GestureDetector(
@@ -279,9 +298,9 @@ class _LoginPageState extends State<LoginPage> {
                               "Credentials: ${_emailController.text} : ${_passwordController.text}");
                         },
                         style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.yellowAccent,
+                              backgroundColor: Colors.white,
                           foregroundColor: Colors.black,
-                          minimumSize: Size(300, 50),
+                          minimumSize: Size(150, 50),
                           elevation: 3,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),

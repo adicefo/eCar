@@ -77,14 +77,9 @@ class _RequestScreenState extends State<RequestScreen> {
                       buildHeader("${user?.userName}"),
                       Container(
                         height: MediaQuery.of(context).size.height * 0.7,
-                        child: GridView(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 1,
-                                  crossAxisSpacing: 10,
-                                  childAspectRatio: 1.0), 
+                        child: ListView(
                           scrollDirection: Axis.vertical,
-                          children: _buildGridView(),
+                          children: _buildListView(),
                         ),
                       ),
                     ],
@@ -92,8 +87,8 @@ class _RequestScreenState extends State<RequestScreen> {
             ));
   }
 
-  List<Widget> _buildGridView() {
-    if (data?.result?.length == 0) {
+  List<Widget> _buildListView() {
+    if (data?.result?.isEmpty == true) {
       return [
         Center(
           child: Column(
@@ -171,7 +166,7 @@ class _RequestScreenState extends State<RequestScreen> {
           ),
           
           Container(
-            height: 220,
+            //height: 220,
             padding: EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

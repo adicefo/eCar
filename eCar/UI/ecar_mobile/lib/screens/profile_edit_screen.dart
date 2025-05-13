@@ -337,6 +337,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 Icons.person
               ),
               validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(errorText: "Name is required"),
                 FormBuilderValidators.minLength(3,
                     errorText: "Name must contain at least 3 characters"),
                 FormBuilderValidators.match(nameSurname,
@@ -355,6 +356,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 Icons.person_outline
               ),
               validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(errorText: "Surname is required"),
                 FormBuilderValidators.minLength(3,
                     errorText: "Surname must contain at least 3 characters"),
                 FormBuilderValidators.match(nameSurname,
@@ -395,18 +397,15 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
 
             FormBuilderTextField(
               name: "email",
-              enabled: true,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              enabled: false,
+
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,color: Colors.red),
               decoration: _buildInputDecoration(
                 "Email", 
                 "Enter your email address", 
                 Icons.email
               ),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.email(errorText: "Please enter a valid email"),
-                FormBuilderValidators.match(emailExp,
-                    errorText: "Email format: name@example.com")
-              ]),
+              
             ),
             SizedBox(height: 15),
 
@@ -420,6 +419,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 Icons.phone
               ),
               validator: FormBuilderValidators.compose([
+
                 FormBuilderValidators.match(phoneExp,
                     errorText: "Number format: 06x-xxx-xxx(x)")
               ]),
@@ -440,6 +440,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 Icons.alternate_email
               ),
               validator: FormBuilderValidators.compose([
+                FormBuilderValidators.required(errorText: "Username is required"),
                 FormBuilderValidators.minLength(5,
                     errorText: "Username must contain at least 5 characters"),
                 FormBuilderValidators.username(

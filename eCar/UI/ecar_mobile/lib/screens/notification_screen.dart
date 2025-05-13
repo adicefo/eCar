@@ -136,12 +136,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   ),),
                   SizedBox(height: 10,),
                   Container(
-                    height: _role=="driver"?450:600,
+                    height: _role=="driver"?400:600,
                     child: GridView(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 1,
                           crossAxisSpacing: 10,
-                          childAspectRatio: 3 / 1),
+                          childAspectRatio: 2.8),
                       scrollDirection: Axis.vertical,
                       children: _buildGridView(),
                     ),
