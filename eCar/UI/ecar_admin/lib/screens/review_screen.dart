@@ -26,9 +26,9 @@ class _ReviewScreenState extends State<ReviewScreen> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
     provider = context.read<ReviewProvider>();
     _fetchData();
-    super.didChangeDependencies();
   }
 
   Future<void> _fetchData() async {

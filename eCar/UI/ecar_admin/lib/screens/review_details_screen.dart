@@ -24,6 +24,7 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
   Map<String, dynamic> _initialValue = {};
   @override
   void initState() {
+    super.initState();
     provider = context.read<ReviewProvider>();
     _initialValue = {
       "value": widget.review?.value,
@@ -33,7 +34,6 @@ class _ReviewDetailsScreenState extends State<ReviewDetailsScreen> {
       "clientName":
           "${widget?.review?.reviews?.user?.name} ${widget?.review?.reviews?.user?.surname}",
     };
-    super.initState();
   }
 
   @override

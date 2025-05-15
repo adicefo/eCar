@@ -36,10 +36,10 @@ class _DriverVehicleDetailsScreenState
 
   @override
   void initState() {
+    super.initState();
     driverProvider = context.read<DriverProvider>();
     vehicleProvider = context.read<VehicleProvider>();
     driverVehicleProvider = context.read<DriverVehicleProvider>();
-    super.initState();
     _initForm();
   }
 
@@ -77,7 +77,7 @@ class _DriverVehicleDetailsScreenState
             padding: const EdgeInsets.only(bottom: 24.0),
             child: Text(
               "Assign Vehicle to Driver",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white),
               textAlign: TextAlign.center,
             ),
           ),

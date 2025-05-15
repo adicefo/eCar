@@ -31,8 +31,8 @@ class _CompanyPricesScreenState extends State<CompanyPricesScreen> {
 
   @override
   void initState() {
-    companyPriceProvider = context.read<CompanyPriceProvider>();
     super.initState();
+    companyPriceProvider = context.read<CompanyPriceProvider>();
     _initForm();
   }
 
@@ -550,31 +550,36 @@ class _CompanyPricesScreenState extends State<CompanyPricesScreen> {
                                 context, "Please enter a price");
                             return;
                           }
+                          bool? confirmationEdit =
+                              await AlertHelpers.addCompanyPriceConfirmation(
+                                  context);
+                          if (confirmationEdit == true) {
+                            try {
+                              double price =
+                                  double.parse(_priceController.text);
+                              if (price <= 0) {
+                                ScaffoldHelpers.showScaffold(
+                                    context, "Price must be greater than 0");
+                                return;
+                              }
 
-                          try {
-                            double price = double.parse(_priceController.text);
-                            if (price <= 0) {
+                              setState(() {
+                                _isSubmitting = true;
+                              });
+
+                              var request = {"pricePerKilometar": price};
+                              await companyPriceProvider.insert(request);
+                              Navigator.of(context).pop();
                               ScaffoldHelpers.showScaffold(
-                                  context, "Price must be greater than 0");
-                              return;
+                                  context, "Price added successfully");
+                              _initForm();
+                            } catch (e) {
+                              setState(() {
+                                _isSubmitting = false;
+                              });
+                              ScaffoldHelpers.showScaffold(
+                                  context, "Error: ${e.toString()}");
                             }
-
-                            setState(() {
-                              _isSubmitting = true;
-                            });
-
-                            var request = {"pricePerKilometar": price};
-                            await companyPriceProvider.insert(request);
-                            Navigator.of(context).pop();
-                            ScaffoldHelpers.showScaffold(
-                                context, "Price added successfully");
-                            _initForm();
-                          } catch (e) {
-                            setState(() {
-                              _isSubmitting = false;
-                            });
-                            ScaffoldHelpers.showScaffold(
-                                context, "Error: ${e.toString()}");
                           }
                         },
                 ),

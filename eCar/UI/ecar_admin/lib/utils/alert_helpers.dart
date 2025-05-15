@@ -79,13 +79,13 @@ class AlertHelpers {
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text("Cancel", style: TextStyle(color: Colors.grey)),
+              child: Text("Cancel", style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: Text("Delete", style: TextStyle(color: Colors.red)),
+              child: Text("Delete", style: TextStyle(color: Colors.grey)),
             ),
           ],
         );
@@ -106,13 +106,13 @@ class AlertHelpers {
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text("Cancel", style: TextStyle(color: Colors.grey)),
+              child: Text("Cancel", style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold)),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(true);
               },
-              child: Text("Delete", style: TextStyle(color: Colors.red)),
+              child: Text("Delete", style: TextStyle(color: Colors.grey)),
             ),
           ],
         );
@@ -192,6 +192,32 @@ class AlertHelpers {
                 Navigator.of(context).pop(true);
               },
               child: Text("Finish", style: TextStyle(color: Colors.green)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+  static Future<bool?> addCompanyPriceConfirmation(BuildContext context,
+      {String entity = "item"}) async {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirm Add"),
+          content: Text("Are you sure you want to add new price for company"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text("Cancel", style: TextStyle(color: Colors.grey)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text("Add", style: TextStyle(color: Colors.green)),
             ),
           ],
         );

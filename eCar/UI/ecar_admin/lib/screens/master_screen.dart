@@ -76,7 +76,8 @@ class _MasterScreenState extends State<MasterScreen> {
         centerTitle: true,
         backgroundColor: Colors.yellowAccent,
         actions: <Widget>[
-          ElevatedButton.icon(
+          Padding(padding: EdgeInsets.only(right: 80),
+          child: ElevatedButton.icon(
             onPressed: () {
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => ReportsScreen()));
@@ -89,20 +90,13 @@ class _MasterScreenState extends State<MasterScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              padding: EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal:32),
             ),
-          ),
+          ),),
           SizedBox(
             width: 10,
           ),
-          IconButton(
-            icon: const Icon(Icons.monetization_on),
-            padding: EdgeInsets.only(right: 90.0),
-            tooltip: "Change price",
-            onPressed: () {
-              _showModal(context);
-            },
-          )
+          
         ],
       ),
       backgroundColor: Colors.black,
@@ -258,7 +252,7 @@ class _MasterScreenState extends State<MasterScreen> {
                               builder: (context) => StatisticsScreen()),
                         ),
                       ),
-                      _buildPopupMenuItem(
+                       _buildPopupMenuItem(
                         title: "Company Prices",
                         icon: Icons.attach_money,
                         onTap: () => Navigator.of(context).push(
@@ -456,7 +450,7 @@ class _MasterScreenState extends State<MasterScreen> {
                           return;
                         }
                         bool? confirmEdit =
-                            await AlertHelpers.editConfirmation(context);
+                            await AlertHelpers.addCompanyPriceConfirmation(context);
                         if (confirmEdit == true) {
                           companyPriceProvider.insert(result);
                           ScaffoldMessenger.of(context)

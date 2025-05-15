@@ -31,6 +31,7 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
 
   @override
   void initState() {
+    super.initState();
     provider = context.read<VehicleProvider>();
     _initialValue = {
       "available": widget.vehicle?.available,
@@ -44,7 +45,6 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
       _base64Image = widget.vehicle!.image;
     }
 
-    super.initState();
   }
 
   @override

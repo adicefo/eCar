@@ -38,9 +38,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
   @override
   void initState() {
+    super.initState();
     statisticsProvider = context.read<StatisticsProvider>();
     driverProvider = context.read<DriverProvider>();
-    super.initState();
 
     _initForm();
   }

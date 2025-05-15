@@ -33,6 +33,7 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
 
   @override
   void initState() {
+    super.initState();
     provider = context.read<NotificationProvider>();
     _initialValue = {
       'heading': widget.notification?.heading,
@@ -48,7 +49,6 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
       _base64Image = widget.notification!.image;
     }
 
-    super.initState();
   }
 
   @override

@@ -66,12 +66,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
   bool isLoading = true;
   @override
   void initState() {
+    super.initState();
     driverProvider = context.read<DriverProvider>();
     clientProvider = context.read<ClientProvider>();
     routeProvider = context.read<RouteProvider>();
     reviewProvider = context.read<ReviewProvider>();
 
-    super.initState();
     _initForm();
     fetchYearlyData(2024).then((value) {
       setState(() {

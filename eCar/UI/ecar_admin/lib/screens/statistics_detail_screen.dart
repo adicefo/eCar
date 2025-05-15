@@ -33,10 +33,10 @@ class _StatisticsDetailScreenState extends State<StatisticsDetailScreen> {
   bool isLoading = true;
   @override
   void initState() {
+    super.initState();
     statisticsProvider = context.read<StatisticsProvider>();
     driverProvider = context.read<DriverProvider>();
     _initialValue = {"driverId": 0};
-    super.initState();
 
     _initForm();
   }

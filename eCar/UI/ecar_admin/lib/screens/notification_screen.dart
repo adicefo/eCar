@@ -33,9 +33,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
     provider = context.read<NotificationProvider>();
     _fetchData();
-    super.didChangeDependencies();
   }
 
   Future<void> _fetchData() async {

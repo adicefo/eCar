@@ -25,9 +25,9 @@ class _DriversListScreenState extends State<DriversListScreen> {
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
     provider = context.read<DriverProvider>();
     _fetchData();
-    super.didChangeDependencies();
   }
 
   Future<void> _fetchData() async {

@@ -29,8 +29,8 @@ class _DriverVehicleScreenState extends State<DriverVehicleScreen> {
 
   @override
   void initState() {
-    driverVehicleProvider = context.read<DriverVehicleProvider>();
     super.initState();
+    driverVehicleProvider = context.read<DriverVehicleProvider>();
 
     _initForm();
   }

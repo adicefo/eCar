@@ -27,8 +27,8 @@ class _RouteListScreenState extends State<RouteListScreen> {
 
   @override
   void didChangeDependencies() {
-    provider = context.read<RouteProvider>();
     super.didChangeDependencies();
+    provider = context.read<RouteProvider>();
     _fetchData();
   }
 

@@ -30,9 +30,9 @@ class _RentScreenState extends State<RentScreen> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
     provider = context.read<RentProvider>();
     _fetchData();
-    super.didChangeDependencies();
   }
 
   Future<void> _fetchData() async {

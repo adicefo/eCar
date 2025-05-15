@@ -317,6 +317,12 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               final formData = _formKey.currentState?.value;
 
               if (widget.rent == null) {
+                if ((formData!['rentingDate'] as DateTime)
+                    .isAfter(formData!['endingDate'] as DateTime)) {
+                  help.AlertHelpers.showAlert(
+                      context, "Invalid form", "Please select valid dates");
+                  return;
+                }
                 final requestPayload = {
                   "rentingDate":
                       (formData!['rentingDate'] as DateTime).toIso8601String(),
@@ -327,11 +333,10 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 };
                 try {
                   await rentProvider.insert(requestPayload);
-                  help.AlertHelpers.successAlert(
-                    context,
-                    "Success",
-                    "Rent added successfully",
-                  );
+                  ScaffoldHelpers.showScaffold(
+                        context, "Rent added successfully");
+                                      await Future.delayed(const Duration(seconds: 2));
+
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
                       builder: (context) => const RentScreen(),
@@ -341,6 +346,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                   ScaffoldHelpers.showScaffold(context, e.toString());
                 }
               } else if (widget.rent != null) {
+                
                 final requestPayload = {
                   "endingDate":
                       (formData!['endingDate'] as DateTime).toIso8601String(),
@@ -352,11 +358,8 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 if (confirmEdit == true) {
                   try {
                     await rentProvider.update(widget.rent?.id, requestPayload);
-                    help.AlertHelpers.successAlert(
-                      context,
-                      "Success",
-                      "Rent updated successfully",
-                    );
+                    ScaffoldHelpers.showScaffold(
+                        context, "Rent updated successfully");
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => const RentScreen(),
@@ -380,9 +383,9 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
           if (widget.rent?.status == "active")
             ElevatedButton.icon(
               onPressed: () async {
-                bool? confirmFinish = await help.AlertHelpers.finishConfirmation(
-                    context,
-                    entity: "Rent");
+                bool? confirmFinish =
+                    await help.AlertHelpers.finishConfirmation(context,
+                        entity: "Rent");
                 if (confirmFinish == true) {
                   try {
                     await rentProvider.updateFinish(widget.rent?.id);

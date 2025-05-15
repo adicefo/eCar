@@ -23,8 +23,8 @@ class _AdminScreenState extends State<AdminScreen> {
   bool isLoading = true;
   @override
   void initState() {
-    adminProvider = context.read<AdminProvider>();
     super.initState();
+    adminProvider = context.read<AdminProvider>();
     _initForm();
   }
 

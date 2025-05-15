@@ -24,9 +24,9 @@ class _ClientListScreenState extends State<ClientListScreen> {
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
     provider = context.read<ClientProvider>();
     _fetchData();
-    super.didChangeDependencies();
   }
 
   Future<void> _fetchData() async {

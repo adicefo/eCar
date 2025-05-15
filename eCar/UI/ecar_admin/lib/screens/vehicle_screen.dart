@@ -33,9 +33,9 @@ class _VehicleScreenState extends State<VehicleScreen> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
     provider = context.read<VehicleProvider>();
     _fetchData();
-    super.didChangeDependencies();
   }
 
   Future<void> _fetchData() async {
