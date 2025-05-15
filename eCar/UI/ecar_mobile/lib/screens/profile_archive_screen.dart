@@ -109,7 +109,23 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
   List<Widget> _buildGridView() {
     if (isRoute) {
       if (routes?.result?.length == 0) {
-        return [Text("Sorry there is no routes in archive")];
+        return [Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.route_outlined, size: 64, color: Colors.grey),
+                      SizedBox(height: 16),
+                      Text(
+                        "No routes available",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade700,
+                        ),
+                      ),
+                    ],
+                  ),
+                )];
       }
       List<Widget> listRoutes = routes!.result
           .map(
@@ -256,7 +272,23 @@ class _ProfileArchiveScreenState extends State<ProfileArchiveScreen> {
       return listRoutes;
     } else if (isRoute == false && widget?.role == "client") {
       if (rents?.result?.length == 0) {
-        return [Text("Sorry there is no rents in archive")];
+        return [Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.car_rental_outlined, size: 64, color: Colors.grey),
+                    SizedBox(height: 16),
+                    Text(
+                      "No rentals available",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ],
+                ),
+              )];
       }
       List<Widget> listRents = rents!.result
           .map(
