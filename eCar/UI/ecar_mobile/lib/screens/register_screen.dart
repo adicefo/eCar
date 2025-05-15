@@ -152,8 +152,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
-                          color: Colors.yellowAccent,
+                          color: Colors.white,
                           fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                         name: "name",
                         validator: FormBuilderValidators.compose([
@@ -193,10 +194,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
-                          color: Colors.yellowAccent,
+                          color: Colors.white,
                           fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
-                        name: "surname",
+                        name: "surname",  
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(
                               errorText: "Field is required"),
@@ -235,8 +237,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
-                          color: Colors.yellowAccent,
+                          color: Colors.white,
                           fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                         name: "userName",
                         validator: FormBuilderValidators.compose([
@@ -283,8 +286,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
-                          color: Colors.yellowAccent,
+                          color: Colors.white,
                           fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                         name: "email",
                         validator: FormBuilderValidators.compose([
@@ -323,8 +327,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
-                          color: Colors.yellowAccent,
+                          color: Colors.white,
                           fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                         name: "password",
                         validator: FormBuilderValidators.compose([
@@ -360,8 +365,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
-                          color: Colors.yellowAccent,
+                          color: Colors.white,
                           fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                         name: "passwordConfirm",
                         validator: FormBuilderValidators.compose([
@@ -396,8 +402,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           contentPadding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         ),
                         style: TextStyle(
-                          color: Colors.yellowAccent,
+                          color: Colors.white,
                           fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                         name: "telephoneNumber",
                         validator: FormBuilderValidators.compose([
@@ -444,6 +451,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         style: TextStyle(
                           color: Colors.yellowAccent,
                           fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       SizedBox(

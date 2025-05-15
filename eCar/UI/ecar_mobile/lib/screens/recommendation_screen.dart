@@ -50,20 +50,24 @@ class RecommendationScreen extends StatelessWidget {
   ),
 ),
         if (recommendationList!.isEmpty)
-          Padding(
-            padding: EdgeInsets.only(top: 50),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.black, strokeAlign: 1),
-                borderRadius: BorderRadius.circular(10),
+         Padding(
+          padding: const EdgeInsets.only(top: 150),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.car_rental_outlined, size: 120, color: Colors.grey),
+                    SizedBox(height: 16),
+                    Text(
+                      "No recommended vehicles available",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey.shade700,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              child: Text(
-                "Sorry, there is no recommended vehicles\n based on previous car.",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
         if (recommendationList!.isNotEmpty)
           Container(
             height: 800, 
