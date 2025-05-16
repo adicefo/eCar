@@ -1,64 +1,106 @@
-# eCar
+# 🚗 eCar
 
-**A project for purposes of the "Razvoj Softvera II" subject.**
+**A project for purposes of the _"Razvoj Softvera II"_ subject.**
 
-## Credentials
+---
 
-### Admin (desktop app):
+## 🔐 Credentials
 
-- **Email:** `admin@edu.fit.ba`
+### 👨‍💼 Admin (Desktop App):
+- **Email:** `admin@edu.fit.ba`  
 - **Password:** `test`
 
-### Client (mobile app):
+### 👤 Client (Mobile App):
+- **Email:** `client1@edu.fit.ba`  
+- **Password:** `test`  
+- ℹ️ *Same credentials for `client2`,`client3` and `client4`.*
 
-- **Email:** `client1@edu.fit.ba`
-- **Password:** `test`
-- **Note:** `Same credentials for client2 and client3`
+### 🚘 Driver (Mobile App):
+- **Email:** `driver1@edu.fit.ba`  
+- **Password:** `test`  
+- ℹ️ *Same credentials for `driver2` , `driver3` and `driver4`.*
 
-### Driver (mobile app):
+---
 
-- **Email:** `driver1@edu.fit.ba`
-- **Password:** `test`
-- **Note:** `Same credentials for driver2 and driver3`
+## ⚙️ IMPORTANT! Emulator Setup for Google Navigation SDK
 
-## IMPORTANT! Emulator setup for Google Navigation SDK
+This app uses the **Google Navigation SDK**.  
+To run the app properly on an **emulator**, follow these requirements:
 
-**In this app Google Navigation SDK is used and in order to run app properly there are some requirments for emulator:**
+- ✅ Use image with **API 35**
+- ✅ Enable **Google Play Services**
+- ✅ Enable **Wi-Fi**
+- ✅ Enable **Location**
 
-- **Use image with API 35**
-- **Enable Google Play Services**
-- **Enable Wi-Fi**
-- **Enable Location**
 
-## Steps for testing main app functionality
 
-**These are steps to test main app drive funcionality:**
+---
 
-- **Login as a driver with mentioned credentials**
-- **Car icon in appbar->Assign car**
-- **Login as a client->Order->Choose car->Send drive request**
-- **Login as a driver->Requests->Accept Request**
-- **After accepting go to Drives and then click Start drive**
+## 🧪 Steps for Testing Main App Functionality
 
-**NOTE: If you test mobile app on emulator use location in United States of America  because default location of emulator is somewhere near San Francisco!!!**
+Follow these steps to test the **main app drive functionality**:
 
-## Docker
+1. 🚘 **Login as a Driver** using the provided credentials  
+   - Tap the **car icon** in the app bar → **Assign car**
+2. 👤 **Login as a Client**  
+   - Navigate to **Order** → Choose a car → **Send drive request**
+3. 🔄 **Switch back to Driver**  
+   - Go to **Requests** → **Accept Request**
+4. 🏁 **Start the Drive**  
+   - Open **Drives** → Tap **Start Drive**
 
-**In order to run app go to path of docker-compose.yaml and run `docker-compose up --build `**
+---
 
-## Recommender system
+### 🧭 Test Navigation SDK
 
-**You can find the more information about recommender in `my recommender system.docx ` file**
+Test the **Google Navigation SDK** functionality using the following steps:
 
-**NOTE:If you get message `No recommended vehicles available` for all vehicles while testing the app, please add few rent requests for different users while testing.**
+1. 🗺️ Tap **"Add Source Point"** and then **"Add Destination Point"**
+2. 🚦 Tap the **"Start Guidance"** button to begin navigation
+3. 🛑 Once finished, tap **"Stop Guidance"**
+4. ✅ Tap **"Finish Drive"** to complete the drive  
+   - You’ll then see the **total price** and a message indicating if the **user has already paid**
 
-## Stripe data
+
+> ⚠️ **NOTE: If you test the mobile app on an emulator, use a location in the _United States of America_**  
+> **because the default location of the emulator is somewhere near _San Francisco_!** 🌍
+---
+
+## 🖥️ Desktop Report Testing
+
+> 🔎 **NOTE:** If you are testing the **Review** section of the report in the desktop app, please select **April 2025** to properly test this functionality.
+
+
+## 🐳 Docker
+
+To run the full system using Docker:
+
+`docker-compose up --build`
+
+⚠️ If you have already used the container ⚠️:
+
+- Run `docker-compose down --rmi all --remove-orphans` to clear all containers
+- Then run `docker-compose up --build`
+
+## 🧠 Recommender System
+
+📄 You can find more details in the file:  
+`my recommender system.docx`
+
+
+---
+
+## 💳 Stripe Test Data
+
+Use this card data for testing payment:
 
 - **Card number:** `4242 4242 4242 4242`
-- **Date:** `Any date in future`
-- **CVC:** `Any 3-digit number`
-- **ZIP Code:** `Any 5-digit number`
+- **Date:** _Any future date_
+- **CVC:** _Any 3-digit number_
+- **ZIP Code:** _Any 5-digit number_
 
-## RabbitMQ
+---
 
-- **Rabbitmq is used to send an email to client after driver accept or reject his drive request.**
+## 📩 RabbitMQ
+
+RabbitMQ is used to **send an email notification** to the client after the driver **accepts or rejects** a drive request.
