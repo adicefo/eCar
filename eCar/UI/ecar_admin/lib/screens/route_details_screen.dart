@@ -609,7 +609,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                     entity: "Route");
                 if (confirmActive == true) {
                   try {
-                    routeProvider.update(widget.route?.id);
+                    routeProvider.update(widget.route?.id,{});
                     ScaffoldHelpers.showScaffold(
                         context, "Route updated to active");
                     await Future.delayed(const Duration(seconds: 1));
