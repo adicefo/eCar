@@ -355,7 +355,6 @@ class _RouteListScreenState extends State<RouteListScreen> {
               int idx = entry.key;
               Model.Route e = entry.value;
 
-              // Determine status color
               Color statusColor = Colors.grey.shade700;
               if (e.status == "active") statusColor = Colors.green.shade700;
               if (e.status == "wait") statusColor = Colors.orange.shade700;
@@ -483,6 +482,7 @@ class _RouteListScreenState extends State<RouteListScreen> {
                                         );
                                       },
                                     ),
+                        
                         IconButton(
                           icon: Icon(Icons.delete, color: Colors.red),
                           tooltip: "Delete route",

@@ -461,28 +461,42 @@ class _RentScreenState extends State<RentScreen> {
                                         );
                                       },
                                     ),
-                                  IconButton(
-                                    icon: Icon(Icons.delete, color: Colors.red),
-                                    tooltip: "Delete rent",
-                                    onPressed: () async {
-                                      bool? confirmDelete =
-                                          await AlertHelpers.deleteConfirmation(
-                                              context);
-                                      if (confirmDelete == true) {
-                                        try {
-                                          provider.delete(e.id);
-                                          await Future.delayed(
-                                              const Duration(seconds: 1));
-                                          ScaffoldHelpers.showScaffold(context,
-                                              "Rent successfully deleted");
-                                          await _fetchData();
-                                        } catch (e) {
-                                          ScaffoldHelpers.showScaffold(
-                                              context, "${e.toString()}");
+                                  if (e.status != "active")
+                                    IconButton(
+                                      icon:
+                                          Icon(Icons.delete, color: Colors.red),
+                                      tooltip: "Delete rent",
+                                      onPressed: () async {
+                                        bool? confirmDelete = await AlertHelpers
+                                            .deleteConfirmation(context);
+                                        if (confirmDelete == true) {
+                                          try {
+                                            provider.delete(e.id);
+                                            await Future.delayed(
+                                                const Duration(seconds: 1));
+                                            ScaffoldHelpers.showScaffold(
+                                                context,
+                                                "Rent successfully deleted");
+                                            await _fetchData();
+                                          } catch (e) {
+                                            ScaffoldHelpers.showScaffold(
+                                                context, "${e.toString()}");
+                                          }
                                         }
-                                      }
-                                    },
-                                  ),
+                                      },
+                                    )
+                                  else
+                                    IconButton(
+                                      icon: Icon(Icons.delete,
+                                          color: Colors.grey),
+                                      tooltip: "Cannot delete active rent",
+                                      onPressed: () async {
+                                        AlertHelpers.showAlert(
+                                            context,
+                                            "Inavlid action",
+                                            "Cannot delete rent when status is active");
+                                      },
+                                    ),
                                 ],
                               ),
                             ),
