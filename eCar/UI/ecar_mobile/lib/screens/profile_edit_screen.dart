@@ -373,6 +373,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                 Icons.person_pin
               ),
               name: "gender",
+              initialValue: widget?.user?.gender?.startsWith("Male")??false?"Male":"Female",
               items: [
                 DropdownMenuItem(
                   value: "Male",

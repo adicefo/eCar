@@ -117,7 +117,8 @@ class _DrivesScreenState extends State<DrivesScreen> {
     if (data?.result?.length == 0) {
       return [
         Center(
-          child: Column(
+          child:Padding(padding: EdgeInsets.only(top:100),
+          child:  Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.directions_car_outlined, size: 64, color: Colors.grey),
@@ -127,7 +128,7 @@ class _DrivesScreenState extends State<DrivesScreen> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
             ],
-          ),
+          ),)
         )
       ];
     }

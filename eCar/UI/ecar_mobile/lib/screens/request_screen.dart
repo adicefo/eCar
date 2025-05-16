@@ -91,7 +91,9 @@ class _RequestScreenState extends State<RequestScreen> {
     if (data?.result?.isEmpty == true) {
       return [
         Center(
-          child: Column(
+          child: Padding(
+            padding:  EdgeInsets.only(top:150),
+            child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(Icons.assignment_late_outlined, size: 64, color: Colors.grey),
@@ -102,6 +104,7 @@ class _RequestScreenState extends State<RequestScreen> {
               ),
             ],
           ),
+          )
         )
       ];
     }

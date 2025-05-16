@@ -939,7 +939,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ),
           ]),
       height: 50,
-      width: 400,
+      width: 450,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
         child: number != null
