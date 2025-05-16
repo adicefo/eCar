@@ -69,7 +69,7 @@ Test the **Google Navigation SDK** functionality using the following steps:
 ## 🖥️ Desktop Report Testing
 
 > 🔎 **NOTE:** If you are testing the **Review** section of the report in the desktop app, please select **April 2025** to properly test this functionality.
-
+---
 
 ## 🐳 Docker
 
@@ -104,3 +104,4 @@ Use this card data for testing payment:
 ## 📩 RabbitMQ
 
 RabbitMQ is used to **send an email notification** to the client after the driver **accepts or rejects** a drive request.
+To fully test RabbitMQ functionality, temporarily update a user's email address to your own, and then follow the steps under Testing Main App Functionality above.
