@@ -40,19 +40,17 @@
 - **Login as a driver->Requests->Accept Request**
 - **After accepting go to Drives and then click Start drive**
 
-**NOTE: If you test mobile app on emulator use location in American continent because default location of emulator is somewhere near San Francisco!!!**
+**NOTE: If you test mobile app on emulator use location in United States of America  because default location of emulator is somewhere near San Francisco!!!**
 
 ## Docker
 
 **In order to run app go to path of docker-compose.yaml and run `docker-compose up --build `**
 
-**NOTE: Do not run migration because database is already created with test data inserted!!!**
-
 ## Recommender system
 
 **You can find the more information about recommender in `my recommender system.docx ` file**
 
-**NOTE:If you get message `Sorry, there is no recommended vehicles based on previous car.` for all vehicles while testing the app, please add few rent requests for different users while testing.**
+**NOTE:If you get message `No recommended vehicles available` for all vehicles while testing the app, please add few rent requests for different users while testing.**
 
 ## Stripe data
 

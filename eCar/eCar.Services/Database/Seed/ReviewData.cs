@@ -57,7 +57,7 @@ namespace eCar.Services.Database.Seed
                    {
                        Id = 5,
                        Value = 5,
-                       Description = "Sve pohvale za momka. Jako lijepa vožnja i prijatan stav, što je jako bitno u gradnji međuljudskih odnosa.",
+                       Description = "Sve pohvale za momka. Jako lijepa vožnja i prijatan stav.",
                        AddedDate = DateTime.Now.AddMonths(-1),
                        ReviewedId = 4,
                        ReviewsId = 1,
