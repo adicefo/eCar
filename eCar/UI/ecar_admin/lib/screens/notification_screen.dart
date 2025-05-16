@@ -41,7 +41,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Future<void> _fetchData() async {
     setState(() {
       isLoading = true;
-      result = null; // Clear current results to show loading indicator
+      result = null; 
     });
 
     try {
@@ -328,19 +328,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         int idx = entry.key;
                         Model.Notification e = entry.value;
 
-                        // Determine target audience
                         Color targetColor = e.isForClient == true
                             ? Colors.blue.shade700
                             : Colors.orange.shade700;
                         String targetText =
                             e.isForClient == true ? "Client" : "Driver";
 
-                        // Determine status color
-                        Color statusColor = e.status == true
-                            ? Colors.green.shade700
-                            : Colors.grey.shade700;
+                        Color statusColor = 
+                             Colors.green.shade700;
+                            
                         String statusText =
-                            e.status == true ? "Active" : "Inactive";
+                            "Active";
 
                         return DataRow(
                           color: MaterialStateProperty.resolveWith<Color?>(

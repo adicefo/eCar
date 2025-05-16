@@ -236,6 +236,7 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                         prefixIcon: Icon(Icons.people, color: Colors.black54),
                       ),
                       name: "gender",
+                      initialValue: widget?.driver?.user?.gender,
                       items: [
                         DropdownMenuItem(
                           value: "Male",
@@ -361,6 +362,7 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                         prefixIcon: Icon(Icons.people, color: Colors.black54),
                       ),
                       name: "gender",
+                      initialValue: widget.driver?.user?.gender?.startsWith("Male") ?? false ? "Male" : "Female",
                       items: [
                         DropdownMenuItem(
                           value: "Male",

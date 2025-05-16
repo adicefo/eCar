@@ -379,6 +379,7 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                         prefixIcon: Icon(Icons.people, color: Colors.black54),
                       ),
                       name: "gender",
+                      initialValue: widget.client?.user?.gender?.startsWith("Male") ?? false ? "Male" : "Female",
                       items: [
                         DropdownMenuItem(
                           value: "Male",

@@ -1110,7 +1110,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     final result = await FilePicker.platform.saveFile(
       dialogTitle: 'Save PDF Report',
       initialDirectory: "/",
-      allowedExtensions: ['pdf'],
+      allowedExtensions: ['.pdf'],
       fileName: entity == "driver"
           ? "ecar_report_driver.pdf"
           : entity == "route"
