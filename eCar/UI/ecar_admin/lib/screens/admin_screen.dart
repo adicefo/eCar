@@ -330,8 +330,8 @@ class _AdminScreenState extends State<AdminScreen> {
                                   ),
                                   
                                   IconButton(
-                                    icon: Icon(Icons.delete, color: Colors.red),
-                                    tooltip: "Delete administrator",
+                                    icon: Icon(Icons.delete, color: Colors.grey),
+                                    tooltip: "Only superadmin can delete administrator",
                                     onPressed: () {
                                       AlertHelpers.showAlert(
                                           context,

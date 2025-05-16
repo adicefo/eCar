@@ -17,9 +17,9 @@ class RouteListScreen extends StatefulWidget {
 }
 
 class _RouteListScreenState extends State<RouteListScreen> {
-  int _currentPage = 0; //track the current page
-  int _totalPages = 1; //total pages (fetched from API)
-  int _pageSize = 8;
+  int _currentPage = 0; 
+  int _totalPages = 1; 
+  int _pageSize = 8; // Page size set to 8 items per page
   late RouteProvider provider;
   String? _selectedStatus;
   SearchResult<Model.Route>? result;
@@ -40,19 +40,25 @@ class _RouteListScreenState extends State<RouteListScreen> {
     try {
       var filter = {
         'Status': _selectedStatus,
-        'PageNumber': _currentPage.toString(),
-        'PageSize': _pageSize.toString(),
+        'Page': _currentPage,
+        'PageSize': _pageSize
       };
 
       result = await provider.get(filter: filter);
 
-      // Calculate total pages based on result
-      if (result != null && result!.count != null) {
-        _totalPages = (result!.count! / _pageSize).ceil();
-        if (_totalPages < 1) _totalPages = 1;
-      }
-
       setState(() {
+        if (result != null && result!.count != null) {
+          _totalPages = (result!.count! / _pageSize).ceil();
+          if (_totalPages < 1) _totalPages = 1;
+          
+          if (_currentPage >= _totalPages && _totalPages > 0) {
+            _currentPage = _totalPages - 1;
+            if (result!.result.length > _pageSize) {
+              _fetchData();
+              return;
+            }
+          }
+        }
         isLoading = false;
       });
     } catch (e) {
@@ -67,14 +73,22 @@ class _RouteListScreenState extends State<RouteListScreen> {
   Widget build(BuildContext context) {
     return MasterScreen(
       "Routes",
-      Container(
-        child: Column(
-          children: [
-            _buildSearch(),
-            _buildResultView(),
-            _buildPagination(),
-          ],
-        ),
+      Column(
+        children: [
+          _buildSearch(),
+          isLoading
+              ? Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Colors.yellowAccent),
+                    ),
+                  ),
+                )
+              : _buildResultView(),
+          if (!isLoading && result != null && result!.result.isNotEmpty)
+            _buildPagination()
+        ],
       ),
     );
   }
@@ -515,9 +529,6 @@ class _RouteListScreenState extends State<RouteListScreen> {
   }
 
   Widget _buildPagination() {
-    if (result == null || result!.result.isEmpty || _totalPages <= 1) {
-      return SizedBox.shrink();
-    }
 
     return Container(
       padding: const EdgeInsets.all(16.0),

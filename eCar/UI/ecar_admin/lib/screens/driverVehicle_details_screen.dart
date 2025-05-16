@@ -82,7 +82,6 @@ class _DriverVehicleDetailsScreenState
             ),
           ),
 
-          // Driver dropdown
           Card(
             elevation: 2,
             margin: EdgeInsets.symmetric(vertical: 8.0),
@@ -136,8 +135,6 @@ class _DriverVehicleDetailsScreenState
           ),
 
           SizedBox(height: 24),
-
-          // Vehicle dropdown
           Card(
             elevation: 2,
             margin: EdgeInsets.symmetric(vertical: 8.0),
@@ -191,7 +188,6 @@ class _DriverVehicleDetailsScreenState
 
           SizedBox(height: 40),
 
-          // Buttons
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(

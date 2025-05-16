@@ -73,12 +73,12 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
     // initialize coordinates if editing
     if (widget.route != null) {
       sourceCoordinates = {
-        'latitude': widget.route!.sourcePoint!.latitude!,
-        'longitude': widget.route!.sourcePoint!.longitude!,
+        'latitude': widget.route!.sourcePoint?.latitude ?? 0.0,
+        'longitude': widget.route!.sourcePoint?.longitude ?? 0.0,
       };
       destinationCoordinates = {
-        'latitude': widget.route!.destinationPoint!.latitude!,
-        'longitude': widget.route!.destinationPoint!.longitude!,
+        'latitude': widget.route!.destinationPoint?.latitude ?? 0.0,
+        'longitude': widget.route!.destinationPoint?.longitude ?? 0.0,
       };
     }
 
@@ -117,14 +117,18 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           children: [
             isLoading
                 ? Center(child: CircularProgressIndicator())
-                : _buildForm(),
+                : widget.route!=null?_buildForm(
+                    getAddressFromLatLng(sourceCoordinates['latitude']!,
+                        sourceCoordinates['longitude']!),
+                    getAddressFromLatLng(destinationCoordinates['latitude']!,
+                        destinationCoordinates['longitude']!)):_buildForm(null,null),
             SizedBox(height: 20),
             _save()
           ],
         ));
   }
 
-  Widget _buildForm() {
+  Widget _buildForm(Future<String>? sourceAddressEdit, Future<String>? destinationAddressEdit) {
     final bool isDisabled = widget.route != null;
 
     return FormBuilder(
@@ -145,7 +149,46 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
             ),
             SizedBox(height: 8),
             if (isDisabled) ...[
-              Row(
+              Column(
+                children: [
+                  Container(
+                    height: 45,
+                    padding: EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(8),
+                      
+                    ),
+                    child:FutureBuilder<String>(
+                      future: sourceAddressEdit,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            snapshot.data!,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          );
+                        } else {
+                          return Text(
+                            "Loading...",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          );
+                        }
+                      },
+                    
+                  ),
+                  ),
+                    
+                  SizedBox(height:15),
+                  Row(
                 children: [
                   Expanded(
                     child: FormBuilderTextField(
@@ -184,12 +227,14 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   ),
                 ],
               ),
+                ],
+              )
             ] else ...[
               PlaceSearchField(
                 key: UniqueKey(),
                 label: "Search for source location",
                 hint: "Enter a location",
-                onLocationSelected: (coords) {
+                onLocationSelected: (coords, address) {
                   print(
                       "Source coordinates selected: ${coords['latitude']}, ${coords['longitude']}");
 
@@ -289,7 +334,44 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
             ),
             SizedBox(height: 8),
             if (isDisabled) ...[
-              Row(
+              Column(children: [
+                Container(
+                  height: 45,
+                    padding: EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(8),
+                      
+                    ),
+                    child:FutureBuilder<String>(
+                      future: destinationAddressEdit,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return Text(
+                            snapshot.data!,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          );
+                        } else {
+                          return Text(
+                            "Loading...",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                          );
+                        }
+                      },
+                    
+                  ),
+                  ),
+                  SizedBox(height: 15,),
+                Row(
                 children: [
                   Expanded(
                     child: FormBuilderTextField(
@@ -328,12 +410,13 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   ),
                 ],
               ),
+              ],)
             ] else ...[
               PlaceSearchField(
                 key: UniqueKey(),
                 label: "Search for destination location",
                 hint: "Enter a location",
-                onLocationSelected: (coords) {
+                onLocationSelected: (coords, address) {
                   print(
                       "Destination coordinates selected: ${coords['latitude']}, ${coords['longitude']}");
 
@@ -484,7 +567,6 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   }
 
   Widget _save() {
-    bool? confirmEdit;
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Row(
@@ -541,11 +623,13 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   return;
                 }
 
-                _formKey.currentState?.saveAndValidate();
-                var formData = _formKey.currentState?.value;
+                if (!_formKey.currentState!.saveAndValidate()) {
+                  return;
+                }
+                var formData = _formKey.currentState!.value;
 
-                if (formData?['driverID'] == null ||
-                    formData?['clientId'] == null) {
+                if (formData['driverID'] == null ||
+                    formData['clientId'] == null) {
                   ScaffoldHelpers.showScaffold(
                       context, "Please select a driver and client");
                   return;
@@ -568,8 +652,8 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                     "latitude": destinationCoordinates['latitude']?.toDouble(),
                     "srid": 4326
                   },
-                  "driverID": formData!['driverID'],
-                  "clientId": formData!['clientId']
+                  "driverID": formData['driverID'],
+                  "clientId": formData['clientId']
                 };
 
                 try {
