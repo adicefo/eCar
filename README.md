@@ -64,12 +64,14 @@ Test the **Google Navigation SDK** functionality using the following steps:
 
 > ⚠️ **NOTE: If you test the mobile app on an emulator, use a location in the _United States of America_**  
 > **because the default location of the emulator is somewhere near _San Francisco_!** 🌍
+
 ---
 
 ## 🖥️ Desktop Report Testing
 
 > 🔎 **NOTE:** If you are testing the **Review** section of the report in the desktop app, please select **April 2025** to properly test this functionality.
 
+---
 
 ## 🐳 Docker
 
@@ -81,12 +83,13 @@ To run the full system using Docker:
 
 - Run `docker-compose down --rmi all --remove-orphans` to clear all containers
 - Then run `docker-compose up --build`
+  
+---
 
 ## 🧠 Recommender System
 
 📄 You can find more details in the file:  
 `my recommender system.docx`
-
 
 ---
 
@@ -104,3 +107,4 @@ Use this card data for testing payment:
 ## 📩 RabbitMQ
 
 RabbitMQ is used to **send an email notification** to the client after the driver **accepts or rejects** a drive request.
+To fully test RabbitMQ functionality, temporarily update a user's email address to your own, and then follow the steps under Testing Main App Functionality above.
