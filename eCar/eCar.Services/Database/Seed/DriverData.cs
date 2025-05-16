@@ -34,6 +34,13 @@ namespace eCar.Services.Database.Seed
                     NumberOfClientsAmount=55,
                     NumberOfHoursAmount=29
 
+                },
+                new Driver()
+                {
+                    Id = 4,
+                    UserID = 10,
+                    NumberOfClientsAmount=39,
+                    NumberOfHoursAmount=20
                 });
 
 

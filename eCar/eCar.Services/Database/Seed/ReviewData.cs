@@ -52,8 +52,29 @@ namespace eCar.Services.Database.Seed
                        ReviewsId = 3,
                        RouteId=3
 
+                   },
+                   new Review()
+                   {
+                       Id = 5,
+                       Value = 5,
+                       Description = "Sve pohvale za momka. Jako lijepa vožnja i prijatan stav, što je jako bitno u gradnji međuljudskih odnosa.",
+                       AddedDate = DateTime.Now.AddMonths(-1),
+                       ReviewedId = 4,
+                       ReviewsId = 1,
+                       RouteId = 6
+
+                   }, new Review()
+                   {
+                       Id = 6,
+                       Value = 4,
+                       Description = "Poprilično sam zadovoljan vožnjom...",
+                       AddedDate = DateTime.Now.AddMonths(-1),
+                       ReviewedId = 3,
+                       ReviewsId = 2,
+                       RouteId = 7
+
                    }
-                   
+
                );
 
 

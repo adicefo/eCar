@@ -93,7 +93,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   void _selectDateRange() async {
     DateTimeRange? picked = await showDateRangePicker(
       context: context,
-      firstDate: DateTime(2025),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2100),
       saveText: "Save",
       errorInvalidRangeText: "Choose a valid range",

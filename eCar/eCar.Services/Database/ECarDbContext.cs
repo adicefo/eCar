@@ -297,7 +297,8 @@ public partial class ECarDbContext : DbContext
         modelBuilder.Entity<Rent>().SeedData();
         modelBuilder.Entity<Notification>().SeedData();
         modelBuilder.Entity<Review>().SeedData();
-
+        modelBuilder.Entity<Statistic>().SeedData();
+        modelBuilder.Entity<DriverVehicle>().SeedData();
      
 
         OnModelCreatingPartial(modelBuilder);

@@ -121,7 +121,35 @@ namespace eCar.Services.Database.Seed
                     Gender = "Male",
                     IsActive = true,
 
-                });
+                },
+                 new User()
+                 {
+                     Id = 9,
+                     Name = "Client4",
+                     Surname = "Client4",
+                     UserName = "client4",
+                     Email = "client4@edu.fit.ba",
+                     PasswordHash = "UbzzxOGag4pPmBhguTkyKnpEZw4=",
+                     PasswordSalt = "qYk4OxryQgplthbzFlS0yQ==",
+                     TelephoneNumber = "061-111-245",
+                     Gender = "Male",
+                     IsActive = true,
+
+                 },
+                  new User()
+                  {
+                      Id = 10,
+                      Name = "Driver4",
+                      Surname = "Driver4",
+                      UserName = "driver4",
+                      Email = "driver4@edu.fit.ba",
+                      PasswordHash = "UbzzxOGag4pPmBhguTkyKnpEZw4=",
+                      PasswordSalt = "qYk4OxryQgplthbzFlS0yQ==",
+                      TelephoneNumber = "061-124-343",
+                      Gender = "Female",
+                      IsActive = true,
+
+                  });
 
         }
     }

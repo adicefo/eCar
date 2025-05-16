@@ -28,6 +28,11 @@ namespace eCar.Services.Database.Seed
                     Id = 3,
                     UserId = 5
 
+                },
+                new Client()
+                {
+                    Id=4,
+                    UserId=9
                 });
 
 

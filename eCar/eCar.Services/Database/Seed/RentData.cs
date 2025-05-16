@@ -60,22 +60,22 @@ namespace eCar.Services.Database.Seed
                 {
                     Id = 5,
                     RentingDate = DateTime.Now.AddDays(-3),
-                    EndingDate = DateTime.Now.AddDays(7),
+                    EndingDate = DateTime.Now.AddDays(15),
                     VehicleId = 1,
                     ClientId = 3,
-                    FullPrice = 400,
-                    NumberOfDays = 10,
+                    FullPrice = 480,
+                    NumberOfDays = 12,
                     Status = "active",
 
                 }, new Rent()
                 {
                     Id = 6,
                     RentingDate = DateTime.Now.AddDays(-2),
-                    EndingDate = DateTime.Now.AddDays(4),
+                    EndingDate = DateTime.Now.AddDays(15),
                     VehicleId = 7,
                     ClientId = 3,
-                    FullPrice = 306,
-                    NumberOfDays = 6,
+                    FullPrice = 612,
+                    NumberOfDays = 13,
                     Status = "active",
 
 
@@ -96,7 +96,7 @@ namespace eCar.Services.Database.Seed
                     Id = 8,
                     RentingDate = DateTime.Now.AddDays(-20),
                     EndingDate = DateTime.Now.AddDays(-10),
-                    VehicleId = 5,
+                    VehicleId = 4,
                     ClientId = 2,
                     FullPrice = 450,
                     NumberOfDays = 10,
@@ -113,6 +113,79 @@ namespace eCar.Services.Database.Seed
                     ClientId = 1,
                     FullPrice = 235,
                     NumberOfDays = 5,
+                    Status = "finished",
+
+
+                },
+                new Rent()
+                {
+                    Id = 10,
+                    RentingDate = DateTime.Now.AddDays(-35),
+                    EndingDate = DateTime.Now.AddDays(-25),
+                    VehicleId = 3,
+                    ClientId = 2,
+                    FullPrice = 450,
+                    NumberOfDays = 10,
+                    Status = "finished",
+
+
+                }, new Rent()
+                {
+                    Id = 11,
+                    RentingDate = DateTime.Now.AddDays(-45),
+                    EndingDate = DateTime.Now.AddDays(-35),
+                    VehicleId = 3,
+                    ClientId = 3,
+                    FullPrice = 450,
+                    NumberOfDays = 10,
+                    Status = "finished",
+
+
+                }, new Rent()
+                {
+                    Id = 12,
+                    RentingDate = DateTime.Now.AddDays(-10),
+                    EndingDate = DateTime.Now.AddDays(-5),
+                    VehicleId = 10,
+                    ClientId = 1,
+                    FullPrice = 235,
+                    NumberOfDays = 5,
+                    Status = "finished",
+
+
+                }, new Rent()
+                {
+                    Id = 13,
+                    RentingDate = DateTime.Now.AddDays(-15),
+                    EndingDate = DateTime.Now.AddDays(-8),
+                    VehicleId = 9,
+                    ClientId = 4,
+                    FullPrice = 385,
+                    NumberOfDays = 7,
+                    Status = "finished",
+
+
+                }, new Rent()
+                {
+                    Id = 14,
+                    RentingDate = DateTime.Now.AddDays(-30),
+                    EndingDate = DateTime.Now.AddDays(-25),
+                    VehicleId = 8,
+                    ClientId = 1,
+                    FullPrice = 245,
+                    NumberOfDays = 5,
+                    Status = "finished",
+
+
+                }, new Rent()
+                {
+                    Id = 15,
+                    RentingDate = DateTime.Now.AddDays(-80),
+                    EndingDate = DateTime.Now.AddDays(-65),
+                    VehicleId = 4,
+                    ClientId = 2,
+                    FullPrice = 675,
+                    NumberOfDays = 15,
                     Status = "finished",
 
 
