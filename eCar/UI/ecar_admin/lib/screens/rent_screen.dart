@@ -21,7 +21,7 @@ class _RentScreenState extends State<RentScreen> {
   late RentProvider provider;
   String? _selectedStatus;
   SearchResult<Rent>? result;
-
+  DateTime? selectedDate;
   int _currentPage = 0;
   int _pageSize = 8;
   int _totalPages = 1;
@@ -44,6 +44,7 @@ class _RentScreenState extends State<RentScreen> {
     try {
       var filter = {
         'Status': _selectedStatus,
+        "RentingDate":selectedDate??null,
         'Page': _currentPage,
         'PageSize': _pageSize
       };
@@ -132,6 +133,35 @@ class _RentScreenState extends State<RentScreen> {
                   ),
                 ),
                 SizedBox(width: 24),
+                Expanded(
+                  child: InkWell(
+                    onTap: () async {
+                      final DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: selectedDate ?? DateTime.now(),
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime(2100),
+                      );
+                      if (picked != null) {
+                        setState(() {
+                          selectedDate = picked;
+                        });
+                      }
+                    },
+                    child: InputDecorator(
+                      decoration: InputDecoration(
+                        labelText: "Date",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8)),
+                      ),
+                      child: Text(
+                        selectedDate == null
+                            ? 'Choose the date'
+                            : "${selectedDate!.day}.${selectedDate!.month}.${selectedDate!.year}",
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(
                   width: 120,
                   child: ElevatedButton.icon(
