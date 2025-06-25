@@ -42,6 +42,10 @@ internal class Program
         builder.Services.AddTransient<IRequestService,RequestService>();
         builder.Services.AddTransient<IRecommenderService, RecommenderService>();
         builder.Services.AddTransient<IRabbitMQProducer, RabbitMQProducer>();
+        builder.Services.AddTransient<ITransakcija25062025, Transakcija25062025Service>();
+        builder.Services.AddTransient<IFinansijskiLimit25062025, FinansijskiLimit25062025Service>();
+        builder.Services.AddTransient<IKategorijaTranskacije25062025, KategorijaTransakcije25062025Service>();
+        builder.Services.AddTransient<IRabbitMQProducer, RabbitMQProducer>();
         builder.Services.AddTransient<BaseRouteState>();
         builder.Services.AddTransient<InitialRouteState>();
         builder.Services.AddTransient<WaitRouteState>();

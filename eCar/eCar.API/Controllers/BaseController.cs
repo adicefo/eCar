@@ -12,7 +12,7 @@ using RentACar.Model;
 namespace eCar.API.Controllers
 {
     [Route("[controller]")]
-    [Authorize]
+    //[Authorize]
     public class BaseController<TModel, TSearch> : ControllerBase where TSearch : BaseSearchObject where TModel : class
     {
         protected IService<TModel, TSearch> _service;

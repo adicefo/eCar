@@ -2,12 +2,14 @@ import 'package:ecar_mobile/providers/auth_provider.dart';
 import 'package:ecar_mobile/providers/client_provider.dart';
 import 'package:ecar_mobile/providers/driverVehicle_provider.dart';
 import 'package:ecar_mobile/providers/driver_provider.dart';
+import 'package:ecar_mobile/providers/kategorija_provider.dart';
 import 'package:ecar_mobile/providers/notification_provider.dart';
 import 'package:ecar_mobile/providers/rent_provider.dart';
 import 'package:ecar_mobile/providers/request_provider.dart';
 import 'package:ecar_mobile/providers/review_provider.dart';
 import 'package:ecar_mobile/providers/route_provider.dart';
 import 'package:ecar_mobile/providers/statistics_provider.dart';
+import 'package:ecar_mobile/providers/transakcija_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/providers/vehicle_provider.dart';
 import 'package:ecar_mobile/screens/master_screen.dart';
@@ -52,6 +54,8 @@ Future<void> main() async {
     ChangeNotifierProvider(create: (_) => RequestProvider()),
     ChangeNotifierProvider(create: (_) => RentProvider()),
     ChangeNotifierProvider(create: (_) => ReviewProvider()),
+    ChangeNotifierProvider(create: (_) => KategorijaProvider()),
+    ChangeNotifierProvider(create: (_) => TransakcijaProvider()),
   ], child: const MyApp()));
 }
 

@@ -7,6 +7,7 @@ import 'package:ecar_mobile/providers/driver_provider.dart';
 import 'package:ecar_mobile/providers/statistics_provider.dart';
 import 'package:ecar_mobile/providers/user_provider.dart';
 import 'package:ecar_mobile/screens/drives_screen.dart';
+import 'package:ecar_mobile/screens/frmTransakcije25062025.dart';
 import 'package:ecar_mobile/screens/rent_screen.dart';
 import 'package:ecar_mobile/screens/request_screen.dart';
 import 'package:ecar_mobile/screens/review_screen.dart';
@@ -147,8 +148,30 @@ class _MasterScreenState extends State<MasterScreen> {
       ),
     ),
   ),
-
-
+  
+            if(isClient!)
+ElevatedButton.icon(
+                onPressed: ()async{
+Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Frmtransakcije25062025(),
+            ),
+          );
+                },
+                
+                icon: Icon(Icons.login),
+                label: Text("Ispit"),
+                style: ElevatedButton.styleFrom(
+                  textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
+                    backgroundColor: Colors.yellowAccent,
+                    foregroundColor: Colors.black,
+                    minimumSize: Size(100, 36),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
+              ),
 
           if (widget.title == "Profile")
             Padding(
