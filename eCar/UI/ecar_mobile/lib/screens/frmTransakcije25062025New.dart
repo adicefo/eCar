@@ -26,7 +26,7 @@ class _frmTransakcijeNew25062025State extends State<frmTransakcijeNew25062025> {
   final _formKey = GlobalKey<FormBuilderState>();
   Map<String, dynamic> _initialValue = {};
 
-  SearchResult<Kategorijatransakcije25062025>? kategorije = null;
+  SearchResult<KategorijaTransakcije25062025>? kategorije = null;
   SearchResult<User>? users = null;
 
   final List<String> statusi = ["Planirano", "Realizovano", "Otkazano"];
@@ -231,13 +231,13 @@ class _frmTransakcijeNew25062025State extends State<frmTransakcijeNew25062025> {
       var formData = _formKey.currentState?.value;
 
       var request = {
-        "iznos": 50.0,
+        "iznos": double.parse(formData!['iznos']),
         "datumTransakcije":
-            DateTime.now().toIso8601String(),
-        "opis": "madosa",
-        "status": "sadsadd",
-        "korisnikId": 1,
-        "kategorijaId": 1
+            (formData['datumTransakcije'] as DateTime).toIso8601String(), 
+        "opis": formData!['opis'],
+        "status": formData!['status'],
+        "korisnikId": formData['korisnikId'],
+        "kategorijaId": formData!['kategorijaId']
       };
       try {
         await provider.insert(request);

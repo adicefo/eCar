@@ -20,8 +20,10 @@ Transakcija25062025 _$Transakcija25062025FromJson(Map<String, dynamic> json) =>
       korisnik: json['korisnik'] == null
           ? null
           : User.fromJson(json['korisnik'] as Map<String, dynamic>),
-      kategorija: Kategorijatransakcije25062025.fromJson(
-          json['kategorija'] as Map<String, dynamic>),
+      kategorija: json['kategorija'] == null
+          ? null
+          : KategorijaTransakcije25062025.fromJson(
+              json['kategorija'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$Transakcija25062025ToJson(

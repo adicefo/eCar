@@ -22,13 +22,13 @@ class _Frmtransakcije25062025State extends State<Frmtransakcije25062025> {
   DateTime? selectedDateOd;
   DateTime? selectedDateDo;
 
-  Kategorijatransakcije25062025? selectedKategorija;
+  KategorijaTransakcije25062025? selectedKategorija;
   dynamic? statTotalHrana = null;
   dynamic? statTotalZabava = null;
   dynamic? statTotalPlata = null;
 
   SearchResult<Transakcija25062025>? data = null;
-  SearchResult<Kategorijatransakcije25062025>? kategorije = null;
+  SearchResult<KategorijaTransakcije25062025>? kategorije = null;
 
   late TransakcijaProvider provider;
   late KategorijaProvider kategorijaProvider;
@@ -108,25 +108,26 @@ class _Frmtransakcije25062025State extends State<Frmtransakcije25062025> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: DropdownButtonFormField<Kategorijatransakcije25062025>(
+              child: DropdownButtonFormField<KategorijaTransakcije25062025>(
                 decoration: InputDecoration(
                   labelText: "Kategorija",
                 ),
                 value: selectedKategorija,
-                onChanged: (Kategorijatransakcije25062025? newValue) {
+                onChanged: (KategorijaTransakcije25062025? newValue) {
                   setState(() {
                     selectedKategorija = newValue;
                   });
                 },
                 items:
-                    kategorije?.result.map((Kategorijatransakcije25062025 key) {
-                  return DropdownMenuItem<Kategorijatransakcije25062025>(
+                    kategorije?.result.map((KategorijaTransakcije25062025 key) {
+                  return DropdownMenuItem<KategorijaTransakcije25062025>(
                     value: key,
                     child: Text("${key?.naziv}"),
                   );
                 }).toList(),
               ),
             ),
+            SizedBox(width: 10,),
             Expanded(
               child: InkWell(
                 onTap: () async {
@@ -158,6 +159,7 @@ class _Frmtransakcije25062025State extends State<Frmtransakcije25062025> {
             ),
           ],
         ),
+        SizedBox(height: 20,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -190,6 +192,7 @@ class _Frmtransakcije25062025State extends State<Frmtransakcije25062025> {
                 ),
               ),
             ),
+            SizedBox(width: 5,),
             ElevatedButton.icon(
               onPressed: () async {
                 _initForm();

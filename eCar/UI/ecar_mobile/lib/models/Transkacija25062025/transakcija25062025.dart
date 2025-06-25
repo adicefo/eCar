@@ -15,7 +15,7 @@ class Transakcija25062025 {
   int? korisnikId;
   int? kategorijaId;
   User? korisnik;
-  Kategorijatransakcije25062025? kategorija;
+  KategorijaTransakcije25062025? kategorija;
 
   Transakcija25062025({
     this.id,

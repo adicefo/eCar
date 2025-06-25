@@ -45,27 +45,31 @@ namespace eCar.Services.Services
 
         public IActionResult GetTotalHrana(Transkacija25062025SearchObject search)
         {
-            var kategorije = Context.Transakcija250602025e.Where(x => x.Kategorija.Naziv == "Hrana" &&
+            var kategorije = Context.Transakcija250602025e.Where(x => x.Kategorija.Naziv == "Hrana");
 
-            (search.KategorijaId.HasValue && search.KategorijaId == x.KategorijaId));
+            if (search.KategorijaId.HasValue)
+                kategorije = kategorije.Where(x => x.KategorijaId == search.KategorijaId);
             if (search.DatumPocetka != null)
                 kategorije = kategorije.Where(x => x.DatumTransakcije.Date > search.DatumPocetka.Value.Date);
             if (search.DatumZavrsetka != null)
                 kategorije = kategorije.Where(x => x.DatumTransakcije.Date < search.DatumZavrsetka.Value.Date);
-            if (kategorije==null)
-                return new OkObjectResult(new {value=0 });
+            kategorije.ToList();
+            if (kategorije == null)
+                return new OkObjectResult(new { value = 0 });
             return new OkObjectResult(new { value = kategorije.Count() });
         }
 
         public IActionResult GetTotalPlata(Transkacija25062025SearchObject search)
         {
-            var kategorije = Context.Transakcija250602025e.Where(x => x.Kategorija.Naziv == "Plata" &&
+            var kategorije = Context.Transakcija250602025e.Where(x => x.Kategorija.Naziv == "Plata");
 
-            (search.KategorijaId.HasValue && search.KategorijaId == x.KategorijaId));
+            if (search.KategorijaId.HasValue)
+                kategorije = kategorije.Where(x => x.KategorijaId == search.KategorijaId);
             if (search.DatumPocetka != null)
                 kategorije = kategorije.Where(x => x.DatumTransakcije.Date > search.DatumPocetka.Value.Date);
             if (search.DatumZavrsetka != null)
                 kategorije = kategorije.Where(x => x.DatumTransakcije.Date < search.DatumZavrsetka.Value.Date);
+            kategorije.ToList();
             if (kategorije == null)
                 return new OkObjectResult(new { value = 0 });
             return new OkObjectResult(new { value = kategorije.Count() });
@@ -73,13 +77,15 @@ namespace eCar.Services.Services
 
         public IActionResult GetTotalZabava(Transkacija25062025SearchObject search)
         {
-            var kategorije = Context.Transakcija250602025e.Where(x => x.Kategorija.Naziv == "Zabava" &&
+            var kategorije = Context.Transakcija250602025e.Where(x => x.Kategorija.Naziv == "Zabava");
 
-            (search.KategorijaId.HasValue && search.KategorijaId == x.KategorijaId));
+            if (search.KategorijaId.HasValue)
+                kategorije = kategorije.Where(x => x.KategorijaId == search.KategorijaId);
             if (search.DatumPocetka != null)
                 kategorije = kategorije.Where(x => x.DatumTransakcije.Date > search.DatumPocetka.Value.Date);
             if (search.DatumZavrsetka != null)
                 kategorije = kategorije.Where(x => x.DatumTransakcije.Date < search.DatumZavrsetka.Value.Date);
+            kategorije.ToList();
             if (kategorije == null)
                 return new OkObjectResult(new { value = 0 });
             return new OkObjectResult(new { value = kategorije.Count() });
@@ -92,19 +98,29 @@ namespace eCar.Services.Services
             Transakcija250602025 entity = Mapper.Map<Database.Transakcija250602025>(request);
             Mapper.Map(request, entity);
 
-            var limit = Context.FinansijskiLimit250602025e.Where(x => x.KorisnikId == entity.KorisnikId && x.KategorijaId == entity.KategorijaId).FirstOrDefault();
-            if (limit != null)
-            {
-                if (request.Iznos > limit.Limit)
+            var limit = Context.FinansijskiLimit250602025e.Where(x => x.KorisnikId == entity.KorisnikId&&x.KategorijaId==request.KategorijaId).Select(x=>x.Limit).FirstOrDefault();
+            var trenutniIznosi = Context.Transakcija250602025e.Where(x => x.KorisnikId == request.KorisnikId && request.KategorijaId == x.KategorijaId).
+                Select(x => x.Iznos).Sum();
+            var iznos = trenutniIznosi + request.Iznos;
+            
+
+                if (iznos > limit)
                 {
                     throw new UserException("Transkacija je prešla limit");
                 }
 
-            }
+           
 
 
-            
 
+            var korisnik = Context.Users.Find(request.KorisnikId);
+            if (korisnik == null)
+                throw new UserException("Entity not found");
+            var kategorija = Context.KategorijaTransakcije250602025e.Find(request.KategorijaId);
+            if (kategorija == null)
+                throw new UserException("Entity not found");
+            entity.Korisnik = korisnik;
+            entity.Kategorija = kategorija;
 
 
             set.Add(entity);
