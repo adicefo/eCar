@@ -80,9 +80,13 @@ namespace eCar.Services.Services
         public virtual void BeforeUpdate(TUpdate request, TDbEntity entity)
         { 
         }
-        
-        
-        
+        public virtual void AfterInsert(TInsert request, TDbEntity entity)
+        {
+        }
+       
+
+
+
 
     }
 }
