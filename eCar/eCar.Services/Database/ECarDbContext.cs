@@ -51,6 +51,7 @@ public partial class ECarDbContext : DbContext
     public virtual DbSet<Transakcija250602025> Transakcija250602025e { get; set; }
     public virtual DbSet<KategorijaTransakcije250602025> KategorijaTransakcije250602025e { get; set; }
     public virtual DbSet<FinansijskiLimit250602025> FinansijskiLimit250602025e { get; set; }
+    public virtual DbSet<TranskacijaLog25062025> TranskacijaLog25062025s { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.

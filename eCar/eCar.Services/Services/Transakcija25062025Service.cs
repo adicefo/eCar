@@ -22,6 +22,7 @@ namespace eCar.Services.Services
         {
         }
 
+        
         public override IQueryable<Transakcija250602025> AddFilter(Transkacija25062025SearchObject search, IQueryable<Transakcija250602025> query)
         {
             var filteredQuery = base.AddFilter(search, query);
@@ -41,6 +42,23 @@ namespace eCar.Services.Services
             filteredQuery = EFCore.EntityFrameworkQueryableExtensions.Include(filteredQuery, x => x.Korisnik);
          
             return filteredQuery;
+        }
+        public override void AfterInsert(Transakcija250602025InsertRequest request, Transakcija250602025 entity)
+        {
+            TranskacijaLog25062025 log=new TranskacijaLog25062025();
+            log.KorisnikId= entity.KorisnikId;
+            log.Korisnik=entity.Korisnik;
+            log.StariIznos=entity.Iznos;
+            log.StariOpis=entity.Opis;
+            log.StariStatus=entity.Status;
+            log.NoviIznos = request.Iznos;
+            log.NoviOpis=request.Opis;
+            log.NoviStatus=request.Status;
+            log.VrijemeLog = TimeOnly.Parse(DateTime.Now.ToString());
+            log.Kategorija = entity.Kategorija.Naziv;
+            Context.Add(log);
+            Context.SaveChanges();
+            
         }
 
         public IActionResult GetTotalHrana(Transkacija25062025SearchObject search)
@@ -95,6 +113,7 @@ namespace eCar.Services.Services
         {
 
             var set = Context.Set<Database.Transakcija250602025>();
+            var tempEntity = set.Where(x => x.KorisnikId == request.KorisnikId).OrderByDescending(x=>x.DatumTransakcije).FirstOrDefault();
             Transakcija250602025 entity = Mapper.Map<Database.Transakcija250602025>(request);
             Mapper.Map(request, entity);
 
@@ -125,6 +144,11 @@ namespace eCar.Services.Services
 
             set.Add(entity);
             Context.SaveChanges();
+
+            if(tempEntity != null)
+                 AfterInsert(request, tempEntity);
+
+
 
 
             var result = Mapper.Map<Model.Model.Transakcija250602025>(entity);
