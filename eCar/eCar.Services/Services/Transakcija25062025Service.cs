@@ -54,7 +54,9 @@ namespace eCar.Services.Services
             log.NoviIznos = request.Iznos;
             log.NoviOpis=request.Opis;
             log.NoviStatus=request.Status;
-            log.VrijemeLog = TimeOnly.Parse(DateTime.Now.ToString());
+            log.StariDatum = entity.DatumTransakcije;
+            log.NoviDatum = request.DatumTransakcije;
+            log.VrijemeLog = DateTime.Now;
             log.Kategorija = entity.Kategorija.Naziv;
             Context.Add(log);
             Context.SaveChanges();
@@ -123,7 +125,7 @@ namespace eCar.Services.Services
             var iznos = trenutniIznosi + request.Iznos;
             
 
-                if (iznos > limit)
+                if (limit!=0&&iznos > limit)
                 {
                     throw new UserException("Transkacija je prešla limit");
                 }

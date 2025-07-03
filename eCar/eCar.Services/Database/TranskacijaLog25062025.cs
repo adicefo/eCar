@@ -16,9 +16,10 @@ namespace eCar.Services.Database
         public double NoviIznos { get; set; }
         public string NoviOpis { get; set; }
         public string NoviStatus { get; set; }
-
+        public DateTime StariDatum { get; set; }
+        public DateTime NoviDatum { get; set; }
         public string Kategorija { get; set; }
-        public TimeOnly VrijemeLog { get; set; }
+        public DateTime VrijemeLog { get; set; }
         public virtual User Korisnik { get; set; } = null!;
 
     }

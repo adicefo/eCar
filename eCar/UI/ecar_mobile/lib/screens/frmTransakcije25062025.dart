@@ -287,7 +287,10 @@ class _Frmtransakcije25062025State extends State<Frmtransakcije25062025> {
     return Row(
       children: [
         Text("Total hrana ${statTotalHrana['value']??0}"),
+        SizedBox(width:15),
         Text("Total zabava ${statTotalZabava['value']??0}"),
+        SizedBox(width:15),
+
         Text("Total plata ${statTotalPlata['value']??0}"),
       ],
     );
