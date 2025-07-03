@@ -285,6 +285,8 @@ class _Frmtransakcije25062025State extends State<Frmtransakcije25062025> {
 
   Widget _buildStatistics() {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text("Total hrana ${statTotalHrana['value']??0}"),
         SizedBox(width:15),
