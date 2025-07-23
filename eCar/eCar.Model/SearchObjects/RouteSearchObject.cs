@@ -13,7 +13,8 @@ namespace eCar.Model.SearchObjects
         public int? ClientId { get; set; }
         public int? DriverId { get; set; }
         public int? UserId { get; set; }
-   
+        public DateTime? StartDate { get; set; }
+
 
     }
 }
