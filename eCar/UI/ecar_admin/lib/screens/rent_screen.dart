@@ -38,7 +38,7 @@ class _RentScreenState extends State<RentScreen> {
   Future<void> _fetchData() async {
     setState(() {
       isLoading = true;
-      result = null; // Clear current results to show loading indicator
+      result = null; 
     });
 
     try {
