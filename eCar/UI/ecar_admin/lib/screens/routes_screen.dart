@@ -42,7 +42,8 @@ class _RouteListScreenState extends State<RouteListScreen> {
       var filter = {
         'Status': _selectedStatus,
         'Page': _currentPage,
-        'PageSize': _pageSize
+        'PageSize': _pageSize,
+        "StartDate":selectedDate
       };
 
       result = await provider.get(filter: filter);

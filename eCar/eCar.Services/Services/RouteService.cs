@@ -104,6 +104,8 @@ namespace eCar.Services.Services
             if(search.UserId.HasValue)
                 filteredQuery = filteredQuery.Where(x => x.Driver.UserID == search.UserId||
                 x.Client.UserId==search.UserId);
+            if (search.StartDate != null)
+                filteredQuery = filteredQuery.Where(x => x.Status!="wait"&&x.StartDate.Value.Date == search.StartDate.Value.Date);
 
             return filteredQuery;
         }
