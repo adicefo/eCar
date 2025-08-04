@@ -17,9 +17,9 @@ class RouteListScreen extends StatefulWidget {
 }
 
 class _RouteListScreenState extends State<RouteListScreen> {
-  int _currentPage = 0; 
-  int _totalPages = 1; 
-  int _pageSize = 8; 
+  int _currentPage = 0;
+  int _totalPages = 1;
+  int _pageSize = 8;
   DateTime? selectedDate;
   late RouteProvider provider;
   String? _selectedStatus;
@@ -43,7 +43,7 @@ class _RouteListScreenState extends State<RouteListScreen> {
         'Status': _selectedStatus,
         'Page': _currentPage,
         'PageSize': _pageSize,
-        "StartDate":selectedDate
+        "StartDate": selectedDate
       };
 
       result = await provider.get(filter: filter);
@@ -52,7 +52,7 @@ class _RouteListScreenState extends State<RouteListScreen> {
         if (result != null && result!.count != null) {
           _totalPages = (result!.count! / _pageSize).ceil();
           if (_totalPages < 1) _totalPages = 1;
-          
+
           if (_currentPage >= _totalPages && _totalPages > 0) {
             _currentPage = _totalPages - 1;
             if (result!.result.length > _pageSize) {
@@ -171,7 +171,22 @@ class _RouteListScreenState extends State<RouteListScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 15,),
+                SizedBox(
+                  width: 15,
+                ),
+                SizedBox(
+                    width: 120,
+                    child: IconButton(
+                      icon: Icon(Icons.refresh),
+                      color: Colors.blue,
+                      onPressed: () {
+                        
+                        setState(() {
+                          selectedDate = null;
+                        _selectedStatus =null;
+                        });
+                      },
+                    )),
                 SizedBox(
                   width: 120,
                   child: ElevatedButton.icon(
@@ -502,33 +517,31 @@ class _RouteListScreenState extends State<RouteListScreen> {
                   DataCell(
                     Row(
                       children: [
-                        if(e.status!="finished")
-                        IconButton(
-                          icon: Icon(Icons.edit, color: Colors.blue),
-                          tooltip: "Edit route",
-                          onPressed: () {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    RouteDetailsScreen(route: e),
-                              ),
-                            );
-                          },
-                        )
+                        if (e.status != "finished")
+                          IconButton(
+                            icon: Icon(Icons.edit, color: Colors.blue),
+                            tooltip: "Edit route",
+                            onPressed: () {
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      RouteDetailsScreen(route: e),
+                                ),
+                              );
+                            },
+                          )
                         else
                           IconButton(
-                                      icon:
-                                          Icon(Icons.edit, color: Colors.grey),
-                                      tooltip: "Cannot edit finished route",
-                                      onPressed: () {
-                                        AlertHelpers.showAlert(
-                                          context,
-                                          "Invalid action",
-                                          "Unable operation. You cannot edit when your status is finished!",
-                                        );
-                                      },
-                                    ),
-                        
+                            icon: Icon(Icons.edit, color: Colors.grey),
+                            tooltip: "Cannot edit finished route",
+                            onPressed: () {
+                              AlertHelpers.showAlert(
+                                context,
+                                "Invalid action",
+                                "Unable operation. You cannot edit when your status is finished!",
+                              );
+                            },
+                          ),
                         IconButton(
                           icon: Icon(Icons.delete, color: Colors.red),
                           tooltip: "Delete route",
@@ -561,7 +574,6 @@ class _RouteListScreenState extends State<RouteListScreen> {
   }
 
   Widget _buildPagination() {
-
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
