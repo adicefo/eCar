@@ -38,13 +38,13 @@ class _RentScreenState extends State<RentScreen> {
   Future<void> _fetchData() async {
     setState(() {
       isLoading = true;
-      result = null; 
+      result = null;
     });
 
     try {
       var filter = {
         'Status': _selectedStatus,
-        "RentingDate":selectedDate??null,
+        "RentingDate": selectedDate ?? null,
         'Page': _currentPage,
         'PageSize': _pageSize
       };
@@ -162,6 +162,19 @@ class _RentScreenState extends State<RentScreen> {
                     ),
                   ),
                 ),
+                SizedBox(
+                    width: 120,
+                    child: IconButton(
+                      icon: Icon(Icons.refresh),
+                      color: Colors.blue,
+                      onPressed: () {
+                        setState(() {
+                          selectedDate = null;
+                          _selectedStatus = null;
+                          _fetchData();
+                        });
+                      },
+                    )),
                 SizedBox(
                   width: 120,
                   child: ElevatedButton.icon(
