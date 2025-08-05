@@ -44,5 +44,7 @@ class StringHelpers {
   static Image imageFromBase64String(String? base64Image) => Image.memory(
         base64Decode(base64Image!),
         fit: BoxFit.cover,
+        width: 500,
+        height:350
       );
 }

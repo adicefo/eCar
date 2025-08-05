@@ -169,8 +169,8 @@ class _VehicleAssigmentScreenState extends State<VehicleAssigmentScreen> {
               Container(
                 child: _selectedImage == null
                     ? Container(
-                        width: 100,
-                        height: 100,
+                        width: 500,
+                        height: 350,
                         child: Image.asset(
                           "assets/images/no_image_placeholder.png",
                         ),
