@@ -77,27 +77,7 @@ class _DrivesScreenState extends State<DrivesScreen> {
   Widget _buildScreen() {
     return Column(
       children: [
-        Container(
-          height: 200,
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 2),
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white),
-          child: SizedBox(
-              height: 200,
-              width: double.infinity,
-              child: Center(
-                child: Image.asset(
-                  fit: BoxFit.fill,
-                  "assets/images/images (1).jpg",
-                  height: 400,
-                  width: 400,
-                ),
-              )),
-        ),
-        SizedBox(
-          height: 10,
-        ),
+        
         buildHeader("Current drives"),
         SizedBox(
           height: 10,
