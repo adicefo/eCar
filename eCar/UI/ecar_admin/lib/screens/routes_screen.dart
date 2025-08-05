@@ -180,10 +180,10 @@ class _RouteListScreenState extends State<RouteListScreen> {
                       icon: Icon(Icons.refresh),
                       color: Colors.blue,
                       onPressed: () {
-                        
                         setState(() {
                           selectedDate = null;
-                        _selectedStatus =null;
+                          _selectedStatus = null;
+                          _fetchData();
                         });
                       },
                     )),
