@@ -132,7 +132,19 @@ class _VehicleScreenState extends State<VehicleScreen> {
                     style: FormStyleHelpers.textFieldTextStyle(),
                   ),
                 ),
-                SizedBox(width: 24),
+                SizedBox(
+                    width: 120,
+                    child: IconButton(
+                      icon: Icon(Icons.refresh),
+                      color: Colors.blue,
+                      onPressed: () {
+                        setState(() {
+                          selectedOption = null;
+                          selectedValue = null;
+                          _fetchData();
+                        });
+                      },
+                    )),
                 SizedBox(
                   width: 120,
                   child: ElevatedButton.icon(
