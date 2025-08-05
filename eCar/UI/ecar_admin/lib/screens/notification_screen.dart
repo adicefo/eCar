@@ -41,7 +41,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Future<void> _fetchData() async {
     setState(() {
       isLoading = true;
-      result = null; 
+      result = null;
     });
 
     try {
@@ -144,7 +144,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     style: FormStyleHelpers.textFieldTextStyle(),
                   ),
                 ),
-                SizedBox(width: 24),
+                SizedBox(
+                    width: 120,
+                    child: IconButton(
+                      icon: Icon(Icons.refresh),
+                      color: Colors.blue,
+                      onPressed: () {
+                        setState(() {
+                          _headingController.text = "";
+                          selectedOption = null;
+                          selectedValue = null;
+                          _fetchData();
+                        });
+                      },
+                    )),
                 SizedBox(
                   width: 120,
                   child: ElevatedButton.icon(
@@ -334,11 +347,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         String targetText =
                             e.isForClient == true ? "Client" : "Driver";
 
-                        Color statusColor = 
-                             Colors.green.shade700;
-                            
-                        String statusText =
-                            "Active";
+                        Color statusColor = Colors.green.shade700;
+
+                        String statusText = "Active";
 
                         return DataRow(
                           color: MaterialStateProperty.resolveWith<Color?>(
