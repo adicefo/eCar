@@ -3,11 +3,13 @@ import 'dart:typed_data';
 
 import 'package:ecar_admin/models/Client/client.dart';
 import 'package:ecar_admin/models/Driver/driver.dart';
+import 'package:ecar_admin/models/Rent/rent.dart';
 import 'package:ecar_admin/models/Review/review.dart';
 import 'package:ecar_admin/models/Route/route.dart' as Model;
 import 'package:ecar_admin/models/search_result.dart';
 import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/driver_provider.dart';
+import 'package:ecar_admin/providers/rent_provider.dart';
 import 'package:ecar_admin/providers/review_provider.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
@@ -57,11 +59,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
   SearchResult<Client>? clients;
   SearchResult<Model.Route>? routes;
   SearchResult<Review>? reviews;
+  SearchResult<Rent>? rents;
 
   late DriverProvider driverProvider;
   late ClientProvider clientProvider;
   late RouteProvider routeProvider;
   late ReviewProvider reviewProvider;
+  late RentProvider rentProvider;
 
   bool isLoading = true;
   @override
@@ -71,6 +75,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     clientProvider = context.read<ClientProvider>();
     routeProvider = context.read<RouteProvider>();
     reviewProvider = context.read<ReviewProvider>();
+    rentProvider = context.read<RentProvider>();
 
     _initForm();
     fetchYearlyData(2024).then((value) {
@@ -93,6 +98,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       clients = await clientProvider.get();
       routes = await routeProvider.get();
       reviews = await reviewProvider.get();
+      rents = await rentProvider.get(); 
       setState(() {
         isLoading = false;
       });
@@ -116,6 +122,37 @@ class _ReportsScreenState extends State<ReportsScreen> {
     }
     return {};
   }
+  //help function for pie chart
+  Map<String, int> _countVehiclesInRents(SearchResult<Rent>? rents) {
+  final Map<String, int> counts = {};
+
+  for (var rent in rents!.result) {
+    final vehicleName = rent.vehicle?.name??""; 
+    counts[vehicleName] = (counts[vehicleName] ?? 0) + 1;
+  }
+
+  return counts;
+}
+//help function for pie chart
+List<PieChartSectionData> _buildVehiclePieSections(Map<String, int> counts) {
+  final total = counts.values.fold(0, (sum, value) => sum + value);
+
+  return counts.entries.map((entry) {
+    final percentage = (entry.value / total) * 100;
+    return PieChartSectionData(
+      title: "${entry.key}\n${percentage.toStringAsFixed(1)}%",
+      value: entry.value.toDouble(),
+      color: _getRandomColor(entry.key), 
+      radius: 100,
+      titleStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+    );
+  }).toList();
+}
+//help function for pie chart
+Color _getRandomColor(String key) {
+  final colors = [Colors.red, Colors.blue, Colors.green, Colors.orange, Colors.purple];
+  return colors[key.hashCode % colors.length];
+}
 
   @override
   Widget build(BuildContext context) {
@@ -928,10 +965,34 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   Widget _buildVehiclesContent() {
-    return Container(
-      child: Text("Still not implemented"),
-    );
-  }
+  final vehicleCounts = _countVehiclesInRents(rents);
+  final sections = _buildVehiclePieSections(vehicleCounts);
+
+  return RepaintBoundary(
+    key: chartKey,
+    child: Column(
+      children: [
+        SizedBox(height: 20,),
+        Text(
+          "Number of vehicles rented",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 65,),
+        AspectRatio(
+          aspectRatio: 4.5,
+          child: PieChart(
+            PieChartData(
+              sections: sections,
+              sectionsSpace: 4,
+              centerSpaceRadius: 80,
+              borderData: FlBorderData(show: false),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildContainer(String hint, int? number) {
     return Container(
