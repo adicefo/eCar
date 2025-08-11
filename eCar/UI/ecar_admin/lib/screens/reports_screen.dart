@@ -155,7 +155,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   Widget _buildMenu() {
-    List<String> menuItems = ["Drivers", "Routes", "Reviews"];
+    List<String> menuItems = ["Drivers", "Routes", "Reviews", "Vehicles"];
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -199,7 +199,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
         return _buildRoutesContent();
       case 2:
         return _buildReviewsContent();
-
+      case 3:
+        return _buildVehiclesContent();
       default:
         return const Center(child: Text("Select a category"));
     }
@@ -329,7 +330,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           AspectRatio(
-            aspectRatio: 5,
+            aspectRatio: 4.5,
             child: BarChart(
               BarChartData(
                 borderData: FlBorderData(
@@ -923,6 +924,12 @@ class _ReportsScreenState extends State<ReportsScreen> {
               )),
         )
       ],
+    );
+  }
+
+  Widget _buildVehiclesContent() {
+    return Container(
+      child: Text("Still not implemented"),
     );
   }
 
