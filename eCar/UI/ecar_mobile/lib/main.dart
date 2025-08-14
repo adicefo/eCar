@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   AuthProvider? _authProvide;
   String _userType = "client";
-
+bool _isObscured = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -198,12 +198,23 @@ class _LoginPageState extends State<LoginPage> {
   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
   child: TextField(
     controller: _passwordController,
-    obscureText: true,
+    obscureText: _isObscured,
     decoration: InputDecoration(
       label: Text("Password",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
       hintText: "Enter your password here...",
       floatingLabelBehavior: FloatingLabelBehavior.always,
       prefixIcon: Icon(Icons.lock),
+      suffixIcon: IconButton(
+        icon: Icon(
+          _isObscured ? Icons.visibility_off : Icons.visibility,
+          color: Colors.black,
+        ),
+        onPressed: () {
+          setState(() {
+            _isObscured = !_isObscured;
+          });
+        },
+      ),
       filled: true,
       fillColor: Colors.white,
       enabledBorder: OutlineInputBorder(
