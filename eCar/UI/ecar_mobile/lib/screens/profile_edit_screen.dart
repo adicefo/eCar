@@ -248,10 +248,21 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   Widget _buildScreen() {
     return SingleChildScrollView(
       child: Column(
-        children: [
+        children: [    
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              Padding(padding: EdgeInsets.only(left: 5),
+              child: IconButton(onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfileScreen(),
+                  ),
+                );
+              }, icon: Icon(Icons.arrow_back,size: 30, color: Colors.black87)),
+              ),
+              SizedBox(width: 15,), 
               buildHeader("Edit your profile"),
             ],
           ),
