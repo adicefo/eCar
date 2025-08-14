@@ -127,35 +127,54 @@ class _MasterScreenState extends State<MasterScreen> {
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
         actions: <Widget>[
-         if (isClient! == false && widget.title != "Profile")
-  Align(
-    alignment: Alignment.bottomRight,
-    child: Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: FloatingActionButton.extended(
-        icon: Icon(Icons.directions_car),
-        label: Text("Pick Up Car"),
-        backgroundColor: Colors.yellowAccent,
-        onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => VehicleAssigmentScreen(user: user),
+          if (isClient! == false && widget.title != "Profile")
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: FloatingActionButton.extended(
+                  icon: Icon(Icons.directions_car),
+                  label: Text("Pick Up Car"),
+                  backgroundColor: Colors.yellowAccent,
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            VehicleAssigmentScreen(user: user),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
-          );
-        },
-      ),
-    ),
-  ),
-
-
-
           if (widget.title == "Profile")
             Padding(
               padding: EdgeInsets.only(right: 50),
-              child: ElevatedButton.icon(
-                onPressed: ()async{
-if (statistics != null) {
+              child: IconButton(
+                icon: Icon(Icons.logout, color: Colors.black),
+                onPressed: () async {
+                  final shouldLogout = await showDialog<bool>(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text("Confirm Logout"),
+                      content: Text("Are you sure you want to log out?"),
+                      actions: [
+                        TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text("Cancel")),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red),
+                          onPressed: () => Navigator.pop(context, true),
+                          child: Text("Logout"),
+                        ),
+                      ],
+                    ),
+                  );
+
+                  if (shouldLogout == true) {
+                    if (statistics != null) {
                       try {
                         statistics = await statisticsProvider
                             .updateFinish(statistics?.id);
@@ -165,19 +184,8 @@ if (statistics != null) {
                       }
                     }
                     authProvider.logout(context);
+                  }
                 },
-                
-                icon: Icon(Icons.login),
-                label: Text("Logout"),
-                style: ElevatedButton.styleFrom(
-                  textStyle: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),
-                    backgroundColor: Colors.yellowAccent,
-                    foregroundColor: Colors.black,
-                    minimumSize: Size(100, 36),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8)),
               ),
             ),
         ],
@@ -188,7 +196,8 @@ if (statistics != null) {
       bottomNavigationBar: isClient! ? _buildNavClient() : _buildNavDriver(),
       body: widget.child,
       floatingActionButton: widget.floatingActionButton,
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
     );
   }
 
