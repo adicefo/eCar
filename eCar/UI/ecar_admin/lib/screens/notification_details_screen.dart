@@ -74,8 +74,8 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(padding: EdgeInsets.only(left:490),
-            child: Text("Add notification",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),),
+            Padding(padding: EdgeInsets.only(left:510),
+            child: Text("Add notification",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
             SizedBox(height: 10,),
             FormBuilderTextField(
               maxLines: 2,
