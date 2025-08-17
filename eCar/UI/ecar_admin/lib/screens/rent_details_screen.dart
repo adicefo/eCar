@@ -79,7 +79,12 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
   }
 
   Widget _buildForm() {
-    return FormBuilder(
+    return Card(
+  elevation: 3,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child:FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
       child: Padding(
@@ -89,13 +94,17 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
           children: [
             if (widget.rent == null) ...[
               const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(left:550),
+                child: Text("Add rent",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+              ),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(left: 8, bottom: 4),
                 child: const Text(
                   "Date Format: MM/DD/YYYY",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                     fontStyle: FontStyle.italic,
@@ -121,7 +130,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 child: const Text(
                   "Date Format: MM/DD/YYYY",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                     fontStyle: FontStyle.italic,
@@ -176,13 +185,17 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
               ),
             ] else if (widget.rent != null) ...[
               const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.only(left:550),
+                child: Text("Edit rent",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+              ),
               Container(
                 alignment: Alignment.centerLeft,
                 padding: const EdgeInsets.only(left: 8, bottom: 4),
                 child: const Text(
                   "Date Format: MM/DD/YYYY",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                     fontStyle: FontStyle.italic,
@@ -213,7 +226,7 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
                 child: const Text(
                   "Date Format: MM/DD/YYYY",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                     fontStyle: FontStyle.italic,
@@ -277,7 +290,12 @@ class _RentDetailsScreenState extends State<RentDetailsScreen> {
           ],
         ),
       ),
-    );
+    )
+);
+
+    
+    
+    
   }
 
   Widget _save() {
