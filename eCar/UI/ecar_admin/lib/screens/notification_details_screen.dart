@@ -55,189 +55,82 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
   Widget build(BuildContext context) {
     return MasterScreen(
         "Notification details",
-        Column(
-          children: [_buildForm(), _buildImageSection(), _save()],
-        ));
+        SingleChildScrollView(child: Column(
+          children: [SizedBox(height: 10,), _buildForm(), _save()],
+        ),));
   }
 
   Widget _buildForm() {
-    return FormBuilder(
+  return Card(
+  elevation: 3,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child: Padding(
+    padding: const EdgeInsets.all(20),
+    child:  FormBuilder(
         key: _formKey,
         initialValue: _initialValue,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(children: [
-            Row(
-              children: [
-                Expanded(
-                  child: FormBuilderTextField(
-                    maxLines: 5,
-                    decoration: FormStyleHelpers.textFieldDecoration(
-                      labelText: "Notification Heading",
-                      prefixIcon: Icon(Icons.title, color: Colors.black54),
-                    ),
-                    style: FormStyleHelpers.textFieldTextStyle(),
-                    name: "heading",
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(
-                          errorText: "Field is required"),
-                    ]),
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: FormBuilderTextField(
-                    maxLines: 5,
-                    decoration: FormStyleHelpers.textFieldDecoration(
-                      labelText: "Notification Content",
-                      prefixIcon:
-                          Icon(Icons.description, color: Colors.black54),
-                    ),
-                    style: FormStyleHelpers.textFieldTextStyle(),
-                    name: "content_",
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(
-                          errorText: "Field is required"),
-                    ]),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: FormBuilderCheckbox(
-                    name: "isForClient",
-                    title: Text(
-                      "Notification for client",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16),
-                    ),
-                    initialValue: widget.notification?.isForClient ?? false,
-                    decoration: FormStyleHelpers.checkboxDecoration(
-                      labelText: "Client Notification",
-                    ),
-                    checkColor: Colors.black,
-                    activeColor: Colors.yellowAccent,
-                    controlAffinity: ListTileControlAffinity.trailing,
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.required(
-                          errorText: "Field is required"),
-                    ]),
-                  ),
-                ),
-              ],
-            ),
-          ]),
-        ));
-  }
-
-  // New image section outside the form
-  Widget _buildImageSection() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(8),
-          color: Colors.white,
-        ),
-        padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Notification Image",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.black87,
+            Padding(padding: EdgeInsets.only(left:490),
+            child: Text("Add notification",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),),
+            SizedBox(height: 10,),
+            FormBuilderTextField(
+              maxLines: 2,
+              decoration: FormStyleHelpers.textFieldDecoration(
+                labelText: "Notification Heading",
+                prefixIcon: Icon(Icons.title, color: Colors.black54),
+              ),
+              style: FormStyleHelpers.textFieldTextStyle(),
+              name: "heading",
+              validator: FormBuilderValidators.required(
+                errorText: "Field is required",
               ),
             ),
             SizedBox(height: 16),
-            Row(
-              children: [
-                Container(
-                  height: 120,
-                  width: 120,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade300),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(7),
-                    child: _image != null
-                        ? Image.file(
-                            _image!,
-                            fit: BoxFit.cover,
-                          )
-                        : _base64Image != null && _base64Image!.isNotEmpty
-                            ? StringHelpers.imageFromBase64String(_base64Image!)
-                            : Image.asset(
-                                'assets/images/no_image_placeholder.png',
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    color: Colors.grey.shade200,
-                                    child: Icon(
-                                      Icons.notifications,
-                                      size: 60,
-                                      color: Colors.grey,
-                                    ),
-                                  );
-                                },
-                              ),
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Upload a notification image",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        "Recommended size: less than 2MB",
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 14,
-                        ),
-                      ),
-                      SizedBox(height: 16),
-                      ElevatedButton.icon(
-                        onPressed: getImage,
-                        icon: Icon(Icons.photo_library),
-                        label: Text("Select Image"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.yellowAccent,
-                          foregroundColor: Colors.black,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 20),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            FormBuilderTextField(
+              maxLines: 4,
+              decoration: FormStyleHelpers.textFieldDecoration(
+                labelText: "Notification Content",
+                prefixIcon: Icon(Icons.description, color: Colors.black54),
+              ),
+              style: FormStyleHelpers.textFieldTextStyle(),
+              name: "content_",
+              validator: FormBuilderValidators.required(
+                errorText: "Field is required",
+              ),
             ),
-          ],
+            SizedBox(height: 16),
+            FormBuilderCheckbox(
+              name: "isForClient",
+              title: Text(
+                "Notification for client",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+              initialValue: widget.notification?.isForClient ?? false,
+              checkColor: Colors.black,
+              activeColor: Colors.yellowAccent,
+              controlAffinity: ListTileControlAffinity.leading,
+              validator: FormBuilderValidators.required(
+                errorText: "Field is required",
+              ),
+            ),
+            SizedBox(height: 16),
+           Column( crossAxisAlignment: CrossAxisAlignment.start, children: [ Text( "Notification Image", style: TextStyle( fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87, ), ), SizedBox(height: 16), Row( children: [ Container( height: 120, width: 120, decoration: BoxDecoration( border: Border.all(color: Colors.grey.shade300), borderRadius: BorderRadius.circular(8), ), child: ClipRRect( borderRadius: BorderRadius.circular(7), child: _image != null ? Image.file( _image!, fit: BoxFit.cover, ) : _base64Image != null && _base64Image!.isNotEmpty ? StringHelpers.imageFromBase64String(_base64Image!) : Image.asset( 'assets/images/no_image_placeholder.png', fit: BoxFit.cover, errorBuilder: (context, error, stackTrace) { return Container( color: Colors.grey.shade200, child: Icon( Icons.notifications, size: 60, color: Colors.grey, ), ); }, ), ), ), SizedBox(width: 16), Expanded( child: Column( crossAxisAlignment: CrossAxisAlignment.start, children: [ Text( "Upload a notification image", style: TextStyle( fontWeight: FontWeight.w500, fontSize: 16, ), ), SizedBox(height: 8), Text( "Recommended size: less than 2MB", style: TextStyle( color: Colors.grey.shade600, fontSize: 14, ), ), SizedBox(height: 16), ElevatedButton.icon( onPressed: getImage, icon: Icon(Icons.photo_library), label: Text("Select Image"), style: ElevatedButton.styleFrom( backgroundColor: Colors.yellowAccent, foregroundColor: Colors.black, padding: EdgeInsets.symmetric( vertical: 12, horizontal: 20), shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(8), ), ), ), ], ), ), ],
+        )],),],
         ),
       ),
-    );
-  }
+  ),
+);
+}
+
+
 
   Widget _save() {
     bool? confirmEdit;
