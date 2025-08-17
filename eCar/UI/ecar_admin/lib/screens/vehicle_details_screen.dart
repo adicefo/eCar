@@ -50,18 +50,27 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return MasterScreen("Vehicle details",
-        Column(children: [_buildForm(), _buildImageSection(), _save()]));
+        Column(children: [_buildForm(),  _save()]));
   }
 
   Widget _buildForm() {
-    return FormBuilder(
+    return  Card(
+  elevation: 3,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child:  FormBuilder(
         key: _formKey,
         initialValue: _initialValue,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
+            Padding(padding: EdgeInsets.only(left:1),
+                child:Text("Add vehicle",style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),)),
+                SizedBox(height: 20,),
             Row(
               children: [
+                
                 Expanded(
                   child: FormBuilderCheckbox(
                     name: "available",
@@ -141,24 +150,11 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
                     ]),
                   ),
                 ),
+
               ],
             ),
-          ]),
-        ));
-  }
-
-  Widget _buildImageSection() {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(8),
-          color: Colors.white,
-        ),
-        padding: EdgeInsets.all(16),
-        child: Column(
+            SizedBox(height: 25,),
+            Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -246,9 +242,13 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
             ),
           ],
         ),
-      ),
-    );
+          ]),
+        ))
+);
+   
   }
+
+
 
   Widget _save() {
     bool? confirmEdit;
