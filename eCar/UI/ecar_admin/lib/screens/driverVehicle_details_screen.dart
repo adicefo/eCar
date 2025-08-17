@@ -66,7 +66,12 @@ class _DriverVehicleDetailsScreenState
   }
 
   Widget _buildContent() {
-    return Padding(
+    return Card(
+  elevation: 3,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child:Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -77,7 +82,7 @@ class _DriverVehicleDetailsScreenState
             padding: const EdgeInsets.only(bottom: 24.0),
             child: Text(
               "Assign Vehicle to Driver",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: Colors.black),
               textAlign: TextAlign.center,
             ),
           ),
@@ -268,6 +273,10 @@ class _DriverVehicleDetailsScreenState
           ),
         ],
       ),
-    );
+    )
+);
+
+    
+    
   }
 }
