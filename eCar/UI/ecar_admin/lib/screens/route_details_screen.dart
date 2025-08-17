@@ -131,7 +131,12 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   Widget _buildForm(Future<String>? sourceAddressEdit, Future<String>? destinationAddressEdit) {
     final bool isDisabled = widget.route != null;
 
-    return FormBuilder(
+    return Card(
+  elevation: 3,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child: FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
       child: Padding(
@@ -144,7 +149,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black,
               ),
             ),
             SizedBox(height: 8),
@@ -329,8 +334,9 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Colors.black,
               ),
+              
             ),
             SizedBox(height: 8),
             if (isDisabled) ...[
@@ -563,7 +569,11 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
           ],
         ),
       ),
-    );
+    )
+);
+
+    
+    
   }
 
   Widget _save() {
