@@ -98,7 +98,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       clients = await clientProvider.get();
       routes = await routeProvider.get();
       reviews = await reviewProvider.get();
-      rents = await rentProvider.get(); 
+      rents = await rentProvider.get();
       setState(() {
         isLoading = false;
       });
@@ -122,37 +122,47 @@ class _ReportsScreenState extends State<ReportsScreen> {
     }
     return {};
   }
+
   //help function for pie chart
   Map<String, int> _countVehiclesInRents(SearchResult<Rent>? rents) {
-  final Map<String, int> counts = {};
+    final Map<String, int> counts = {};
 
-  for (var rent in rents!.result) {
-    final vehicleName = rent.vehicle?.name??""; 
-    counts[vehicleName] = (counts[vehicleName] ?? 0) + 1;
+    for (var rent in rents!.result) {
+      final vehicleName = rent.vehicle?.name ?? "";
+      counts[vehicleName] = (counts[vehicleName] ?? 0) + 1;
+    }
+
+    return counts;
   }
 
-  return counts;
-}
 //help function for pie chart
-List<PieChartSectionData> _buildVehiclePieSections(Map<String, int> counts) {
-  final total = counts.values.fold(0, (sum, value) => sum + value);
+  List<PieChartSectionData> _buildVehiclePieSections(Map<String, int> counts) {
+    final total = counts.values.fold(0, (sum, value) => sum + value);
 
-  return counts.entries.map((entry) {
-    final percentage = (entry.value / total) * 100;
-    return PieChartSectionData(
-      title: "${entry.key}\n${percentage.toStringAsFixed(1)}%",
-      value: entry.value.toDouble(),
-      color: _getRandomColor(entry.key), 
-      radius: 100,
-      titleStyle: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
-    );
-  }).toList();
-}
+    return counts.entries.map((entry) {
+      final percentage = (entry.value / total) * 100;
+      return PieChartSectionData(
+        title: "${entry.key}\n${percentage.toStringAsFixed(1)}%",
+        value: entry.value.toDouble(),
+        color: _getRandomColor(entry.key),
+        radius: 100,
+        titleStyle: TextStyle(
+            fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+      );
+    }).toList();
+  }
+
 //help function for pie chart
-Color _getRandomColor(String key) {
-  final colors = [Colors.red, Colors.blue, Colors.green, Colors.orange, Colors.purple];
-  return colors[key.hashCode % colors.length];
-}
+  Color _getRandomColor(String key) {
+    final colors = [
+      Colors.red,
+      Colors.blue,
+      Colors.green,
+      Colors.orange,
+      Colors.purple
+    ];
+    return colors[key.hashCode % colors.length];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -164,6 +174,28 @@ Color _getRandomColor(String key) {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        actions: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: 150),
+            child: ElevatedButton.icon(
+              onPressed: () {
+                AlertHelpers.showAlert(
+                    context, "Not impl", "Still not implemented");
+              },
+              icon: Icon(Icons.file_download),
+              label: Text("Export to CSV"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 28, 128, 31),
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                minimumSize: Size(150,50),
+                padding: EdgeInsets.symmetric(horizontal: 32),
+              ),
+            ),
+          ),
+        ],
         backgroundColor: Colors.yellowAccent,
         leading: IconButton(
           tooltip: "Go back",
@@ -965,36 +997,42 @@ Color _getRandomColor(String key) {
   }
 
   Widget _buildVehiclesContent() {
-  final vehicleCounts = _countVehiclesInRents(rents);
-  final sections = _buildVehiclePieSections(vehicleCounts);
+    final vehicleCounts = _countVehiclesInRents(rents);
+    final sections = _buildVehiclePieSections(vehicleCounts);
 
-  return RepaintBoundary(
-    key: chartKey,
-    child: Column(
-      children: [
-        SizedBox(height: 20,),
-        Text(
-          "Number of vehicles rented",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 65,),
-        AspectRatio(
-          aspectRatio: 4.5,
-          child: PieChart(
-            PieChartData(
-              sections: sections,
-              sectionsSpace: 4,
-              centerSpaceRadius: 80,
-              borderData: FlBorderData(show: false),
+    return RepaintBoundary(
+      key: chartKey,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            "Number of vehicles rented",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(
+            height: 65,
+          ),
+          AspectRatio(
+            aspectRatio: 4.5,
+            child: PieChart(
+              PieChartData(
+                sections: sections,
+                sectionsSpace: 4,
+                centerSpaceRadius: 80,
+                borderData: FlBorderData(show: false),
+              ),
             ),
           ),
-        ),
-        SizedBox(height: 50,),
-        _drawExportPdfBtn("vehicle")
-      ],
-    ),
-  );
-}
+          SizedBox(
+            height: 50,
+          ),
+          _drawExportPdfBtn("vehicle")
+        ],
+      ),
+    );
+  }
 
   Widget _buildContainer(String hint, int? number) {
     return Container(
@@ -1157,8 +1195,8 @@ Color _getRandomColor(String key) {
               pw.Text(
                   "Lowest average mark has  ${_reviewReportObj!["minDriver"]["driverName"]["name"]} ${_reviewReportObj!["minDriver"]["driverName"]["surname"]} with value of: ${_reviewReportObj!["minDriver"]["avgMark"]}"),
             ],
-            if(entity=="vehicle")...[
-   pw.Text('Percentage of vehicle rentage'),
+            if (entity == "vehicle") ...[
+              pw.Text('Percentage of vehicle rentage'),
               pw.SizedBox(height: 10),
               if (imageBytes != null)
                 pw.Image(pw.MemoryImage(imageBytes), height: 200)
