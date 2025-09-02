@@ -50,6 +50,7 @@ dependencies:
   flutter_google_places: ^0.3.0
   place_picker: ^0.10.0
   google_maps_flutter: ^2.12.1
+  csv: ^5.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,17 +1,20 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:csv/csv.dart';
 import 'package:ecar_admin/models/Client/client.dart';
 import 'package:ecar_admin/models/Driver/driver.dart';
 import 'package:ecar_admin/models/Rent/rent.dart';
 import 'package:ecar_admin/models/Review/review.dart';
 import 'package:ecar_admin/models/Route/route.dart' as Model;
+import 'package:ecar_admin/models/Vehicle/vehicle.dart';
 import 'package:ecar_admin/models/search_result.dart';
 import 'package:ecar_admin/providers/client_provider.dart';
 import 'package:ecar_admin/providers/driver_provider.dart';
 import 'package:ecar_admin/providers/rent_provider.dart';
 import 'package:ecar_admin/providers/review_provider.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
+import 'package:ecar_admin/providers/vehicle_provider.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/utils/alert_helpers.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
@@ -60,13 +63,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
   SearchResult<Model.Route>? routes;
   SearchResult<Review>? reviews;
   SearchResult<Rent>? rents;
-
+  SearchResult<Vehicle>? vehicles;
   late DriverProvider driverProvider;
   late ClientProvider clientProvider;
   late RouteProvider routeProvider;
   late ReviewProvider reviewProvider;
   late RentProvider rentProvider;
-
+  late VehicleProvider vehicleProvider;
   bool isLoading = true;
   @override
   void initState() {
@@ -76,6 +79,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
     routeProvider = context.read<RouteProvider>();
     reviewProvider = context.read<ReviewProvider>();
     rentProvider = context.read<RentProvider>();
+    vehicleProvider = context.read<VehicleProvider>();
 
     _initForm();
     fetchYearlyData(2024).then((value) {
@@ -99,6 +103,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
       routes = await routeProvider.get();
       reviews = await reviewProvider.get();
       rents = await rentProvider.get();
+      vehicles = await vehicleProvider.get();
       setState(() {
         isLoading = false;
       });
@@ -164,6 +169,73 @@ class _ReportsScreenState extends State<ReportsScreen> {
     return colors[key.hashCode % colors.length];
   }
 
+  Future<void> _exportToCSV() async {
+    try {
+      // Prepare CSV rows (headers + data)
+      List<List<dynamic>> rows = [];
+
+      // Add headers
+      rows.add([
+        "Driver ID",
+        "Driver Name",
+        "Driver Surname",
+        "Driver Email",
+        "Driver Gender",
+        "Driver Username",
+        "Driver Telephone Number"
+      ]);
+
+      for (var driver in drivers!.result) {
+        rows.add([
+          driver.id,
+          "${driver.user?.name}",
+          "${driver.user?.surname}",
+          driver.user?.email ?? "",
+          driver.user?.gender ?? "",
+          driver.user?.userName ?? "",
+          driver.user?.telephoneNumber ?? "",
+        ]);
+      }
+      rows.add([
+            "Vehicle ID",
+        "Vehicle Name",
+        "Vehicle Price",
+        "Vehicle Consumption",
+        "Vehicle Availability"
+      ]);
+
+      for (var vehicle in vehicles!.result) {
+        rows.add([
+          vehicle.id,
+          vehicle.name,
+          vehicle.price,
+          vehicle.averageConsumption,
+          vehicle.available
+        ]);
+      }
+
+      // Convert rows to CSV string
+      String csvData = const ListToCsvConverter().convert(rows);
+
+      // Ask user where to save file
+      String? outputFile = await FilePicker.platform.saveFile(
+        dialogTitle: "Save report as CSV",
+        fileName: "drivers_and_vehicles.csv",
+        type: FileType.custom,
+        allowedExtensions: ["csv"],
+      );
+
+      if (outputFile != null) {
+        final file = File(outputFile);
+        await file.writeAsString(csvData);
+        ScaffoldHelpers.showScaffold(context, "Export successful: $outputFile");
+      }
+    } catch (e) {
+      ScaffoldHelpers.showScaffold(
+          context, "Error exporting CSV: ${e.toString()}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,10 +250,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
           Padding(
             padding: EdgeInsets.only(right: 150),
             child: ElevatedButton.icon(
-              onPressed: () {
-                AlertHelpers.showAlert(
-                    context, "Not impl", "Still not implemented");
-              },
+              onPressed: _exportToCSV,
               icon: Icon(Icons.file_download),
               label: Text("Export to CSV"),
               style: ElevatedButton.styleFrom(
@@ -190,7 +259,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                minimumSize: Size(150,50),
+                minimumSize: Size(150, 50),
                 padding: EdgeInsets.symmetric(horizontal: 32),
               ),
             ),
