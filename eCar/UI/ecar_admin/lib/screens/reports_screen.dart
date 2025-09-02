@@ -989,6 +989,8 @@ Color _getRandomColor(String key) {
             ),
           ),
         ),
+        SizedBox(height: 50,),
+        _drawExportPdfBtn("vehicle")
       ],
     ),
   );
@@ -1154,6 +1156,12 @@ Color _getRandomColor(String key) {
               pw.SizedBox(height: 20),
               pw.Text(
                   "Lowest average mark has  ${_reviewReportObj!["minDriver"]["driverName"]["name"]} ${_reviewReportObj!["minDriver"]["driverName"]["surname"]} with value of: ${_reviewReportObj!["minDriver"]["avgMark"]}"),
+            ],
+            if(entity=="vehicle")...[
+   pw.Text('Percentage of vehicle rentage'),
+              pw.SizedBox(height: 10),
+              if (imageBytes != null)
+                pw.Image(pw.MemoryImage(imageBytes), height: 200)
             ]
           ],
         ),
@@ -1185,7 +1193,7 @@ Color _getRandomColor(String key) {
               ? "ecar_report_route.pdf"
               : entity == "review"
                   ? "ecar_report_review.pdf"
-                  : "ecar_report_default.pdf",
+                  : "ecar_report_vehicle.pdf",
     );
 
     if (result != null) {
