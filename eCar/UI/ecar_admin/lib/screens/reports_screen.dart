@@ -171,10 +171,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
   Future<void> _exportToCSV() async {
     try {
-      // Prepare CSV rows (headers + data)
       List<List<dynamic>> rows = [];
 
-      // Add headers
       rows.add([
         "Driver ID",
         "Driver Name",
@@ -214,10 +212,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
         ]);
       }
 
-      // Convert rows to CSV string
       String csvData = const ListToCsvConverter().convert(rows);
 
-      // Ask user where to save file
       String? outputFile = await FilePicker.platform.saveFile(
         dialogTitle: "Save report as CSV",
         fileName: "drivers_and_vehicles.csv",

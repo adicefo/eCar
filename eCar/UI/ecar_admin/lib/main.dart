@@ -47,8 +47,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
- 
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -90,13 +88,23 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
 
   AuthProvider _authProvide = new AuthProvider();
+
   final _formKey = GlobalKey<FormBuilderState>();
+
+  bool _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -185,6 +193,17 @@ class LoginPage extends StatelessWidget {
                                 hintText: "Enter your password",
                                 prefixIcon:
                                     Icon(Icons.lock, color: Colors.black54),
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _isObscured
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: Colors.black,
+                                  ),
+                                  onPressed: () {
+                                    _isObscured = !_isObscured;
+                                  },
+                                ),
                               ),
                               style: FormStyleHelpers.textFieldTextStyle(),
                             ),
