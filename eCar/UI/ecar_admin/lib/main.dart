@@ -186,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                             SizedBox(height: 16),
 
                             TextField(
-                              obscureText: true,
+                              obscureText: _isObscured,
                               controller: _passwordController,
                               decoration: FormStyleHelpers.textFieldDecoration(
                                 labelText: "Password",
@@ -201,7 +201,9 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Colors.black,
                                   ),
                                   onPressed: () {
-                                    _isObscured = !_isObscured;
+                                    setState(() {
+            _isObscured = !_isObscured;
+          });
                                   },
                                 ),
                               ),
