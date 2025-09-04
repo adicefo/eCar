@@ -13,6 +13,7 @@ import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/providers/statistics_provider.dart';
 import 'package:ecar_admin/providers/user_provider.dart';
 import 'package:ecar_admin/providers/vehicle_provider.dart';
+import 'package:ecar_admin/screens/dashboard_screen.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
@@ -251,7 +252,7 @@ class _LoginPageState extends State<LoginPage> {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  DriversListScreen()));
+                                                  DashboardScreen()));
                                     } else {
                                       if (context.mounted) {
                                         showDialog(
