@@ -77,23 +77,7 @@ class _MasterScreenState extends State<MasterScreen> {
         centerTitle: true,
         backgroundColor: Colors.yellowAccent,
         actions: <Widget>[
-          Padding(padding: EdgeInsets.only(right: 80),
-          child: ElevatedButton.icon(
-            onPressed: () {
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => ReportsScreen()));
-            },
-            icon: Icon(Icons.analytics),
-            label: Text("Reports"),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: EdgeInsets.symmetric(horizontal:32),
-            ),
-          ),),
+         
           SizedBox(
             width: 10,
           ),
