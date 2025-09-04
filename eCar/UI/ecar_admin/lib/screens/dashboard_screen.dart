@@ -28,6 +28,7 @@ import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
 import 'package:ecar_admin/screens/notification_screen.dart';
 import 'package:ecar_admin/screens/rent_screen.dart';
+import 'package:ecar_admin/screens/reports_screen.dart';
 import 'package:ecar_admin/screens/review_screen.dart';
 import 'package:ecar_admin/screens/routes_screen.dart';
 import 'package:ecar_admin/screens/statistics_screen.dart';
@@ -198,8 +199,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               )
             : Container(
+              color: Colors.white,
                 child: Column(
-                children: [_buildDashboard()],
+                children: [
+                  Padding(padding: EdgeInsets.only(left: 250),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(height: 20,),
+                      Text("Total active items",style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold
+                ),),
+                SizedBox(width: 170,),
+                ElevatedButton.icon(onPressed: ()=>{
+                  Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => ReportsScreen()))
+                }, label:  Text("Reports"),
+                style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.black,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: EdgeInsets.symmetric(horizontal:32),
+            ),
+            icon: Icon(Icons.analytics),)
+                    ],
+                  ),),_buildDashboard()],
               )));
   }
 
