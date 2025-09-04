@@ -291,6 +291,16 @@ class _MasterScreenState extends State<MasterScreen> {
                   ),
                 ),
               ),
+              SizedBox(height: 8,),
+              _buildNavItem(
+                 title: "Dashboard",
+                icon: Icons.dashboard,
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => NotificationScreen()));
+                },
+                isActive: currentRoute == 'Dashboard',
+              ),
               SizedBox(height: 8),
               _buildNavItem(
                 title: "Log out",
