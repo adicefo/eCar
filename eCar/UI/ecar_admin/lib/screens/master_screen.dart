@@ -6,6 +6,7 @@ import 'package:ecar_admin/providers/user_provider.dart';
 import 'package:ecar_admin/screens/admin_screen.dart';
 import 'package:ecar_admin/screens/clients_screen.dart';
 import 'package:ecar_admin/screens/company_prices_screen.dart';
+import 'package:ecar_admin/screens/dashboard_screen.dart';
 import 'package:ecar_admin/screens/driverVehicle_screen.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/screens/notification_screen.dart';
@@ -297,7 +298,7 @@ class _MasterScreenState extends State<MasterScreen> {
                 icon: Icons.dashboard,
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => NotificationScreen()));
+                      builder: (context) => DashboardScreen()));
                 },
                 isActive: currentRoute == 'Dashboard',
               ),
