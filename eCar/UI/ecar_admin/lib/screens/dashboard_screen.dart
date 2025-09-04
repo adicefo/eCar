@@ -20,7 +20,18 @@ import 'package:ecar_admin/providers/review_provider.dart';
 import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/providers/statistics_provider.dart';
 import 'package:ecar_admin/providers/vehicle_provider.dart';
+import 'package:ecar_admin/screens/admin_screen.dart';
+import 'package:ecar_admin/screens/clients_screen.dart';
+import 'package:ecar_admin/screens/company_prices_screen.dart';
+import 'package:ecar_admin/screens/driverVehicle_screen.dart';
+import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/screens/notification_screen.dart';
+import 'package:ecar_admin/screens/rent_screen.dart';
+import 'package:ecar_admin/screens/review_screen.dart';
+import 'package:ecar_admin/screens/routes_screen.dart';
+import 'package:ecar_admin/screens/statistics_screen.dart';
+import 'package:ecar_admin/screens/vehicle_screen.dart';
 import 'package:ecar_admin/utils/scaffold_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -108,61 +119,70 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildDashboardCard({
-    required IconData icon,
-    required String title,
-    required int? count,
-    Color color = Colors.blue,
-  }) {
-    return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      child: Card(
-        elevation: 6,
-        shadowColor: Colors.grey.withOpacity(0.2),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        color: const Color.fromARGB(255, 242, 198, 251),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-          
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: color.withOpacity(0.15),
-                ),
-                child: Icon(icon, size: 32, color: color),
+  required IconData icon,
+  required String title,
+  required int? count,
+  required Widget screen,
+  Color color = Colors.blue,
+}) {
+  return InkWell(
+    borderRadius: BorderRadius.circular(16),
+    onTap: () {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => screen),
+      );
+    },
+    child: Card(
+      elevation: 6,
+      shadowColor: Colors.grey.withOpacity(0.2),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      color: const Color.fromARGB(255, 242, 198, 251),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // icon in circle
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color.withOpacity(0.15),
               ),
-              const SizedBox(height: 16),
+              child: Icon(icon, size: 32, color: color),
+            ),
+            const SizedBox(height: 16),
 
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.black87,
-                ),
-                textAlign: TextAlign.center,
+            // title
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Colors.black87,
               ),
-              const SizedBox(height: 8),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 8),
 
-              Text(
-                count?.toString() ?? "0",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                  color: color,
-                ),
+            // count
+            Text(
+              count?.toString() ?? "0",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+                color: color,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -195,6 +215,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             icon: Icons.person,
             title: "Drivers",
             count: drivers?.result.length ?? 0,
+            screen: DriversListScreen(),
             color: Colors.blue,
           ),
           _buildDashboardCard(
@@ -202,53 +223,62 @@ class _DashboardScreenState extends State<DashboardScreen> {
             title: "Clients",
             count: clients?.result.length ?? 0,
             color: Colors.green,
+            screen: ClientListScreen()
           ),
           _buildDashboardCard(
             icon: Icons.route,
             title: "Routes",
             count: routes?.result.length ?? 0,
             color: Colors.orange,
+            screen: RouteListScreen(),
           ),
           _buildDashboardCard(
             icon: Icons.directions_car,
             title: "Vehicles",
             count: vehicles?.result.length ?? 0,
             color: Colors.redAccent,
+            screen: VehicleScreen()
           ),
           _buildDashboardCard(
             icon: Icons.shopping_cart,
             title: "Rents",
             count: rents?.result.length ?? 0,
             color: Colors.teal,
+            screen: RentScreen(),
           ),
           _buildDashboardCard(
             icon: Icons.notifications,
             title: "Notifications",
             count: notifications?.result.length ?? 0,
             color: Colors.purple,
+            screen:NotificationScreen(),
           ),
           _buildDashboardCard(
             icon: Icons.reviews,
             title: "Reviews",
             count: reviews?.result.length ?? 0,
             color: Colors.deepOrange,
+            screen: ReviewScreen(),
           ),
           _buildDashboardCard(
             icon: Icons.admin_panel_settings,
             title: "Admins",
             count: admins?.result.length ?? 0,
             color: Colors.indigo,
+            screen: AdminScreen(),
           ),
           _buildDashboardCard(
             icon: Icons.bar_chart,
             title: "Statistics",
             count: statistics?.result.length ?? 0,
+            screen: StatisticsScreen(),
             color: Colors.cyan,
           ),
           _buildDashboardCard(
             icon: Icons.monetization_on,
             title: "Company Prices",
             count: companyPrices?.result.length ?? 0,
+            screen: CompanyPricesScreen(),
             color: Colors.lime[800]!,
           ),
           _buildDashboardCard(
@@ -256,6 +286,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             title: "Driver Vehicles",
             count: driverVehicles?.count ?? 0,
             color: Colors.pink,
+            screen: DriverVehicleScreen(),
+
           ),
         ],
       ),
