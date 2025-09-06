@@ -183,6 +183,62 @@ class _DashboardScreenState extends State<DashboardScreen> {
     ),
   );
 }
+Widget _buildQuickActionCard({
+  required IconData icon,
+  required String title,
+  required String description,
+  required VoidCallback onTap,
+  Color color = Colors.blue,
+}) {
+  return InkWell(
+    borderRadius: BorderRadius.circular(16),
+    onTap: onTap,
+    child: Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            // Icon circle
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: color.withOpacity(0.2),
+              ),
+              child: Icon(icon, size: 28, color: color),
+            ),
+            const SizedBox(width: 16),
+            // Title & description
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  description,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
 
 
   @override
@@ -227,7 +283,68 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             icon: Icon(Icons.analytics),)
                     ],
-                  ),),_buildDashboard()],
+                  ),),Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        "Quick Actions",
+        style: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(height: 16),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: _buildQuickActionCard(
+              icon: Icons.person_add,
+              title: "Add Driver",
+              description: "Create a new driver",
+              color: Colors.blue,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => DriversListScreen()),
+                );
+              },
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: _buildQuickActionCard(
+              icon: Icons.group_add,
+              title: "Add Client",
+              description: "Register a new client",
+              color: Colors.green,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => ClientListScreen()),
+                );
+              },
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: _buildQuickActionCard(
+              icon: Icons.notifications_active,
+              title: "Add Notification",
+              description: "Send a new notification",
+              color: Colors.deepPurple,
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => NotificationScreen()),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    ],
+  ),
+),_buildDashboard()],
               )));
   }
 
