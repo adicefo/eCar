@@ -261,7 +261,7 @@ Widget _buildQuickActionCard({
               color: Colors.white,
                 child: Column(
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 250,top:20),
+                  Padding(padding: EdgeInsets.only(left: 270,top:20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -291,6 +291,9 @@ Widget _buildQuickActionCard({
   child: Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
+     Row(
+      children: [
+         Icon(Icons.fast_forward),
       const Text(
         "Quick Actions",
         style: TextStyle(
@@ -298,6 +301,8 @@ Widget _buildQuickActionCard({
           fontWeight: FontWeight.bold,
         ),
       ),
+      ],
+     ),
       const SizedBox(height: 16),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
