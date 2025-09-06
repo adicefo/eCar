@@ -202,7 +202,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               color: Colors.white,
                 child: Column(
                 children: [
-                  Padding(padding: EdgeInsets.only(left: 250),
+                  Padding(padding: EdgeInsets.only(left: 250,top:20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -219,6 +219,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 style: ElevatedButton.styleFrom(
               backgroundColor: Colors.black,
               foregroundColor: Colors.white,
+              minimumSize: Size(150,50),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
