@@ -21,11 +21,14 @@ import 'package:ecar_admin/providers/route_provider.dart';
 import 'package:ecar_admin/providers/statistics_provider.dart';
 import 'package:ecar_admin/providers/vehicle_provider.dart';
 import 'package:ecar_admin/screens/admin_screen.dart';
+import 'package:ecar_admin/screens/clients_details_screen.dart';
 import 'package:ecar_admin/screens/clients_screen.dart';
 import 'package:ecar_admin/screens/company_prices_screen.dart';
 import 'package:ecar_admin/screens/driverVehicle_screen.dart';
+import 'package:ecar_admin/screens/driver_details_screen.dart';
 import 'package:ecar_admin/screens/drivers_screen.dart';
 import 'package:ecar_admin/screens/master_screen.dart';
+import 'package:ecar_admin/screens/notification_details_screen.dart';
 import 'package:ecar_admin/screens/notification_screen.dart';
 import 'package:ecar_admin/screens/rent_screen.dart';
 import 'package:ecar_admin/screens/reports_screen.dart';
@@ -307,7 +310,7 @@ Widget _buildQuickActionCard({
               color: Colors.blue,
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => DriversListScreen()),
+                  MaterialPageRoute(builder: (context) => DriverDetailsScreen()),
                 );
               },
             ),
@@ -321,7 +324,7 @@ Widget _buildQuickActionCard({
               color: Colors.green,
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => ClientListScreen()),
+                  MaterialPageRoute(builder: (context) => ClientsDetailsScreen()),
                 );
               },
             ),
@@ -335,7 +338,7 @@ Widget _buildQuickActionCard({
               color: Colors.deepPurple,
               onTap: () {
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => NotificationScreen()),
+                  MaterialPageRoute(builder: (context) => NotificationDetailsScreen()),
                 );
               },
             ),
