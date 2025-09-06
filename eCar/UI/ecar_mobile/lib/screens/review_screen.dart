@@ -263,7 +263,7 @@ SizedBox(height: 20),
                       padding: EdgeInsets.symmetric(vertical: 16),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [Colors.amber.shade300, Colors.amber.shade500],
+                          colors: [Colors.blueAccent.shade100,Colors.blueAccent.shade200],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
@@ -431,8 +431,8 @@ SizedBox(height: 20),
                           ElevatedButton(
                             onPressed: () => Navigator.pop(context),
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.amber,
-                              foregroundColor: Colors.black87,
+                              backgroundColor: Colors.blueAccent,
+                              foregroundColor: Colors.white,
                               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
