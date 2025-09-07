@@ -75,7 +75,7 @@ class _NotificationDetailsScreenState extends State<NotificationDetailsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(padding: EdgeInsets.only(left:510),
-            child: Text("Add notification",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
+            child: widget.notification!=null?Text("Edit notification",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),):Text("Add notification",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
             SizedBox(height: 10,),
             FormBuilderTextField(
               maxLines: 2,
