@@ -246,114 +246,135 @@ Widget _buildQuickActionCard({
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreen(
-        "Dashboard",
-        isLoading
-            ? Expanded(
-                child: Center(
-                  child: CircularProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(Colors.yellowAccent),
-                  ),
+   return MasterScreen(
+   "Dashboard",
+   isLoading
+      ? Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.yellowAccent),
+          ),
+        )
+      : Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only( left:30, top: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.fast_forward),
+                    const Text(
+                      "Quick Actions",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 780,),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (context) => ReportsScreen()),
+                        );
+                      },
+                      label: Text("Reports"),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        minimumSize: Size(150, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 32),
+                      ),
+                      icon: Icon(Icons.analytics),
+                    ),
+                  ],
                 ),
-              )
-            : Container(
-              color: Colors.white,
-                child: Column(
-                children: [
-                  Padding(padding: EdgeInsets.only(left: 270,top:20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(height: 20,),
-                      Text("Total active items",style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold
-                ),),
-                SizedBox(width: 170,),
-                ElevatedButton.icon(onPressed: ()=>{
-                  Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => ReportsScreen()))
-                }, label:  Text("Reports"),
-                style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-              foregroundColor: Colors.white,
-              minimumSize: Size(150,50),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
               ),
-              padding: EdgeInsets.symmetric(horizontal:32),
-            ),
-            icon: Icon(Icons.analytics),)
-                    ],
-                  ),),Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-  child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-     Row(
-      children: [
-         Icon(Icons.fast_forward),
-      const Text(
-        "Quick Actions",
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
+           
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: _buildQuickActionCard(
+                            icon: Icons.person_add,
+                            title: "Add Driver",
+                            description: "Create a new driver",
+                            color: Colors.blue,
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => DriverDetailsScreen()),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _buildQuickActionCard(
+                            icon: Icons.group_add,
+                            title: "Add Client",
+                            description: "Register a new client",
+                            color: Colors.green,
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => ClientsDetailsScreen()),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: _buildQuickActionCard(
+                            icon: Icons.notifications_active,
+                            title: "Add Notification",
+                            description: "Send a new notification",
+                            color: Colors.deepPurple,
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => NotificationDetailsScreen()),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+                 Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: EdgeInsets.only(left:180),
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.summarize),
+                        Text(
+                    "Total active items",
+                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                  ),
+                      ],
+                    )
+                  ),
+                  SizedBox(width: 170),
+                ],
+              ),
+              _buildDashboard(),
+            ],
+          ),
         ),
-      ),
-      ],
-     ),
-      const SizedBox(height: 16),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: _buildQuickActionCard(
-              icon: Icons.person_add,
-              title: "Add Driver",
-              description: "Create a new driver",
-              color: Colors.blue,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => DriverDetailsScreen()),
-                );
-              },
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: _buildQuickActionCard(
-              icon: Icons.group_add,
-              title: "Add Client",
-              description: "Register a new client",
-              color: Colors.green,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => ClientsDetailsScreen()),
-                );
-              },
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: _buildQuickActionCard(
-              icon: Icons.notifications_active,
-              title: "Add Notification",
-              description: "Send a new notification",
-              color: Colors.deepPurple,
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => NotificationDetailsScreen()),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    ],
-  ),
-),_buildDashboard()],
-              )));
+);
+
   }
 
   Widget _buildDashboard() {
