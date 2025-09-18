@@ -61,7 +61,7 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
         Column(
           children: [
             _buildForm(),
-            if (widget.client != null) _buildImageSection(),
+           
             _save()
           ],
         ));
@@ -72,7 +72,12 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
     RegExp emailExp = RegExp(
         r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?$");
     RegExp nameSurname = RegExp(r"[A-Z][a-z]{2,}");
-    return FormBuilder(
+    return Card(
+  elevation: 3,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child:  FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
       child: Padding(
@@ -80,6 +85,14 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
         child: Column(
           children: [
             if (widget.client == null) ...[
+              Text(
+                "Add client",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              SizedBox(height: 20,),
               Row(
                 children: [
                   Expanded(
@@ -270,6 +283,14 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                 ],
               ),
             ] else if (widget.client != null) ...[
+              Text(
+                "Edit client",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              SizedBox(height: 20,),
               Row(
                 children: [
                   Expanded(
@@ -463,11 +484,14 @@ class _ClientsDetailsScreenState extends State<ClientsDetailsScreen> {
                 ],
               ),
               SizedBox(height: 20),
+               _buildImageSection()
             ],
           ],
         ),
       ),
-    );
+    )
+);
+    
   }
 
   void _showPasswordUpdateDialog(BuildContext context) {

@@ -54,14 +54,29 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
     RegExp emailExp = RegExp(
         r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(\.[a-zA-Z]{2,})?$");
     RegExp nameSurname = RegExp(r"[A-Z][a-z]{2,}");
-    return FormBuilder(
+    return  Card(
+  elevation: 3,
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(12),
+  ),
+  child:  FormBuilder(
       key: _formKey,
       initialValue: _initialValue,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
+        child: Card(
+          elevation: 3,
+          child:Column(
           children: [
             if (widget.driver == null) ...[
+              Text(
+                "Add driver",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              SizedBox(height: 20,),
               Row(
                 children: [
                   Expanded(
@@ -253,6 +268,14 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
                 ],
               ),
             ] else if (widget.driver != null) ...[
+              Text(
+                "Edit driver",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+              SizedBox(height: 20,),
               Row(
                 children: [
                   Expanded(
@@ -482,8 +505,13 @@ class _DriverDetailsScreenState extends State<DriverDetailsScreen> {
             ],
           ],
         ),
+        )
       ),
-    );
+    )
+);
+    
+    
+    
   }
 
   void _showPasswordUpdateDialog(BuildContext context) {

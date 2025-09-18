@@ -66,7 +66,8 @@ class _VehicleDetailsScreenState extends State<VehicleDetailsScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
             Padding(padding: EdgeInsets.only(left:1),
-                child:Text("Add vehicle",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)),
+                child:widget.vehicle==null?Text("Add vehicle",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),):Text("Edit vehicle",style: TextStyle(fontSize: 21,fontWeight: FontWeight.bold),)
+                ),
                 SizedBox(height: 20,),
             Row(
               children: [
