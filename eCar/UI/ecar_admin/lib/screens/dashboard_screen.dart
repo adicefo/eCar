@@ -354,7 +354,7 @@ Widget _buildQuickActionCard({
                 children: [
                   SizedBox(height: 20),
                   Padding(
-                    padding: EdgeInsets.only(left:180),
+                    padding: EdgeInsets.only(left:180,top:20),
                     child:Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -366,7 +366,7 @@ Widget _buildQuickActionCard({
                       ],
                     )
                   ),
-                  SizedBox(width: 170),
+                  SizedBox(width: 300),
                 ],
               ),
               _buildDashboard(),
